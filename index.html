@@ -7,10 +7,10 @@
 
   <style>
     :root{
-      --card: rgba(20,24,28,.55);
+      --card: rgba(18,20,24,.62);
       --border: rgba(255,255,255,.18);
       --muted: rgba(255,255,255,.78);
-      --shadow: 0 20px 50px rgba(0,0,0,.45);
+      --shadow: 0 20px 55px rgba(0,0,0,.55);
 
       --okBg: rgba(34,197,94,.20);
       --okBorder: rgba(34,197,94,.55);
@@ -22,8 +22,26 @@
       --bookBorder: rgba(255,200,80,.55);
     }
 
+    * , *::before, *::after { box-sizing: border-box; }
+
     html,body{height:100%;margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;}
-    body{background:#0b0b0b;color:#fff;padding:24px;}
+    body{
+      color:#fff;
+      padding:24px;
+      background:
+        radial-gradient(1200px 700px at 20% 10%, rgba(255,255,255,.10), transparent 55%),
+        radial-gradient(900px 600px at 70% 30%, rgba(80,180,255,.10), transparent 55%),
+        linear-gradient(180deg, rgba(0,0,0,.65), rgba(0,0,0,.70)),
+        url("bg.jpg");
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+
+    /* mobil: background-attachment fixed kan give hakken, så slå det fra */
+    @media (max-width: 700px){
+      body{ background-attachment: scroll; }
+    }
 
     .wrap{max-width:1100px;margin:0 auto;}
     .card{
@@ -32,12 +50,12 @@
       border:1px solid var(--border);
       border-radius:18px;
       box-shadow:var(--shadow);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
     }
     .pad{padding:18px;}
 
-    h1{margin:0;font-size:clamp(22px,3.5vw,34px);}
+    h1{margin:0;font-size:clamp(22px,3.5vw,34px); letter-spacing:.2px;}
     h2{margin:0;font-size:18px;}
     .muted{opacity:.78;}
     .small{font-size:13px;opacity:.78;}
@@ -46,6 +64,7 @@
     .between{justify-content:space-between;}
 
     input, button, textarea{
+      width: 100%;
       font-size:16px;
       padding:12px 14px;
       border-radius:12px;
@@ -53,9 +72,33 @@
       background:rgba(255,255,255,.06);
       color:#fff;
       outline:none;
+      transition: border-color .12s ease, background .12s ease, transform .12s ease;
     }
-    textarea{width:100%;resize:vertical;}
-    button{cursor:pointer;font-weight:900;}
+    input:focus, textarea:focus{
+      border-color: rgba(80,180,255,.60);
+      background: rgba(255,255,255,.08);
+    }
+
+    button{
+      width: auto;
+      cursor:pointer;
+      font-weight:900;
+      user-select:none;
+    }
+    button:hover{ transform: translateY(-1px); }
+    button:active{ transform: translateY(0px); }
+
+    textarea{resize:vertical;}
+
+    input[type="date"]{
+      height: 46px;
+      line-height: 46px;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
     .primary{background:var(--okBg);border-color:var(--okBorder);}
     .ghost{background:rgba(255,255,255,.04);}
 
@@ -68,7 +111,8 @@
     }
     .loginBox{width:min(680px,100%);}
     .loginRow{display:flex;gap:10px;margin-top:12px;}
-    .loginRow input{flex:1;}
+    .loginRow input{flex:1;width:auto;}
+    .loginRow button{width:auto;}
 
     /* App */
     #app{display:none;}
@@ -91,7 +135,7 @@
       justify-content:space-between;
       margin-bottom:10px;
     }
-    .month{font-weight:950;font-size:18px;}
+    .month{font-weight:950;font-size:18px;text-transform:capitalize;}
 
     .dow{
       display:grid;
@@ -115,9 +159,9 @@
       background:rgba(255,255,255,.03);
       padding:8px;
       cursor:pointer;
-      transition:transform .12s ease, background .12s ease;
+      transition:transform .12s ease, background .12s ease, border-color .12s ease;
     }
-    .day:hover{transform:translateY(-1px);background:rgba(255,255,255,.05);}
+    .day:hover{transform:translateY(-1px);background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.20);}
     .day.off{opacity:.42;}
     .day.selected{
       border-color: rgba(34,197,94,.65);
@@ -131,7 +175,6 @@
       font-weight:900;
     }
 
-    /* Piller: vis fulde navne på 2 linjer */
     .pill{
       margin-top:6px;
       padding:7px 10px;
@@ -140,10 +183,10 @@
       background:rgba(255,255,255,.04);
       font-size:12px;
       line-height:1.2;
-      white-space: normal;        /* vigtigt */
-      overflow: visible;          /* vigtigt */
-      text-overflow: clip;        /* vigtigt */
-      word-break: break-word;
+      white-space: normal;
+      overflow: visible;
+      word-break: normal;
+      overflow-wrap: anywhere;
     }
     .pill.owner{
       border-color: var(--blueBorder);
@@ -153,6 +196,8 @@
       border-color: var(--bookBorder);
       background: var(--bookBg);
     }
+    .pill .line1{font-weight:900;display:block;}
+    .pill .line2{display:block;margin-top:2px;}
 
     .list{
       display:flex;
@@ -169,9 +214,22 @@
     .stayItem .title{font-weight:950;margin-bottom:4px;}
     .stayItem .meta{font-size:13px;opacity:.82;}
 
+    .twoCols{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+    }
     @media (max-width: 520px){
       .calendar{gap:6px;}
       .day{min-height:92px;padding:7px;}
+      .twoCols{ grid-template-columns: 1fr; }
+    }
+
+    .prettyDate{
+      margin-top:6px;
+      font-size:12px;
+      opacity:.82;
+      padding-left:2px;
     }
   </style>
 </head>
@@ -240,29 +298,27 @@
             <h2>Book datoer</h2>
             <div class="small">Vælg datoer i kalenderen, eller udfyld her.</div>
 
-            <div class="row" style="margin-top:10px;">
-              <div style="flex:1;">
+            <div class="twoCols" style="margin-top:10px;">
+              <div>
                 <div class="small">Start</div>
-                <input id="startDate" type="date" style="width:100%;">
+                <input id="startDate" type="date">
+                <div id="prettyStart" class="prettyDate"></div>
               </div>
-              <div style="flex:1;">
+              <div>
                 <div class="small">Slut</div>
-                <input id="endDate" type="date" style="width:100%;">
+                <input id="endDate" type="date">
+                <div id="prettyEnd" class="prettyDate"></div>
               </div>
             </div>
 
-            <div class="row" style="margin-top:10px;">
-              <div style="flex:1;">
-                <div class="small">Hvem har huset (kan være familie/venner)</div>
-                <input id="whoHas" placeholder="Fx Familien Taastrup / Vennegruppe / etc." style="width:100%;">
-              </div>
+            <div style="margin-top:10px;">
+              <div class="small">Hvem har huset (kan være familie/venner)</div>
+              <input id="whoHas" placeholder="Fx Taastrup / Vennegruppe / etc.">
             </div>
 
-            <div class="row" style="margin-top:10px;">
-              <div style="flex:1;">
-                <div class="small">Navn på den der booker</div>
-                <input id="bookedBy" placeholder="Navn" style="width:100%;">
-              </div>
+            <div style="margin-top:10px;">
+              <div class="small">Navn på den der booker</div>
+              <input id="bookedBy" placeholder="Navn">
             </div>
 
             <div style="margin-top:10px;">
@@ -306,6 +362,7 @@
     loginScreen.style.display = "none";
     app.style.display = "block";
     renderAll();
+    updatePrettyDates();
   }
 
   function showLogin(){
@@ -329,9 +386,8 @@
   logoutBtn.onclick = showLogin;
 
   /* ===== DATA (lokal) ===== */
-  const FAMILIES = ["Familien Taastrup","Familien Horsens","Familien Birkerød"];
-
-  const STORAGE_KEY = "samsoehuset_stays_v2";
+  const FAMILIES = ["Taastrup","Horsens","Birkerød"];
+  const STORAGE_KEY = "samsoehuset_stays_v4";
 
   function loadStays(){
     try{ return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"); }
@@ -350,29 +406,27 @@
 
   function startOfWeekMonday(d){
     const x = new Date(d);
-    const dow = (x.getDay() + 6) % 7; // Man=0 ... Søn=6
+    const dow = (x.getDay() + 6) % 7;
     x.setDate(x.getDate() - dow);
     x.setHours(12,0,0,0);
     return x;
   }
 
   function isoWeek(date){
-    // ISO uge: mandag-baseret
     const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
-    const dayNum = d.getUTCDay() || 7; // man=1..søn=7
+    const dayNum = d.getUTCDay() || 7;
     d.setUTCDate(d.getUTCDate() + 4 - dayNum);
     const yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
     return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
   }
 
   function ownerForDateMondayToSunday(d){
-    // Familie skifter pr ISO uge, mandag->søndag
     const week = isoWeek(d);
     const idx = (week - 1) % FAMILIES.length;
     return FAMILIES[idx];
   }
 
-  /* ===== UI STATE ===== */
+  /* ===== UI ===== */
   let view = new Date();
   let selectionStart = null;
 
@@ -387,6 +441,23 @@
   const noteInput = document.getElementById("note");
   const formMsg = document.getElementById("formMsg");
 
+  const prettyStart = document.getElementById("prettyStart");
+  const prettyEnd = document.getElementById("prettyEnd");
+
+  function formatPretty(iso){
+    if(!iso) return "";
+    const d = new Date(iso + "T12:00:00");
+    return d.toLocaleDateString("da-DK", { weekday:"long", day:"numeric", month:"long", year:"numeric" });
+  }
+
+  function updatePrettyDates(){
+    prettyStart.textContent = startInput.value ? formatPretty(startInput.value) : "";
+    prettyEnd.textContent = endInput.value ? formatPretty(endInput.value) : "";
+  }
+
+  startInput.addEventListener("change", updatePrettyDates);
+  endInput.addEventListener("change", updatePrettyDates);
+
   document.getElementById("prev").onclick = () => { view.setMonth(view.getMonth()-1); renderAll(); };
   document.getElementById("next").onclick = () => { view.setMonth(view.getMonth()+1); renderAll(); };
   document.getElementById("today").onclick = () => { view = new Date(); selectionStart = null; renderAll(); };
@@ -399,6 +470,7 @@
     bookedByInput.value = "";
     noteInput.value = "";
     formMsg.textContent = "";
+    updatePrettyDates();
     renderAll();
   };
 
@@ -449,14 +521,17 @@
     renderAll();
   };
 
-  function renderAll(){
-    renderMonthLabel();
-    renderCalendar();
-    renderStaysList();
+  function escapeHtml(str){
+    return String(str).replace(/[&<>"']/g, m => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+    }[m]));
   }
 
-  function renderMonthLabel(){
+  function renderAll(){
     monthLabel.textContent = view.toLocaleDateString("da-DK", { month:"long", year:"numeric" });
+    renderCalendar();
+    renderStaysList();
+    updatePrettyDates();
   }
 
   function onDayClick(iso, owner){
@@ -466,10 +541,10 @@
       selectionStart = iso;
       startInput.value = iso;
       endInput.value = iso;
-      // forslag: sæt hvem-har til ugefamilien, men brugeren kan ændre det
       if(!whoHasInput.value.trim()){
         whoHasInput.value = owner;
       }
+      updatePrettyDates();
       return;
     }
 
@@ -477,11 +552,9 @@
     const b = iso;
     selectionStart = null;
 
-    const start = a <= b ? a : b;
-    const end = a <= b ? b : a;
-
-    startInput.value = start;
-    endInput.value = end;
+    startInput.value = (a <= b ? a : b);
+    endInput.value = (a <= b ? b : a);
+    updatePrettyDates();
 
     renderCalendar();
   }
@@ -498,12 +571,9 @@
     const first = new Date(year, month, 1);
     const last = new Date(year, month+1, 0);
 
-    // grid fra mandag før/lig første i måneden
     const gridStart = startOfWeekMonday(first);
-
-    // gridEnd til søndag efter/lig sidste i måneden
     const gridEnd = new Date(last);
-    const endDow = (gridEnd.getDay() + 6) % 7; // man=0..søn=6
+    const endDow = (gridEnd.getDay() + 6) % 7;
     gridEnd.setDate(gridEnd.getDate() + (6 - endDow));
     gridEnd.setHours(12,0,0,0);
 
@@ -522,31 +592,24 @@
       top.innerHTML = `<span>${d.getDate()}</span><span class="small">${["Man","Tir","Ons","Tor","Fre","Lør","Søn"][(d.getDay()+6)%7]}</span>`;
       cell.appendChild(top);
 
-      // ugefamilie (mandag->søndag)
       const owner = ownerForDateMondayToSunday(d);
-      const ownerPill = document.createElement("div");
-      ownerPill.className = "pill owner";
-      ownerPill.textContent = `Standard uge: ${owner}`;
-      cell.appendChild(ownerPill);
 
-      // bookings
       const hits = staysForDay(iso, stays);
+
+      // hvis booket: vis kun BOOKET-pill (mindre støj)
       if(hits.length){
         const firstHit = hits[0];
         const p = document.createElement("div");
         p.className = "pill booked";
-        p.textContent = `BOOKET: ${firstHit.who_has}`;
+        p.innerHTML = `<span class="line1">BOOKET:</span><span class="line2">${escapeHtml(firstHit.who_has)}</span>`;
         cell.appendChild(p);
-
-        if(hits.length > 1){
-          const more = document.createElement("div");
-          more.className = "pill booked";
-          more.textContent = `+${hits.length-1} mere`;
-          cell.appendChild(more);
-        }
+      }else{
+        const ownerPill = document.createElement("div");
+        ownerPill.className = "pill owner";
+        ownerPill.innerHTML = `<span class="line1">Standard uge:</span><span class="line2">${owner}</span>`;
+        cell.appendChild(ownerPill);
       }
 
-      // markér valgt interval
       const s = startInput.value;
       const e = endInput.value;
       if(s && e && iso >= s && iso <= e){
@@ -558,12 +621,6 @@
 
       d.setDate(d.getDate() + 1);
     }
-  }
-
-  function escapeHtml(str){
-    return String(str).replace(/[&<>"']/g, m => ({
-      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
-    }[m]));
   }
 
   function renderStaysList(){
@@ -583,7 +640,7 @@
       item.className = "stayItem";
       item.innerHTML = `
         <div class="title">${escapeHtml(s.who_has)}</div>
-        <div class="meta">${s.start_date} → ${s.end_date}</div>
+        <div class="meta">${formatPretty(s.start_date)} → ${formatPretty(s.end_date)}</div>
         <div class="meta">Booket af: ${escapeHtml(s.booked_by)}</div>
         ${s.note ? `<div class="meta">Note: ${escapeHtml(s.note)}</div>` : ""}
         <div class="row" style="margin-top:10px; justify-content:flex-end;">
@@ -604,7 +661,6 @@
     });
   }
 
-  // Start
   showLogin();
 </script>
 </body>
