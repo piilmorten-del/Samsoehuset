@@ -1,854 +1,1016 @@
 <!doctype html>
 <html lang="da">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Samsøhuset</title>
 
   <style>
     :root{
-      --card: rgba(18,20,24,.62);
-      --border: rgba(255,255,255,.18);
-      --shadow: 0 20px 55px rgba(0,0,0,.55);
-
-      --okBg: rgba(34,197,94,.20);
-      --okBorder: rgba(34,197,94,.55);
-
-      --bookBg: rgba(255,200,80,.18);
-      --bookBorder: rgba(255,200,80,.65);
-
-      --pillBg: rgba(255,255,255,.05);
-      --pillBorder: rgba(255,255,255,.16);
-
-      --taastrupBg: rgba(80,180,255,.15);
-      --taastrupBorder: rgba(80,180,255,.60);
-
-      --horsensBg: rgba(175,120,255,.16);
-      --horsensBorder: rgba(175,120,255,.62);
-
-      --birkBg: rgba(60,220,160,.14);
-      --birkBorder: rgba(60,220,160,.58);
+      --bg:#0b0f14;
+      --card: rgba(15,18,22,.78);
+      --stroke: rgba(255,255,255,.10);
+      --stroke2: rgba(255,255,255,.16);
+      --text:#f3f5f7;
+      --muted: rgba(255,255,255,.70);
+      --muted2: rgba(255,255,255,.55);
+      --green:#2dd47a;
+      --blue:#4aa6ff;
+      --purple:#b77bff;
+      --teal:#3ee6c3;
+      --shadow: 0 18px 50px rgba(0,0,0,.55);
+      --r: 18px;
     }
 
-    *, *::before, *::after{ box-sizing: border-box; }
-    html,body{height:100%;margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;}
-
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; margin:0; }
     body{
-      color:#fff;
-      padding:24px;
-      background:
-        radial-gradient(1200px 700px at 20% 10%, rgba(255,255,255,.10), transparent 55%),
-        radial-gradient(900px 600px at 70% 30%, rgba(80,180,255,.10), transparent 55%),
-        linear-gradient(180deg, rgba(0,0,0,.58), rgba(0,0,0,.72)),
-        url("bg.jpg");
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      overflow-x:hidden;
+    }
+
+    /* ===== Background image =====
+       Upload your image file next to index.html in GitHub.
+       Update the filename here if needed.
+    */
+    .bg{
+      position:fixed; inset:0;
+      background-image: url("bg.jpg"); /* <- change if your file is named differently */
       background-size: cover;
       background-position: center;
-      background-attachment: fixed;
+      background-repeat: no-repeat;
+      filter: saturate(1.05) contrast(1.05);
+      transform: scale(1.02);
     }
-    @media (max-width: 700px){
-      body{ background-attachment: scroll; padding:16px; }
+    .bg::after{
+      content:"";
+      position:absolute; inset:0;
+      background: radial-gradient(1000px 700px at 25% 15%, rgba(0,0,0,.25), rgba(0,0,0,.75)),
+                  linear-gradient(180deg, rgba(0,0,0,.40), rgba(0,0,0,.70));
     }
 
-    .wrap{max-width:1180px;margin:0 auto;}
-    .card{
-      width:100%;
-      background:var(--card);
-      border:1px solid var(--border);
-      border-radius:18px;
-      box-shadow:var(--shadow);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+    .wrap{
+      position:relative;
+      min-height:100%;
+      padding: 22px 22px 34px;
     }
-    .pad{padding:18px;}
-    @media (max-width: 520px){ .pad{padding:14px;} }
 
-    h1{margin:0;font-size:clamp(22px,3.5vw,34px);letter-spacing:.2px;}
-    h2{margin:0;font-size:18px;}
-    .muted{opacity:.78;}
-    .small{font-size:13px;opacity:.78;}
-
-    .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
-    .between{justify-content:space-between;}
-
-    input, button, textarea{
-      width:100%;
-      font-size:16px;
-      padding:12px 14px;
-      border-radius:12px;
-      border:1px solid rgba(255,255,255,.18);
-      background:rgba(255,255,255,.06);
-      color:#fff;
-      outline:none;
-      transition:border-color .12s ease, background .12s ease, transform .12s ease;
+    header{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:16px;
+      margin-bottom: 16px;
     }
-    input:focus, textarea:focus{
-      border-color: rgba(80,180,255,.60);
-      background: rgba(255,255,255,.08);
+    .title h1{
+      margin:0;
+      font-size: clamp(28px, 4vw, 44px);
+      letter-spacing: .2px;
+      line-height: 1.05;
     }
-    button{
-      width:auto;
+    .title p{
+      margin:6px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .topActions{
+      display:flex; align-items:center; gap:10px;
+    }
+    .btn{
+      border: 1px solid var(--stroke2);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      border-radius: 14px;
+      padding: 10px 14px;
+      font-weight: 650;
       cursor:pointer;
-      font-weight:900;
+      transition: transform .08s ease, background .18s ease, border-color .18s ease;
       user-select:none;
     }
-    button:hover{ transform: translateY(-1px); }
-    button:active{ transform: translateY(0px); }
-    textarea{resize:vertical;}
-
-    input[type="date"]{
-      height:46px;
-      line-height:46px;
-      padding-top:10px;
-      padding-bottom:10px;
-      appearance:none;
-      -webkit-appearance:none;
+    .btn:hover{ background: rgba(255,255,255,.10); border-color: rgba(255,255,255,.22); }
+    .btn:active{ transform: translateY(1px); }
+    .btnPrimary{
+      border-color: rgba(45,212,122,.45);
+      background: rgba(45,212,122,.14);
     }
+    .btnPrimary:hover{ background: rgba(45,212,122,.20); border-color: rgba(45,212,122,.62); }
 
-    .primary{background:var(--okBg);border-color:var(--okBorder);}
-    .ghost{background:rgba(255,255,255,.04);}
-    .msg{margin-top:10px;min-height:18px;}
-
-    #loginScreen{
-      min-height: calc(100vh - 48px);
-      display:flex;align-items:center;justify-content:center;
-    }
-    .loginBox{width:min(720px,100%);}
-    .loginRow{display:flex;gap:10px;margin-top:12px;}
-    .loginRow input{flex:1;width:auto;}
-    .loginRow button{width:auto;}
-
-    #app{display:none;}
     .grid{
       display:grid;
-      grid-template-columns:1fr;
-      gap:12px;
-      margin-top:12px;
-    }
-    @media (min-width: 980px){
-      .grid{grid-template-columns:1.35fr 0.65fr;}
+      grid-template-columns: minmax(0, 1.1fr) minmax(340px, .9fr);
+      gap: 16px;
+      align-items:start;
     }
 
-    .calHeader{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
-      justify-content:space-between;
-      margin-bottom:10px;
+    .card{
+      background: var(--card);
+      border: 1px solid var(--stroke);
+      box-shadow: var(--shadow);
+      border-radius: var(--r);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
-    .month{font-weight:950;font-size:18px;text-transform:capitalize;}
+    .cardInner{ padding: 16px; }
 
-    .dow{
-      display:grid;
-      grid-template-columns:repeat(7,minmax(0,1fr));
-      gap:10px;
-      margin:10px 0 8px;
-      font-size:12px;
-      opacity:.85;
-    }
-    .dow div{text-align:center;}
-
-    .calendar{
-      display:grid;
-      grid-template-columns:repeat(7,minmax(0,1fr));
-      gap:10px;
-    }
-
-    .day{
-      min-height:110px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.12);
-      background:rgba(255,255,255,.03);
-      padding:10px;
-      cursor:pointer;
-      transition:transform .12s ease, background .12s ease, border-color .12s ease;
-    }
-    .day:hover{
-      transform:translateY(-1px);
-      background:rgba(255,255,255,.05);
-      border-color:rgba(255,255,255,.20);
-    }
-    .day.off{opacity:.42;}
-    .day.selected{
-      border-color: rgba(34,197,94,.65);
-      background: rgba(34,197,94,.10);
-    }
-
-    .dayTop{
-      display:flex;
-      justify-content:space-between;
-      gap:8px;
-      font-weight:950;
+    .card h2{
+      margin:0 0 4px;
+      font-size: 18px;
       letter-spacing:.2px;
-      font-size:13px;
+    }
+    .card .sub{
+      margin:0 0 14px;
+      color: var(--muted2);
+      font-size: 13px;
     }
 
-    .pill{
-      margin-top:10px;
-      padding:10px 10px;
-      border-radius:12px;
-      border:1px solid var(--pillBorder);
-      background:var(--pillBg);
-      text-align:center;
-    }
-
-    .pill .title{
-      font-weight:950;
-      display:block;
-      white-space: nowrap;
-      overflow: visible;
-      text-overflow: clip;
-      word-break: keep-all;
-      overflow-wrap: normal;
-      hyphens: none;
-      font-size: 12px;
-      line-height: 1.1;
-    }
-
-    .pill .sub{
-      display:block;
-      margin-top:4px;
-      opacity:.92;
-      font-size:10.5px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: clip;
-      word-break: keep-all;
-      overflow-wrap: normal;
-      hyphens: none;
-      line-height: 1.1;
-    }
-
-    .pill.booked{
-      border-color: var(--bookBorder);
-      background: var(--bookBg);
-    }
-
-    .pill.family-taastrup{ border-color: var(--taastrupBorder); background: var(--taastrupBg); }
-    .pill.family-horsens{ border-color: var(--horsensBorder); background: var(--horsensBg); }
-    .pill.family-birkerod{ border-color: var(--birkBorder); background: var(--birkBg); }
-
-    .pill.split{ padding:10px; }
-    .splitChips{
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-      align-items:stretch;
-    }
-    .chip{
+    /* ===== Login screen ===== */
+    #loginScreen{
+      min-height: calc(100vh - 48px);
       display:flex;
       align-items:center;
       justify-content:center;
-      padding:8px 8px;
-      border-radius:12px;
-      border:1px solid rgba(255,255,255,.16);
-      background:rgba(255,255,255,.04);
-      font-weight:950;
-      font-size:12px;
-      line-height:1.05;
-      white-space:nowrap;
-      word-break:keep-all;
-      overflow-wrap:normal;
-      hyphens:none;
     }
-    .chip.ta{ border-color: var(--taastrupBorder); background: var(--taastrupBg); }
-    .chip.ho{ border-color: var(--horsensBorder); background: var(--horsensBg); }
-    .chip.bi{ border-color: var(--birkBorder); background: var(--birkBg); }
+    .loginBox{
+      width: min(560px, 96vw);
+      padding: 18px;
+    }
+    .loginBox .row{
+      display:flex; gap: 10px;
+      align-items:center;
+      margin-top: 10px;
+    }
+    .field{
+      width:100%;
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 14px;
+      padding: 12px 14px;
+      color: var(--text);
+      outline:none;
+      font-size: 16px;
+    }
+    .field:focus{
+      border-color: rgba(255,255,255,.28);
+      box-shadow: 0 0 0 4px rgba(255,255,255,.07);
+    }
+    .hint{
+      margin: 10px 0 0;
+      color: var(--muted2);
+      font-size: 13px;
+    }
+    .msg{
+      margin-top: 10px;
+      font-size: 14px;
+      color: rgba(255,220,220,.92);
+      display:none;
+    }
+    .msg.ok{
+      color: rgba(205,255,225,.92);
+    }
 
-    .twoCols{
+    /* ===== Calendar ===== */
+    .calHeader{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .monthTitle{
+      display:flex;
+      flex-direction:column;
+      gap:3px;
+    }
+    .monthTitle .m{
+      font-size: 18px;
+      font-weight: 750;
+      letter-spacing:.2px;
+    }
+    .monthTitle .t{
+      font-size: 12px;
+      color: var(--muted2);
+    }
+    .nav{
+      display:flex; align-items:center; gap:10px;
+    }
+    .nav .btn{ padding: 10px 12px; min-width: 44px; }
+    .weekdays{
       display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:12px;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+      margin-bottom: 8px;
+      padding: 0 2px;
+      color: rgba(255,255,255,.72);
+      font-size: 12px;
     }
-    @media (max-width: 560px){
-      .calendar{gap:8px;}
-      .day{min-height:100px;padding:8px;}
-      .twoCols{ grid-template-columns:1fr; }
+    .weekdays div{ text-align:center; }
+
+    .days{
+      display:grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+    }
+    .day{
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+      border-radius: 14px;
+      min-height: 92px;
+      padding: 10px;
+      display:flex;
+      flex-direction:column;
+      gap: 8px;
+      cursor:pointer;
+      transition: transform .06s ease, border-color .18s ease, background .18s ease;
+      user-select:none;
+    }
+    .day:hover{ border-color: rgba(255,255,255,.18); background: rgba(255,255,255,.07); }
+    .day:active{ transform: translateY(1px); }
+    .day.muted{
+      opacity: .38;
+      cursor: default;
+    }
+    .day.muted:hover{ background: rgba(255,255,255,.05); border-color: rgba(255,255,255,.10); }
+    .dayTop{
+      display:flex; justify-content:space-between; align-items:baseline;
+      gap: 8px;
+    }
+    .num{ font-weight: 800; font-size: 14px; }
+    .dow{ font-size: 12px; color: rgba(255,255,255,.70); }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.20);
+      font-weight: 750;
+      font-size: 12px;
+      line-height: 1;
+      letter-spacing:.2px;
+      white-space: nowrap;
+      max-width: 100%;
+      overflow:hidden;
+      text-overflow: ellipsis;
+    }
+    /* Default-week colors */
+    .pill.taastrup{ border-color: rgba(74,166,255,.55); background: rgba(74,166,255,.14); }
+    .pill.horsens{ border-color: rgba(183,123,255,.55); background: rgba(183,123,255,.14); }
+    .pill.birkeroed{ border-color: rgba(62,230,195,.55); background: rgba(62,230,195,.14); }
+    /* Booking pill */
+    .pill.booking{ border-color: rgba(45,212,122,.55); background: rgba(45,212,122,.16); }
+
+    /* Skiftedag label style (Sunday) */
+    .shiftWrap{
+      display:flex;
+      flex-direction:column;
+      gap: 6px;
+    }
+    .shiftLabel{
+      display:inline-flex;
+      align-self:flex-start;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing:.25px;
+      text-transform: uppercase;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: rgba(255,255,255,.82);
+    }
+    .shiftNames{
+      display:flex;
+      flex-direction:column;
+      gap: 6px;
     }
 
-    .prettyDate{
-      margin-top:6px;
-      font-size:12px;
-      opacity:.82;
-      padding-left:2px;
-      text-transform:capitalize;
+    /* ===== Form ===== */
+    .formGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .formGrid .full{ grid-column: 1 / -1; }
+    label{
+      display:block;
+      margin: 10px 0 6px;
+      font-size: 12px;
+      color: rgba(255,255,255,.74);
+    }
+    textarea.field{ min-height: 92px; resize: vertical; }
+    .rowBtns{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      margin-top: 12px;
+    }
+    .small{
+      font-size: 12px;
+      color: rgba(255,255,255,.70);
+      margin-top: 8px;
+    }
+    .status{
+      margin-top: 10px;
+      font-size: 13px;
+      color: rgba(205,255,225,.92);
+      display:none;
     }
 
-    .list{display:flex;flex-direction:column;gap:10px;margin-top:10px;}
-    .stayItem{
-      border:1px solid rgba(255,255,255,.14);
-      border-radius:14px;
-      padding:12px;
-      background:rgba(255,255,255,.03);
+    .list{
+      margin-top: 12px;
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
     }
-    .stayItem .title{font-weight:950;margin-bottom:4px;}
-    .stayItem .meta{font-size:13px;opacity:.82;}
+    .item{
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+      border-radius: 14px;
+      padding: 12px;
+      display:flex;
+      justify-content:space-between;
+      gap: 10px;
+      align-items:flex-end;
+    }
+    .item .meta{
+      display:flex; flex-direction:column; gap: 6px;
+      min-width: 0;
+    }
+    .item .meta .who{
+      font-weight: 800;
+      white-space: nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
+    }
+    .item .meta .dates{
+      color: rgba(255,255,255,.70);
+      font-size: 12px;
+    }
+    .item .meta .by{
+      color: rgba(255,255,255,.72);
+      font-size: 12px;
+    }
 
+    .danger{
+      border-color: rgba(255,100,100,.35);
+      background: rgba(255,60,60,.10);
+    }
+
+    /* Responsive */
     @media (max-width: 980px){
       .grid{ grid-template-columns: 1fr; }
     }
 
-    .statusDot{
-      display:inline-block;
-      width:10px;height:10px;border-radius:99px;
-      background: rgba(255,255,255,.35);
-      margin-right:8px;
-    }
-    .statusOk{ background: rgba(34,197,94,.85); }
-    .statusBad{ background: rgba(255,90,90,.85); }
+    .hidden{ display:none !important; }
   </style>
 </head>
 
 <body>
+  <div class="bg"></div>
+
   <div class="wrap">
+    <header>
+      <div class="title">
+        <h1>Samsøhuset</h1>
+        <p>Kalender og ændringer (synkroniseres via Supabase)</p>
+      </div>
 
-    <div id="loginScreen">
+      <div class="topActions">
+        <button id="logoutBtn" class="btn hidden">Log ud</button>
+      </div>
+    </header>
+
+    <!-- LOGIN -->
+    <section id="loginScreen">
       <div class="card loginBox">
-        <div class="pad">
-          <h1>Samsøhuset</h1>
-          <div class="muted">Indtast koden for at logge ind</div>
+        <div class="cardInner">
+          <h2>Log ind</h2>
+          <p class="sub">Indtast koden for at komme ind.</p>
 
-          <div class="loginRow">
-            <input id="code" type="password" placeholder="Kode" autocomplete="off">
-            <button id="btn" class="primary" type="button">Log ind</button>
+          <div class="row">
+            <input id="passInput" class="field" type="password" placeholder="Kode" autocomplete="current-password" />
+            <button id="loginBtn" class="btn btnPrimary" type="button">Log ind</button>
           </div>
 
           <div id="loginMsg" class="msg"></div>
-          <div class="small">Tip: Vi gemmer ikke login. Du kan altid lukke fanen og åbne igen.</div>
+          <p class="hint">Tip: Browseren husker det på enheden, når du er logget ind.</p>
         </div>
       </div>
-    </div>
+    </section>
 
-    <div id="app">
-      <div class="row between" style="margin-top:6px;">
-        <div>
-          <h1>Samsøhuset</h1>
-          <div class="muted">
-            <span id="syncDot" class="statusDot"></span>
-            <span id="syncText">Forbinder…</span>
+    <!-- APP -->
+    <main id="app" class="grid hidden">
+
+      <!-- Calendar -->
+      <section class="card">
+        <div class="cardInner">
+          <div class="calHeader">
+            <div class="monthTitle">
+              <div id="monthName" class="m">—</div>
+              <div class="t">Klik på en dag for start. Klik igen for slut.</div>
+            </div>
+            <div class="nav">
+              <button id="prevBtn" class="btn" type="button">◀</button>
+              <button id="todayBtn" class="btn" type="button">I dag</button>
+              <button id="nextBtn" class="btn" type="button">▶</button>
+            </div>
+          </div>
+
+          <div class="weekdays">
+            <div>Man</div><div>Tir</div><div>Ons</div><div>Tor</div><div>Fre</div><div>Lør</div><div>Søn</div>
+          </div>
+
+          <div id="days" class="days"></div>
+        </div>
+      </section>
+
+      <!-- Booking panel -->
+      <aside class="card">
+        <div class="cardInner">
+          <h2>Vælg datoer</h2>
+          <p class="sub">Vælg i kalenderen, eller udfyld felterne her.</p>
+
+          <div class="formGrid">
+            <div>
+              <label for="startInput">Start</label>
+              <input id="startInput" class="field" type="date" />
+            </div>
+            <div>
+              <label for="endInput">Slut</label>
+              <input id="endInput" class="field" type="date" />
+            </div>
+
+            <div class="full">
+              <label for="whoInput">Hvem har huset (kan være familie/venner)</label>
+              <input id="whoInput" class="field" type="text" placeholder="Fx Taastrup / Vennegruppe / etc." />
+            </div>
+
+            <div class="full">
+              <label for="changedByInput">Ændret af</label>
+              <input id="changedByInput" class="field" type="text" placeholder="Navn" />
+            </div>
+
+            <div class="full">
+              <label for="noteInput">Note (valgfri)</label>
+              <textarea id="noteInput" class="field" placeholder="Kort note"></textarea>
+            </div>
+          </div>
+
+          <div class="rowBtns">
+            <button id="resetBtn" class="btn" type="button">Nulstil</button>
+            <button id="saveBtn" class="btn btnPrimary" type="button">Gem</button>
+          </div>
+
+          <div id="status" class="status">—</div>
+
+          <div style="margin-top:16px">
+            <h2>Ændringer</h2>
+            <p class="sub">Liste over ændringer på denne enhed (synkroniseres)</p>
+            <div id="list" class="list"></div>
           </div>
         </div>
-        <div class="row">
-          <button id="logout" class="ghost" type="button">Log ud</button>
-        </div>
-      </div>
+      </aside>
 
-      <div class="grid">
-        <div class="card">
-          <div class="pad">
-            <div class="calHeader">
-              <div>
-                <div class="month" id="monthLabel"></div>
-                <div class="small">Klik på en dag for start. Klik igen for slut.</div>
-              </div>
-              <div class="row">
-                <button id="prev" class="ghost" type="button">◀</button>
-                <button id="today" class="ghost" type="button">I dag</button>
-                <button id="next" class="ghost" type="button">▶</button>
-              </div>
-            </div>
-
-            <div class="dow">
-              <div>Man</div><div>Tir</div><div>Ons</div><div>Tor</div><div>Fre</div><div>Lør</div><div>Søn</div>
-            </div>
-
-            <div class="calendar" id="calendar"></div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="pad">
-            <h2>Book datoer</h2>
-            <div class="small">Vælg datoer i kalenderen, eller udfyld her.</div>
-
-            <div class="twoCols" style="margin-top:10px;">
-              <div>
-                <div class="small">Start</div>
-                <input id="startDate" type="date">
-                <div id="prettyStart" class="prettyDate"></div>
-              </div>
-              <div>
-                <div class="small">Slut</div>
-                <input id="endDate" type="date">
-                <div id="prettyEnd" class="prettyDate"></div>
-              </div>
-            </div>
-
-            <div style="margin-top:10px;">
-              <div class="small">Hvem har huset (kan være familie/venner)</div>
-              <input id="whoHas" placeholder="Fx Taastrup / Vennegruppe / etc.">
-            </div>
-
-            <div style="margin-top:10px;">
-              <div class="small">Ændret af</div>
-              <input id="changedBy" placeholder="Navn">
-            </div>
-
-            <div style="margin-top:10px;">
-              <div class="small">Note (valgfri)</div>
-              <textarea id="note" rows="3" placeholder="Kort note"></textarea>
-            </div>
-
-            <div class="row between" style="margin-top:10px;">
-              <button id="clear" class="ghost" type="button">Nulstil</button>
-              <button id="save" class="primary" type="button">Gem</button>
-            </div>
-
-            <div id="formMsg" class="msg"></div>
-
-            <div style="margin-top:14px;">
-              <h2>Ændringer</h2>
-              <div class="small">Liste over ændringer på denne enhed</div>
-              <div class="list" id="staysList"></div>
-            </div>
-
-          </div>
-        </div>
-
-      </div>
-    </div>
-
+    </main>
   </div>
 
-  <!-- Supabase client -->
+  <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<script>
-  /* ====== DINE SUPABASE-NØGLER ====== */
-  const SUPABASE_URL = "https://jbweskxscyxjonrhbdcd.supabase.co";
-  const SUPABASE_KEY = "sb_publishable_2qMwF5JFmVmQuf9jJCERxw_25bMzbyu";
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  <script>
+    /* =========================================================
+       KONFIGURATION (DET ENESTE DU EVT. SKAL ÆNDRE SENERE)
+       ========================================================= */
+    const SHARED_CODE = "kalkhavesvej"; // <- login-kode
 
-  /* ===== LOGIN ===== */
-  const KODE = "kalkhavesvej";
+    const SUPABASE_URL = "https://jbweskxscyxjonrhbdcd.supabase.co";
+    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_2qMwF5JFmVmQuf9jJCERxw_25bMzbyu";
 
-  const loginScreen = document.getElementById("loginScreen");
-  const app = document.getElementById("app");
-  const code = document.getElementById("code");
-  const btn = document.getElementById("btn");
-  const loginMsg = document.getElementById("loginMsg");
-  const logoutBtn = document.getElementById("logout");
+    // 2026 standard-rotation for weeks (Mon->Sat), Sunday is shared shift day.
+    const YEAR = 2026;
 
-  const syncDot = document.getElementById("syncDot");
-  const syncText = document.getElementById("syncText");
+    // Rotation order:
+    const ROTATION = ["Taastrup", "Horsens", "Birkerød"];
 
-  function setSync(status, text){
-    syncDot.classList.remove("statusOk","statusBad");
-    if(status === "ok") syncDot.classList.add("statusOk");
-    if(status === "bad") syncDot.classList.add("statusBad");
-    syncText.textContent = text;
-  }
+    // Monday of the first rotation week (choose any correct starting Monday for your 2026 plan)
+    // NOTE: This controls where the Taastrup/Horsens/Birkerød cycle starts.
+    // If the rotation looks off, change this ONE date.
+    const ROTATION_START_MONDAY = "2025-12-29"; // Monday (ISO). Week that contains Jan 1, 2026.
 
-  function norm(v){ return (v||"").trim().toLowerCase(); }
+    /* ========================================================= */
 
-  function showApp(){
-    loginScreen.style.display = "none";
-    app.style.display = "block";
-    initSupabaseAndLoad();
-  }
-  function showLogin(){
-    app.style.display = "none";
-    loginScreen.style.display = "flex";
-    code.value = "";
-    loginMsg.textContent = "";
-  }
-  function unlock(){
-    if(norm(code.value) === norm(KODE)){
-      loginMsg.textContent = "Logget ind ✅";
+    // DOM
+    const loginScreen = document.getElementById("loginScreen");
+    const app = document.getElementById("app");
+    const passInput = document.getElementById("passInput");
+    const loginBtn = document.getElementById("loginBtn");
+    const loginMsg = document.getElementById("loginMsg");
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    const monthName = document.getElementById("monthName");
+    const daysEl = document.getElementById("days");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const todayBtn = document.getElementById("todayBtn");
+
+    const startInput = document.getElementById("startInput");
+    const endInput = document.getElementById("endInput");
+    const whoInput = document.getElementById("whoInput");
+    const changedByInput = document.getElementById("changedByInput");
+    const noteInput = document.getElementById("noteInput");
+    const resetBtn = document.getElementById("resetBtn");
+    const saveBtn = document.getElementById("saveBtn");
+    const statusEl = document.getElementById("status");
+    const listEl = document.getElementById("list");
+
+    // Robust: wait until Supabase library is present
+    function getSupabaseClient(){
+      if (!window.supabase || !window.supabase.createClient) return null;
+      return window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+    }
+
+    // Login handling (kept totally separate from Supabase)
+    function normalize(v){ return (v || "").toString().trim().toLowerCase(); }
+    function setLoginMsg(text, ok=false){
+      loginMsg.textContent = text;
+      loginMsg.className = "msg" + (ok ? " ok" : "");
+      loginMsg.style.display = "block";
+    }
+    function clearLoginMsg(){
+      loginMsg.style.display = "none";
+      loginMsg.textContent = "";
+    }
+
+    function isLoggedIn(){ return localStorage.getItem("samsoehuset_ok") === "1"; }
+    function setLoggedIn(){
+      localStorage.setItem("samsoehuset_ok", "1");
       showApp();
-    }else{
-      loginMsg.textContent = "Forkert kode – prøv igen";
     }
-  }
-  btn.onclick = unlock;
-  code.onkeydown = e => { if(e.key==="Enter") unlock(); };
-  logoutBtn.onclick = showLogin;
-
-  /* ===== STANDARD-UGER ===== */
-  const FAMILIES = ["Taastrup","Horsens","Birkerød"];
-
-  /* ===== GLOBAL STATE ===== */
-  let staysCache = [];
-  let realtimeChannel = null;
-
-  /* ===== Helpers ===== */
-  function toISO(d){
-    const y = d.getFullYear();
-    const m = String(d.getMonth()+1).padStart(2,"0");
-    const day = String(d.getDate()).padStart(2,"0");
-    return `${y}-${m}-${day}`;
-  }
-
-  function startOfWeekMonday(d){
-    const x = new Date(d);
-    const dow = (x.getDay() + 6) % 7;
-    x.setDate(x.getDate() - dow);
-    x.setHours(12,0,0,0);
-    return x;
-  }
-
-  function isoWeek(date){
-    const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
-    const dayNum = d.getUTCDay() || 7;
-    d.setUTCDate(d.getUTCDate() + 4 - dayNum);
-    const yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
-    return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
-  }
-
-  function ownerForWeekIndex(week){
-    const idx = (week - 1) % FAMILIES.length;
-    return FAMILIES[idx];
-  }
-
-  function familyClass(name){
-    const n = (name || "").toLowerCase();
-    if(n.includes("taastrup")) return "family-taastrup";
-    if(n.includes("horsens")) return "family-horsens";
-    if(n.includes("birker")) return "family-birkerod";
-    return "";
-  }
-  function chipClass(name){
-    const n = (name || "").toLowerCase();
-    if(n.includes("taastrup")) return "ta";
-    if(n.includes("horsens")) return "ho";
-    if(n.includes("birker")) return "bi";
-    return "";
-  }
-
-  // Søndag-til-søndag: søndag er skiftedag (to chips), men uden label
-  function ownerInfoForDate(d){
-    const day = d.getDay(); // 0=søn
-    const w = isoWeek(d);
-
-    if(day !== 0){
-      const owner = ownerForWeekIndex(w);
-      return { kind:"single", a: owner, b: null, className: familyClass(owner) };
+    function setLoggedOut(){
+      localStorage.removeItem("samsoehuset_ok");
+      showLogin();
     }
 
-    const prev = ownerForWeekIndex(w);
-    const next = ownerForWeekIndex(w + 1);
-    return { kind:"split", a: prev, b: next, className: "" };
-  }
-
-  function staysForDay(iso){
-    return staysCache.filter(s => iso >= s.start_date && iso <= s.end_date);
-  }
-
-  function escapeHtml(str){
-    return String(str).replace(/[&<>"']/g, m => ({
-      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
-    }[m]));
-  }
-
-  function formatPretty(iso){
-    if(!iso) return "";
-    const d = new Date(iso + "T12:00:00");
-    return d.toLocaleDateString("da-DK", { weekday:"long", day:"numeric", month:"long", year:"numeric" });
-  }
-
-  /* ===== Supabase I/O ===== */
-  async function fetchStays(){
-    const { data, error } = await supabase
-      .from("stays")
-      .select("*")
-      .order("start_date", { ascending: true });
-
-    if(error) throw error;
-    staysCache = (data || []).map(x => ({
-      id: x.id,
-      start_date: x.start_date,
-      end_date: x.end_date,
-      who_has: x.who_has,
-      changed_by: x.changed_by,
-      note: x.note || ""
-    }));
-  }
-
-  async function createStay(payload){
-    const { error } = await supabase.from("stays").insert([payload]);
-    if(error) throw error;
-  }
-
-  async function deleteStay(id){
-    const { error } = await supabase.from("stays").delete().eq("id", id);
-    if(error) throw error;
-  }
-
-  function setupRealtime(){
-    if(realtimeChannel){
-      supabase.removeChannel(realtimeChannel);
-      realtimeChannel = null;
+    function showLogin(){
+      loginScreen.classList.remove("hidden");
+      app.classList.add("hidden");
+      logoutBtn.classList.add("hidden");
+    }
+    function showApp(){
+      loginScreen.classList.add("hidden");
+      app.classList.remove("hidden");
+      logoutBtn.classList.remove("hidden");
     }
 
-    realtimeChannel = supabase
-      .channel("stays-changes")
-      .on("postgres_changes", { event: "*", schema: "public", table: "stays" }, async () => {
-        try{
-          await fetchStays();
-          renderAll();
-          setSync("ok","Synkroniseret (opdateret)");
-        }catch(e){
-          setSync("bad","Kunne ikke opdatere lige nu");
-        }
-      })
-      .subscribe((status) => {
-        if(status === "SUBSCRIBED"){
-          setSync("ok","Synkroniseret (live)");
-        }
-      });
-  }
+    function tryLogin(){
+      clearLoginMsg();
+      const entered = normalize(passInput.value);
+      const correct = normalize(SHARED_CODE);
 
-  async function initSupabaseAndLoad(){
-    setSync("", "Forbinder…");
-    try{
-      await fetchStays();
-      setupRealtime();
-      renderAll();
-      setSync("ok","Synkroniseret (live)");
-    }catch(e){
-      console.error(e);
-      setSync("bad","Fejl: tjek Supabase (RLS/policies)");
-      // Vi rendrer stadig UI, så du kan se kalenderen
-      renderAll();
-    }
-  }
-
-  /* ===== UI ===== */
-  let view = new Date();
-  let selectionStart = null;
-
-  const monthLabel = document.getElementById("monthLabel");
-  const calendarEl = document.getElementById("calendar");
-  const staysListEl = document.getElementById("staysList");
-
-  const startInput = document.getElementById("startDate");
-  const endInput = document.getElementById("endDate");
-  const whoHasInput = document.getElementById("whoHas");
-  const changedByInput = document.getElementById("changedBy");
-  const noteInput = document.getElementById("note");
-  const formMsg = document.getElementById("formMsg");
-
-  const prettyStart = document.getElementById("prettyStart");
-  const prettyEnd = document.getElementById("prettyEnd");
-
-  function updatePrettyDates(){
-    prettyStart.textContent = startInput.value ? formatPretty(startInput.value) : "";
-    prettyEnd.textContent = endInput.value ? formatPretty(endInput.value) : "";
-  }
-  startInput.addEventListener("change", updatePrettyDates);
-  endInput.addEventListener("change", updatePrettyDates);
-
-  document.getElementById("prev").onclick = () => { view.setMonth(view.getMonth()-1); renderAll(); };
-  document.getElementById("next").onclick = () => { view.setMonth(view.getMonth()+1); renderAll(); };
-  document.getElementById("today").onclick = () => { view = new Date(); selectionStart = null; renderAll(); };
-
-  document.getElementById("clear").onclick = () => {
-    selectionStart = null;
-    startInput.value = "";
-    endInput.value = "";
-    whoHasInput.value = "";
-    changedByInput.value = "";
-    noteInput.value = "";
-    formMsg.textContent = "";
-    updatePrettyDates();
-    renderAll();
-  };
-
-  document.getElementById("save").onclick = async () => {
-    const start = startInput.value;
-    const end = endInput.value;
-    const whoHas = (whoHasInput.value || "").trim();
-    const changedBy = (changedByInput.value || "").trim();
-    const note = (noteInput.value || "").trim();
-
-    if(!start || !end){ formMsg.textContent = "Vælg start og slut først."; return; }
-    if(end < start){ formMsg.textContent = "Slutdato må ikke være før startdato."; return; }
-    if(!whoHas){ formMsg.textContent = "Skriv hvem der har huset i perioden."; return; }
-    if(!changedBy){ formMsg.textContent = "Skriv hvem der har ændret."; return; }
-
-    // Konflikt-check mod cache (alle)
-    const conflict = staysCache.some(s => !(end < s.start_date || start > s.end_date));
-    if(conflict){
-      formMsg.textContent = "Der ligger allerede en reservation i det interval.";
-      return;
+      if (!entered){
+        setLoginMsg("Skriv koden først.");
+        return;
+      }
+      if (entered !== correct){
+        setLoginMsg("Forkert kode. Prøv igen.");
+        return;
+      }
+      setLoggedIn();
     }
 
-    formMsg.textContent = "Gemmer…";
+    loginBtn.addEventListener("click", tryLogin);
+    passInput.addEventListener("keydown", (e)=>{ if (e.key === "Enter") tryLogin(); });
+    logoutBtn.addEventListener("click", ()=>{ setLoggedOut(); });
 
-    try{
-      await createStay({
-        start_date: start,
-        end_date: end,
-        who_has: whoHas,
-        changed_by: changedBy,
-        note: note || ""
-      });
+    // Calendar state
+    const DK_MONTHS = ["januar","februar","marts","april","maj","juni","juli","august","september","oktober","november","december"];
+    const DK_DOW = ["Søn","Man","Tir","Ons","Tor","Fre","Lør"]; // JS getDay()
 
-      // Realtime vil opdatere, men vi henter også hurtigt for at være sikker
-      await fetchStays();
-      renderAll();
-      formMsg.textContent = "Gemt ✅";
-      setSync("ok","Synkroniseret (live)");
-    }catch(e){
-      console.error(e);
-      formMsg.textContent = "Kunne ikke gemme. Tjek Supabase.";
-      setSync("bad","Kunne ikke gemme");
+    let view = new Date();
+    view.setHours(12,0,0,0);
+
+    let selectedStart = null;
+    let selectedEnd = null;
+
+    // Data
+    let stays = []; // from Supabase
+
+    function isoDate(d){
+      const y = d.getFullYear();
+      const m = String(d.getMonth()+1).padStart(2,"0");
+      const da = String(d.getDate()).padStart(2,"0");
+      return `${y}-${m}-${da}`;
     }
-  };
+    function parseISO(s){
+      const [y,m,d] = s.split("-").map(Number);
+      const dt = new Date(y, m-1, d);
+      dt.setHours(12,0,0,0);
+      return dt;
+    }
+    function startOfDay(d){
+      const x = new Date(d);
+      x.setHours(12,0,0,0);
+      return x;
+    }
 
-  function onDayClick(iso, suggested){
-    formMsg.textContent = "";
+    function addDays(d, n){
+      const x = new Date(d);
+      x.setDate(x.getDate()+n);
+      return startOfDay(x);
+    }
 
-    if(!selectionStart){
-      selectionStart = iso;
-      startInput.value = iso;
-      endInput.value = iso;
+    function clampDateOrder(a,b){
+      if (!a || !b) return [a,b];
+      return a <= b ? [a,b] : [b,a];
+    }
 
-      if(!whoHasInput.value.trim()){
-        whoHasInput.value = suggested;
+    function sameDay(a,b){
+      return a && b && a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate();
+    }
+
+    function inRange(day, a, b){
+      if (!a || !b) return false;
+      const d = day.getTime();
+      return d >= a.getTime() && d <= b.getTime();
+    }
+
+    function mondayStart(d){
+      const x = startOfDay(d);
+      const js = x.getDay(); // 0 Sun,1 Mon...
+      const diff = (js === 0) ? -6 : (1 - js); // go back to Monday
+      return addDays(x, diff);
+    }
+
+    function weekIndexFromRotationStart(monday){
+      const start = parseISO(ROTATION_START_MONDAY);
+      const diffDays = Math.round((monday.getTime()-start.getTime())/(1000*60*60*24));
+      return Math.floor(diffDays / 7);
+    }
+
+    function baseOwnerForDate(d){
+      // Ownership applies Mon->Sat for an "owner".
+      // Sunday is shift day showing both current owner and next owner.
+      const mon = mondayStart(d);
+      const w = weekIndexFromRotationStart(mon);
+      const idx = ((w % ROTATION.length) + ROTATION.length) % ROTATION.length;
+      const current = ROTATION[idx];
+      const next = ROTATION[(idx+1) % ROTATION.length];
+
+      if (d.getDay() === 0){ // Sunday
+        return { type:"shift", current, next };
+      }
+      return { type:"single", owner: current };
+    }
+
+    function ownerClass(name){
+      const n = (name||"").toLowerCase();
+      if (n.includes("taastrup")) return "taastrup";
+      if (n.includes("horsens")) return "horsens";
+      if (n.includes("birker")) return "birkeroed";
+      return "";
+    }
+
+    function setStatus(text, ok=true){
+      statusEl.textContent = text;
+      statusEl.style.display = "block";
+      statusEl.style.color = ok ? "rgba(205,255,225,.92)" : "rgba(255,220,220,.92)";
+      setTimeout(()=>{ statusEl.style.display = "none"; }, 2500);
+    }
+
+    // Supabase operations
+    async function loadStays(){
+      const client = getSupabaseClient();
+      if (!client){
+        setStatus("Supabase kunne ikke loades (prøv at genindlæse).", false);
+        return;
       }
 
-      updatePrettyDates();
-      renderCalendar();
-      return;
-    }
+      const { data, error } = await client
+        .from("stays")
+        .select("*")
+        .order("start_date", { ascending: true });
 
-    const a = selectionStart;
-    const b = iso;
-    selectionStart = null;
-
-    startInput.value = (a <= b ? a : b);
-    endInput.value = (a <= b ? b : a);
-
-    updatePrettyDates();
-    renderCalendar();
-  }
-
-  function renderAll(){
-    monthLabel.textContent = view.toLocaleDateString("da-DK", { month:"long", year:"numeric" });
-    renderCalendar();
-    renderStaysList();
-    updatePrettyDates();
-  }
-
-  function renderCalendar(){
-    calendarEl.innerHTML = "";
-
-    const year = view.getFullYear();
-    const month = view.getMonth();
-    const first = new Date(year, month, 1);
-    const last = new Date(year, month+1, 0);
-
-    const gridStart = startOfWeekMonday(first);
-    const gridEnd = new Date(last);
-    const endDow = (gridEnd.getDay() + 6) % 7;
-    gridEnd.setDate(gridEnd.getDate() + (6 - endDow));
-    gridEnd.setHours(12,0,0,0);
-
-    let d = new Date(gridStart);
-    while(d <= gridEnd){
-      const iso = toISO(d);
-      const inMonth = d.getMonth() === month;
-
-      const cell = document.createElement("div");
-      cell.className = "day" + (inMonth ? "" : " off");
-
-      const top = document.createElement("div");
-      top.className = "dayTop";
-      top.innerHTML = `<span>${d.getDate()}</span><span class="small">${["Man","Tir","Ons","Tor","Fre","Lør","Søn"][(d.getDay()+6)%7]}</span>`;
-      cell.appendChild(top);
-
-      const info = ownerInfoForDate(d);
-      const hits = staysForDay(iso);
-
-      if(hits.length){
-        const firstHit = hits[0];
-        const p = document.createElement("div");
-        p.className = "pill booked";
-        p.innerHTML = `
-          <span class="title">Bruges af</span>
-          <span class="sub">${escapeHtml(firstHit.who_has)}</span>
-        `;
-        cell.appendChild(p);
-      }else{
-        if(info.kind === "single"){
-          const p = document.createElement("div");
-          p.className = "pill " + info.className;
-          p.innerHTML = `<span class="title">${info.a}</span>`;
-          cell.appendChild(p);
-        }else{
-          const p = document.createElement("div");
-          p.className = "pill split";
-          p.innerHTML = `
-            <div class="splitChips">
-              <div class="chip ${chipClass(info.a)}">${info.a}</div>
-              <div class="chip ${chipClass(info.b)}">${info.b}</div>
-            </div>
-          `;
-          cell.appendChild(p);
-        }
+      if (error){
+        setStatus("Kunne ikke hente data fra Supabase.", false);
+        console.error(error);
+        return;
       }
 
+      stays = Array.isArray(data) ? data : [];
+      render();
+      renderList();
+    }
+
+    function findStayForDate(d){
+      const dayISO = isoDate(d);
+      // A stay covers inclusive start_date..end_date
+      return stays.find(s => s.start_date <= dayISO && s.end_date >= dayISO) || null;
+    }
+
+    async function saveStay(){
       const s = startInput.value;
       const e = endInput.value;
-      if(s && e && iso >= s && iso <= e){
-        cell.classList.add("selected");
+      const who = (whoInput.value || "").trim();
+      const changedBy = (changedByInput.value || "").trim();
+      const note = (noteInput.value || "").trim();
+
+      if (!s || !e){
+        setStatus("Vælg både start og slut.", false);
+        return;
+      }
+      if (!who){
+        setStatus("Skriv hvem der har huset.", false);
+        return;
+      }
+      if (!changedBy){
+        setStatus("Skriv hvem der har ændret.", false);
+        return;
       }
 
-      const suggested = info.kind === "split" ? info.a : info.a;
-      cell.onclick = () => onDayClick(iso, suggested);
+      // Ensure order
+      const [a,b] = clampDateOrder(s, e);
 
-      calendarEl.appendChild(cell);
-      d.setDate(d.getDate() + 1);
-    }
-  }
+      const client = getSupabaseClient();
+      if (!client){
+        setStatus("Supabase kunne ikke loades.", false);
+        return;
+      }
 
-  function renderStaysList(){
-    staysListEl.innerHTML = "";
-
-    if(!staysCache.length){
-      const empty = document.createElement("div");
-      empty.className = "stayItem";
-      empty.innerHTML = `<div class="muted">Ingen ændringer endnu</div>`;
-      staysListEl.appendChild(empty);
-      return;
-    }
-
-    staysCache.forEach(s => {
-      const item = document.createElement("div");
-      item.className = "stayItem";
-      item.innerHTML = `
-        <div class="title">${escapeHtml(s.who_has)}</div>
-        <div class="meta">${formatPretty(s.start_date)} → ${formatPretty(s.end_date)}</div>
-        <div class="meta">Ændret af: ${escapeHtml(s.changed_by || "")}</div>
-        ${s.note ? `<div class="meta">Note: ${escapeHtml(s.note)}</div>` : ""}
-        <div class="row" style="margin-top:10px; justify-content:flex-end;">
-          <button class="ghost" type="button" data-del="${s.id}">Slet</button>
-        </div>
-      `;
-      staysListEl.appendChild(item);
-    });
-
-    staysListEl.querySelectorAll("button[data-del]").forEach(b => {
-      b.onclick = async () => {
-        const id = b.getAttribute("data-del");
-        formMsg.textContent = "Sletter…";
-        try{
-          await deleteStay(id);
-          await fetchStays();
-          renderAll();
-          formMsg.textContent = "Slettet ✅";
-          setSync("ok","Synkroniseret (live)");
-        }catch(e){
-          console.error(e);
-          formMsg.textContent = "Kunne ikke slette. Tjek Supabase.";
-          setSync("bad","Kunne ikke slette");
-        }
+      // Insert new stay (simple approach)
+      const payload = {
+        start_date: a,
+        end_date: b,
+        family: who,
+        booked_by: changedBy,
+        note
       };
-    });
-  }
 
-  showLogin();
-</script>
+      const { error } = await client.from("stays").insert(payload);
+      if (error){
+        setStatus("Kunne ikke gemme i Supabase.", false);
+        console.error(error);
+        return;
+      }
+
+      setStatus("Gemt ✅");
+      resetForm(false);
+      await loadStays();
+    }
+
+    async function deleteStay(id){
+      const client = getSupabaseClient();
+      if (!client){
+        setStatus("Supabase kunne ikke loades.", false);
+        return;
+      }
+
+      const { error } = await client.from("stays").delete().eq("id", id);
+      if (error){
+        setStatus("Kunne ikke slette.", false);
+        console.error(error);
+        return;
+      }
+      setStatus("Slettet");
+      await loadStays();
+    }
+
+    function resetForm(clearSelection=true){
+      startInput.value = "";
+      endInput.value = "";
+      whoInput.value = "";
+      changedByInput.value = "";
+      noteInput.value = "";
+      if (clearSelection){
+        selectedStart = null;
+        selectedEnd = null;
+        render();
+      }
+    }
+
+    function onDayClick(date){
+      // Selecting range (two clicks)
+      if (!selectedStart || (selectedStart && selectedEnd)){
+        selectedStart = date;
+        selectedEnd = null;
+      } else {
+        selectedEnd = date;
+        [selectedStart, selectedEnd] = clampDateOrder(selectedStart, selectedEnd);
+      }
+
+      // Update form
+      if (selectedStart) startInput.value = isoDate(selectedStart);
+      if (selectedEnd) endInput.value = isoDate(selectedEnd);
+
+      render();
+    }
+
+    function monthLabel(d){
+      return `${DK_MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+    }
+
+    function render(){
+      monthName.textContent = monthLabel(view);
+
+      // Grid from Monday-start
+      const first = new Date(view.getFullYear(), view.getMonth(), 1);
+      first.setHours(12,0,0,0);
+
+      const firstMonday = mondayStart(first);
+      const last = new Date(view.getFullYear(), view.getMonth()+1, 0);
+      last.setHours(12,0,0,0);
+
+      // 6 weeks grid (42 days)
+      const start = firstMonday;
+
+      daysEl.innerHTML = "";
+      for (let i=0; i<42; i++){
+        const d = addDays(start, i);
+        const inThisMonth = d.getMonth() === view.getMonth();
+
+        const day = document.createElement("div");
+        day.className = "day" + (inThisMonth ? "" : " muted");
+
+        const top = document.createElement("div");
+        top.className = "dayTop";
+
+        const num = document.createElement("div");
+        num.className = "num";
+        num.textContent = String(d.getDate());
+
+        const dow = document.createElement("div");
+        dow.className = "dow";
+        dow.textContent = DK_DOW[d.getDay()];
+
+        top.appendChild(num);
+        top.appendChild(dow);
+
+        day.appendChild(top);
+
+        // Default owner / shift day
+        const base = baseOwnerForDate(d);
+
+        if (base.type === "shift"){
+          const wrap = document.createElement("div");
+          wrap.className = "shiftWrap";
+
+          const lbl = document.createElement("div");
+          lbl.className = "shiftLabel";
+          lbl.textContent = "Skiftedag";
+
+          const names = document.createElement("div");
+          names.className = "shiftNames";
+
+          const p1 = document.createElement("div");
+          p1.className = "pill " + ownerClass(base.current);
+          p1.textContent = base.current;
+
+          const p2 = document.createElement("div");
+          p2.className = "pill " + ownerClass(base.next);
+          p2.textContent = base.next;
+
+          names.appendChild(p1);
+          names.appendChild(p2);
+
+          wrap.appendChild(lbl);
+          wrap.appendChild(names);
+          day.appendChild(wrap);
+        } else {
+          const p = document.createElement("div");
+          p.className = "pill " + ownerClass(base.owner);
+          p.textContent = base.owner;
+          day.appendChild(p);
+        }
+
+        // Booking overlay (if any)
+        const stay = findStayForDate(d);
+        if (stay){
+          const b = document.createElement("div");
+          b.className = "pill booking";
+          b.textContent = `Bruges af: ${stay.family}`;
+          day.appendChild(b);
+        }
+
+        // Selection highlight via border glow
+        if (selectedStart && sameDay(d, selectedStart)) {
+          day.style.outline = "2px solid rgba(45,212,122,.85)";
+          day.style.outlineOffset = "2px";
+        }
+        if (selectedEnd && sameDay(d, selectedEnd)) {
+          day.style.outline = "2px solid rgba(45,212,122,.85)";
+          day.style.outlineOffset = "2px";
+        }
+        if (selectedStart && selectedEnd && inRange(d, selectedStart, selectedEnd)){
+          day.style.borderColor = "rgba(45,212,122,.35)";
+          day.style.background = "rgba(45,212,122,.08)";
+        }
+
+        if (inThisMonth){
+          day.addEventListener("click", ()=> onDayClick(d));
+        }
+
+        daysEl.appendChild(day);
+      }
+    }
+
+    function renderList(){
+      listEl.innerHTML = "";
+
+      if (!stays.length){
+        const empty = document.createElement("div");
+        empty.className = "item";
+        empty.innerHTML = `<div class="meta"><div class="who">Ingen ændringer endnu</div><div class="dates">—</div></div>`;
+        listEl.appendChild(empty);
+        return;
+      }
+
+      // Show newest first
+      const sorted = [...stays].sort((a,b)=>{
+        const aa = (a.created_at || "");
+        const bb = (b.created_at || "");
+        return bb.localeCompare(aa);
+      });
+
+      for (const s of sorted){
+        const it = document.createElement("div");
+        it.className = "item";
+
+        const meta = document.createElement("div");
+        meta.className = "meta";
+
+        const who = document.createElement("div");
+        who.className = "who";
+        who.textContent = s.family || "(ukendt)";
+
+        const dates = document.createElement("div");
+        dates.className = "dates";
+        dates.textContent = `${s.start_date} → ${s.end_date}`;
+
+        const by = document.createElement("div");
+        by.className = "by";
+        by.textContent = `Ændret af: ${s.booked_by || "-"}`;
+
+        meta.appendChild(who);
+        meta.appendChild(dates);
+        meta.appendChild(by);
+
+        const del = document.createElement("button");
+        del.className = "btn danger";
+        del.type = "button";
+        del.textContent = "Slet";
+        del.addEventListener("click", ()=> deleteStay(s.id));
+
+        it.appendChild(meta);
+        it.appendChild(del);
+
+        listEl.appendChild(it);
+      }
+    }
+
+    // Navigation
+    prevBtn.addEventListener("click", ()=>{
+      view = new Date(view.getFullYear(), view.getMonth()-1, 1);
+      view.setHours(12,0,0,0);
+      render();
+    });
+    nextBtn.addEventListener("click", ()=>{
+      view = new Date(view.getFullYear(), view.getMonth()+1, 1);
+      view.setHours(12,0,0,0);
+      render();
+    });
+    todayBtn.addEventListener("click", ()=>{
+      view = new Date();
+      view.setHours(12,0,0,0);
+      render();
+    });
+
+    // Form
+    resetBtn.addEventListener("click", ()=> resetForm(true));
+    saveBtn.addEventListener("click", saveStay);
+
+    // Init
+    (function init(){
+      // Always show login first or app based on localStorage
+      if (isLoggedIn()){
+        showApp();
+        // Load data after login
+        loadStays();
+      } else {
+        showLogin();
+      }
+
+      // Default view: January 2026
+      view = new Date(YEAR, 0, 1);
+      view.setHours(12,0,0,0);
+      render();
+      renderList();
+    })();
+  </script>
 </body>
 </html>
