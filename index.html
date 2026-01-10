@@ -9,20 +9,19 @@
     :root{
       --card: rgba(18,20,24,.62);
       --border: rgba(255,255,255,.18);
-      --muted: rgba(255,255,255,.78);
       --shadow: 0 20px 55px rgba(0,0,0,.55);
 
       --okBg: rgba(34,197,94,.20);
       --okBorder: rgba(34,197,94,.55);
 
-      --blueBg: rgba(80,180,255,.12);
-      --blueBorder: rgba(80,180,255,.45);
+      --ownerBg: rgba(80,180,255,.12);
+      --ownerBorder: rgba(80,180,255,.45);
 
-      --bookBg: rgba(255,200,80,.14);
-      --bookBorder: rgba(255,200,80,.55);
+      --bookBg: rgba(255,200,80,.16);
+      --bookBorder: rgba(255,200,80,.60);
     }
 
-    * , *::before, *::after { box-sizing: border-box; }
+    *, *::before, *::after{ box-sizing: border-box; }
 
     html,body{height:100%;margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;}
     body{
@@ -31,14 +30,12 @@
       background:
         radial-gradient(1200px 700px at 20% 10%, rgba(255,255,255,.10), transparent 55%),
         radial-gradient(900px 600px at 70% 30%, rgba(80,180,255,.10), transparent 55%),
-        linear-gradient(180deg, rgba(0,0,0,.65), rgba(0,0,0,.70)),
+        linear-gradient(180deg, rgba(0,0,0,.58), rgba(0,0,0,.72)),
         url("bg.jpg");
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
     }
-
-    /* mobil: background-attachment fixed kan give hakken, så slå det fra */
     @media (max-width: 700px){
       body{ background-attachment: scroll; }
     }
@@ -55,7 +52,7 @@
     }
     .pad{padding:18px;}
 
-    h1{margin:0;font-size:clamp(22px,3.5vw,34px); letter-spacing:.2px;}
+    h1{margin:0;font-size:clamp(22px,3.5vw,34px);letter-spacing:.2px;}
     h2{margin:0;font-size:18px;}
     .muted{opacity:.78;}
     .small{font-size:13px;opacity:.78;}
@@ -64,7 +61,7 @@
     .between{justify-content:space-between;}
 
     input, button, textarea{
-      width: 100%;
+      width:100%;
       font-size:16px;
       padding:12px 14px;
       border-radius:12px;
@@ -72,36 +69,33 @@
       background:rgba(255,255,255,.06);
       color:#fff;
       outline:none;
-      transition: border-color .12s ease, background .12s ease, transform .12s ease;
+      transition:border-color .12s ease, background .12s ease, transform .12s ease;
     }
     input:focus, textarea:focus{
       border-color: rgba(80,180,255,.60);
       background: rgba(255,255,255,.08);
     }
-
     button{
-      width: auto;
+      width:auto;
       cursor:pointer;
       font-weight:900;
       user-select:none;
     }
     button:hover{ transform: translateY(-1px); }
     button:active{ transform: translateY(0px); }
-
     textarea{resize:vertical;}
 
     input[type="date"]{
-      height: 46px;
-      line-height: 46px;
-      padding-top: 10px;
-      padding-bottom: 10px;
-      appearance: none;
-      -webkit-appearance: none;
+      height:46px;
+      line-height:46px;
+      padding-top:10px;
+      padding-bottom:10px;
+      appearance:none;
+      -webkit-appearance:none;
     }
 
     .primary{background:var(--okBg);border-color:var(--okBorder);}
     .ghost{background:rgba(255,255,255,.04);}
-
     .msg{margin-top:10px;min-height:18px;}
 
     /* Login */
@@ -161,7 +155,11 @@
       cursor:pointer;
       transition:transform .12s ease, background .12s ease, border-color .12s ease;
     }
-    .day:hover{transform:translateY(-1px);background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.20);}
+    .day:hover{
+      transform:translateY(-1px);
+      background:rgba(255,255,255,.05);
+      border-color:rgba(255,255,255,.20);
+    }
     .day.off{opacity:.42;}
     .day.selected{
       border-color: rgba(34,197,94,.65);
@@ -175,54 +173,47 @@
       font-weight:900;
     }
 
+    /* Piller */
     .pill{
-      margin-top:6px;
-      padding:7px 10px;
+      margin-top:8px;
+      padding:9px 10px;
       border-radius:12px;
       border:1px solid rgba(255,255,255,.16);
       background:rgba(255,255,255,.04);
-      font-size:12px;
-      line-height:1.2;
+      font-size:13px;
+      line-height:1.15;
       white-space: normal;
-      overflow: visible;
-      word-break: normal;
       overflow-wrap: anywhere;
     }
     .pill.owner{
-      border-color: var(--blueBorder);
-      background: var(--blueBg);
+      border-color: var(--ownerBorder);
+      background: var(--ownerBg);
     }
     .pill.booked{
       border-color: var(--bookBorder);
       background: var(--bookBg);
     }
-    .pill .line1{font-weight:900;display:block;}
-    .pill .line2{display:block;margin-top:2px;}
-
-    .list{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-      margin-top:10px;
+    .pill .title{
+      font-weight:950;
+      display:block;
     }
-    .stayItem{
-      border:1px solid rgba(255,255,255,.14);
-      border-radius:14px;
-      padding:12px;
-      background:rgba(255,255,255,.03);
+    .pill .sub{
+      display:block;
+      margin-top:3px;
+      opacity:.9;
+      font-size:12px;
     }
-    .stayItem .title{font-weight:950;margin-bottom:4px;}
-    .stayItem .meta{font-size:13px;opacity:.82;}
 
+    /* Booking layout */
     .twoCols{
       display:grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns:1fr 1fr;
       gap:12px;
     }
     @media (max-width: 520px){
       .calendar{gap:6px;}
       .day{min-height:92px;padding:7px;}
-      .twoCols{ grid-template-columns: 1fr; }
+      .twoCols{ grid-template-columns:1fr; }
     }
 
     .prettyDate{
@@ -231,6 +222,16 @@
       opacity:.82;
       padding-left:2px;
     }
+
+    .list{display:flex;flex-direction:column;gap:10px;margin-top:10px;}
+    .stayItem{
+      border:1px solid rgba(255,255,255,.14);
+      border-radius:14px;
+      padding:12px;
+      background:rgba(255,255,255,.03);
+    }
+    .stayItem .title{font-weight:950;margin-bottom:4px;}
+    .stayItem .meta{font-size:13px;opacity:.82;}
   </style>
 </head>
 
@@ -275,7 +276,7 @@
             <div class="calHeader">
               <div>
                 <div class="month" id="monthLabel"></div>
-                <div class="small" id="hint">Klik på en dag for start. Klik igen for slut.</div>
+                <div class="small">Klik på en dag for start. Klik igen for slut.</div>
               </div>
               <div class="row">
                 <button id="prev" class="ghost" type="button">◀</button>
@@ -349,6 +350,7 @@
 <script>
   /* ===== LOGIN ===== */
   const KODE = "kalkhavesvej";
+
   const loginScreen = document.getElementById("loginScreen");
   const app = document.getElementById("app");
   const code = document.getElementById("code");
@@ -364,14 +366,12 @@
     renderAll();
     updatePrettyDates();
   }
-
   function showLogin(){
     app.style.display = "none";
     loginScreen.style.display = "flex";
     code.value = "";
     loginMsg.textContent = "";
   }
-
   function unlock(){
     if(norm(code.value) === norm(KODE)){
       loginMsg.textContent = "Korrekt kode 🎉";
@@ -380,14 +380,13 @@
       loginMsg.textContent = "Forkert kode – prøv igen";
     }
   }
-
   btn.onclick = unlock;
   code.onkeydown = e => { if(e.key==="Enter") unlock(); };
   logoutBtn.onclick = showLogin;
 
   /* ===== DATA (lokal) ===== */
   const FAMILIES = ["Taastrup","Horsens","Birkerød"];
-  const STORAGE_KEY = "samsoehuset_stays_v4";
+  const STORAGE_KEY = "samsoehuset_stays_v5";
 
   function loadStays(){
     try{ return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"); }
@@ -420,7 +419,7 @@
     return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
   }
 
-  function ownerForDateMondayToSunday(d){
+  function ownerForDate(d){
     const week = isoWeek(d);
     const idx = (week - 1) % FAMILIES.length;
     return FAMILIES[idx];
@@ -454,7 +453,6 @@
     prettyStart.textContent = startInput.value ? formatPretty(startInput.value) : "";
     prettyEnd.textContent = endInput.value ? formatPretty(endInput.value) : "";
   }
-
   startInput.addEventListener("change", updatePrettyDates);
   endInput.addEventListener("change", updatePrettyDates);
 
@@ -545,6 +543,7 @@
         whoHasInput.value = owner;
       }
       updatePrettyDates();
+      renderCalendar();
       return;
     }
 
@@ -562,6 +561,10 @@
   function staysForDay(iso, stays){
     return stays.filter(s => iso >= s.start_date && iso <= s.end_date);
   }
+
+  document.getElementById("calendar").addEventListener("dblclick", () => {
+    selectionStart = null;
+  });
 
   function renderCalendar(){
     calendarEl.innerHTML = "";
@@ -592,22 +595,23 @@
       top.innerHTML = `<span>${d.getDate()}</span><span class="small">${["Man","Tir","Ons","Tor","Fre","Lør","Søn"][(d.getDay()+6)%7]}</span>`;
       cell.appendChild(top);
 
-      const owner = ownerForDateMondayToSunday(d);
-
+      const owner = ownerForDate(d);
       const hits = staysForDay(iso, stays);
 
-      // hvis booket: vis kun BOOKET-pill (mindre støj)
       if(hits.length){
         const firstHit = hits[0];
         const p = document.createElement("div");
         p.className = "pill booked";
-        p.innerHTML = `<span class="line1">BOOKET:</span><span class="line2">${escapeHtml(firstHit.who_has)}</span>`;
+        p.innerHTML = `
+          <span class="title">Ny booking</span>
+          <span class="sub">${escapeHtml(firstHit.who_has)}</span>
+        `;
         cell.appendChild(p);
       }else{
-        const ownerPill = document.createElement("div");
-        ownerPill.className = "pill owner";
-        ownerPill.innerHTML = `<span class="line1">Standard uge:</span><span class="line2">${owner}</span>`;
-        cell.appendChild(ownerPill);
+        const p = document.createElement("div");
+        p.className = "pill owner";
+        p.innerHTML = `<span class="title">${owner}</span>`;
+        cell.appendChild(p);
       }
 
       const s = startInput.value;
