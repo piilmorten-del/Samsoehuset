@@ -1,807 +1,95 @@
 <!doctype html>
 <html lang="da">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Samsøhuset</title>
-
   <style>
-    :root{
-      --card-bg: rgba(15, 18, 22, 0.52);
-      --card-border: rgba(255,255,255,0.14);
-      --text-muted: rgba(255,255,255,0.72);
-      --green: rgba(34,197,94,0.85);
-      --blue: rgba(80,180,255,0.85);
-      --shadow: 0 12px 40px rgba(0,0,0,0.35);
-    }
-
-    html, body { height: 100%; margin: 0; }
+    html,body{height:100%;margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;}
     body{
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      color:#fff;
-      overflow-x:hidden;
       background:#0b0b0b;
-    }
-
-    /* Baggrund */
-    .bg{
-      position: fixed;
-      inset: 0;
-      z-index: -2;
-      background-image: url("data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wgARCAUoA4IDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD5n8b/APJ3f+Wb/wA4R/6M0f8AJ3f+Wb/zjH/ozR8b/wDJ3f8Alm/84x/6M0f8nd/5Zv8AzjH/AKM0f8nR/wCzv+0v/mb/APw8aP8AJ0f+zv8AtL/5m/8A8PGj/2Q==");
-      background-size: cover;
-      background-position: center;
-      transform: scale(1.08);
-      filter: blur(10px) saturate(1.05);
-    }
-    .bgOverlay{
-      position: fixed;
-      inset: 0;
-      z-index: -1;
-      background:
-        radial-gradient(1200px 700px at 50% 10%, rgba(255,255,255,0.08), transparent 60%),
-        radial-gradient(900px 700px at 20% 80%, rgba(80,180,255,0.10), transparent 55%),
-        radial-gradient(900px 700px at 80% 80%, rgba(34,197,94,0.08), transparent 55%),
-        linear-gradient(to bottom, rgba(0,0,0,0.55), rgba(0,0,0,0.78));
-    }
-
-    .wrap{
-      max-width: 1150px;
-      margin: 0 auto;
-      padding: 16px;
-    }
-
-    .topbar{
-      display:flex;
-      align-items:flex-end;
-      justify-content:space-between;
-      gap: 12px;
-      margin: 6px 0 14px;
-    }
-
-    .brand{
-      display:flex;
-      flex-direction:column;
-      gap: 2px;
-    }
-    .brand h1{
-      margin:0;
-      font-size: clamp(20px, 3.6vw, 34px);
-      letter-spacing: 0.2px;
-      line-height: 1.05;
-    }
-    .brand .sub{
-      color: var(--text-muted);
-      font-size: 13px;
-    }
-
-    .tabs{
-      display:flex;
-      gap: 10px;
-      flex-wrap:wrap;
-      align-items:center;
-      justify-content:flex-end;
-    }
-    .tab{
-      padding: 10px 14px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.16);
-      background: rgba(255,255,255,0.06);
-      cursor:pointer;
-      user-select:none;
-      font-weight: 800;
-      font-size: 14px;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      box-shadow: 0 6px 24px rgba(0,0,0,0.18);
-    }
-    .tab.active{
-      border-color: rgba(34,197,94,0.55);
-      background: rgba(34,197,94,0.18);
-    }
-
-    .grid{
-      display:grid;
-      gap: 12px;
-      grid-template-columns: 1fr;
-    }
-    @media (min-width: 920px){
-      .grid{ grid-template-columns: 1.25fr 0.75fr; }
-    }
-
-    .card{
-      border: 1px solid var(--card-border);
-      background: var(--card-bg);
-      border-radius: 18px;
-      padding: 14px;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-    }
-
-    .row{
-      display:flex;
-      gap: 10px;
-      flex-wrap:wrap;
-      align-items:center;
-    }
-
-    input, select, textarea, button{
-      font-size: 16px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.16);
-      background: rgba(255,255,255,0.06);
-      color:#fff;
-      padding: 10px 12px;
-      outline: none;
-    }
-    textarea{ resize: vertical; }
-    button{ cursor:pointer; font-weight: 900; }
-    button.primary{
-      border-color: rgba(34,197,94,0.55);
-      background: rgba(34,197,94,0.22);
-    }
-    button.ghost{
-      background: rgba(255,255,255,0.03);
-    }
-
-    .muted{ color: var(--text-muted); }
-    .small{ font-size: 13px; }
-
-    .calendar{
-      display:grid;
-      grid-template-columns: repeat(7, minmax(0, 1fr));
-      gap: 8px;
-    }
-
-    .day{
-      min-height: 92px;
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 14px;
-      padding: 8px;
-      background: rgba(255,255,255,0.03);
-      cursor:pointer;
-      transition: transform 120ms ease, background 120ms ease;
-    }
-    .day:hover{
-      transform: translateY(-1px);
-      background: rgba(255,255,255,0.05);
-    }
-    .dayHeader{
-      display:flex;
-      justify-content:space-between;
-      font-weight: 900;
-    }
-
-    .pill{
-      display:block;
-      margin-top: 6px;
-      padding: 6px 9px;
-      border-radius: 999px;
-      font-size: 12px;
-      border: 1px solid rgba(255,255,255,0.16);
-      white-space: nowrap;
-      overflow:hidden;
-      text-overflow: ellipsis;
-    }
-    .pill.owner{
-      border-color: rgba(80,180,255,0.35);
-      background: rgba(80,180,255,0.12);
-    }
-    .pill.booked{
-      border-color: rgba(34,197,94,0.55);
-      background: rgba(34,197,94,0.16);
-    }
-
-    .weeks{
-      max-height: 65vh;
-      overflow:auto;
-      padding-right: 6px;
-    }
-    .weekRow{
-      display:grid;
-      grid-template-columns: 96px 1fr;
-      gap: 10px;
-      align-items:center;
-      margin: 8px 0;
-    }
-
-    @media (max-width: 520px){
-      .calendar{ gap: 6px; }
-      .day{ min-height: 82px; padding: 7px; }
-      .tabs{ justify-content:flex-start; }
-    }
-
-    /* Kodelås */
-    .lock{
-      position: fixed;
-      inset: 0;
       display:flex;
       align-items:center;
       justify-content:center;
-      padding: 24px;
-      z-index: 50;
+      color:#fff;
+      padding:24px;
     }
-    .lockBox{
-      width: min(520px, 100%);
-      border: 1px solid rgba(255,255,255,0.18);
-      background: rgba(10,12,14,0.45);
-      border-radius: 18px;
-      padding: 18px;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      text-align:left;
+    .box{
+      width:min(520px,100%);
+      background:rgba(20,24,28,.55);
+      border:1px solid rgba(255,255,255,.18);
+      border-radius:18px;
+      padding:18px;
+      box-shadow:0 20px 50px rgba(0,0,0,.45);
     }
-    .lockTitle{
-      font-weight: 950;
-      font-size: 22px;
-      margin-bottom: 6px;
+    h1{margin:0 0 6px;font-size:24px;}
+    .muted{opacity:.75;margin-bottom:12px;}
+    .row{display:flex;gap:10px;}
+    input,button{
+      font-size:16px;
+      padding:12px 14px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.18);
+      background:rgba(255,255,255,.06);
+      color:#fff;
     }
-    .lockText{
-      color: var(--text-muted);
-      margin-bottom: 12px;
-      line-height: 1.35;
+    input{flex:1;}
+    button{
+      cursor:pointer;
+      font-weight:900;
+      background:rgba(34,197,94,.25);
+      border-color:rgba(34,197,94,.6);
     }
-    .lockRow{
-      display:flex;
-      gap: 10px;
-    }
-    .lockRow input{ flex: 1; }
-    .lockMsg{
-      margin-top: 10px;
-      color: rgba(255,255,255,0.85);
-      font-size: 14px;
-      min-height: 18px;
-    }
-    .hidden{ display:none; }
-
-    .errorBox{
+    .msg{margin-top:12px;min-height:18px;}
+    .ok{
       margin-top:12px;
       padding:12px 14px;
       border-radius:12px;
-      border:1px solid rgba(255,120,120,.45);
-      background: rgba(255,120,120,.12);
-      color: rgba(255,255,255,.95);
-      display:none;
+      background:rgba(34,197,94,.18);
+      border:1px solid rgba(34,197,94,.6);
     }
   </style>
 </head>
-
 <body>
-  <div class="bg"></div>
-  <div class="bgOverlay"></div>
 
-  <div id="lockScreen" class="lock">
-    <div class="lockBox">
-      <div class="lockTitle">Samsøhuset</div>
-      <div class="lockText">Indtast koden for at se kalenderen.</div>
+<div class="box">
+  <h1>Samsøhuset</h1>
+  <div class="muted">Indtast koden for at komme ind</div>
 
-      <div class="lockRow">
-        <input id="passInput" type="password" placeholder="Kode" autocomplete="off" />
-        <button id="unlockBtn" class="primary" type="button">Lås op</button>
-      </div>
-
-      <div id="lockMsg" class="lockMsg"></div>
-      <div class="muted small" style="margin-top:10px;">Tip: Browseren husker login på enheden.</div>
-    </div>
+  <div class="row">
+    <input id="code" type="password" placeholder="Kode">
+    <button id="btn">Lås op</button>
   </div>
 
-  <div class="wrap" id="appWrap" style="display:none;">
-    <div class="topbar">
-      <div class="brand">
-        <h1>Samsøhuset</h1>
-        <div class="sub">Kalender og booking for familien</div>
-      </div>
-
-      <div class="tabs">
-        <div class="tab active" data-tab="calendar">Kalender</div>
-        <div class="tab" data-tab="weeks">Ugefordeling</div>
-      </div>
-    </div>
-
-    <div id="calendarTab" class="grid">
-      <div class="card">
-        <div class="row" style="justify-content:space-between;">
-          <div>
-            <div style="font-size:18px; font-weight:950;">Kalender</div>
-            <div class="muted small" id="monthLabel"></div>
-          </div>
-          <div class="row">
-            <button id="prevMonth" class="ghost" type="button">◀</button>
-            <button id="nextMonth" class="ghost" type="button">▶</button>
-          </div>
-        </div>
-
-        <div class="muted small" style="margin:10px 0 8px;">
-          Klik på en dato for start. Klik igen for slut. Ugens standardfamilie vises i blå.
-        </div>
-
-        <div class="calendar" id="calendar"></div>
-        <div id="errorBoxCal" class="errorBox"></div>
-      </div>
-
-      <div class="card">
-        <div style="font-size:18px; font-weight:950; margin-bottom:8px;">Book datoer</div>
-
-        <div class="row">
-          <label class="muted small">Start</label>
-          <input id="startDate" type="date" />
-          <label class="muted small">Slut</label>
-          <input id="endDate" type="date" />
-        </div>
-
-        <div class="row" style="margin-top:10px;">
-          <label class="muted small">Familie</label>
-          <select id="family"></select>
-        </div>
-
-        <div class="row" style="margin-top:10px;">
-          <input id="bookedBy" placeholder="Navn på den der booker" style="flex:1;" />
-        </div>
-
-        <div class="row" style="margin-top:10px;">
-          <textarea id="note" placeholder="Note (valgfri)" rows="3" style="width:100%;"></textarea>
-        </div>
-
-        <div class="row" style="margin-top:10px; justify-content:space-between;">
-          <button id="clear" class="ghost" type="button">Nulstil</button>
-          <button class="primary" id="saveStay" type="button">Gem booking</button>
-        </div>
-
-        <div class="muted small" id="msg" style="margin-top:10px;"></div>
-        <div id="errorBoxForm" class="errorBox"></div>
-      </div>
-    </div>
-
-    <div id="weeksTab" class="grid" style="display:none;">
-      <div class="card">
-        <div style="font-size:18px; font-weight:950; margin-bottom:8px;">Ugefordeling (standard)</div>
-
-        <div class="row">
-          <label class="muted small">År</label>
-          <input id="year" type="number" min="2020" max="2100" value="2026" />
-          <button id="loadWeeks" class="ghost" type="button">Hent</button>
-          <button class="primary" id="saveWeeks" type="button">Gem</button>
-        </div>
-
-        <div class="row" style="margin-top:10px;">
-          <button id="fillAllTaastrup" class="ghost" type="button">Sæt alle uger: Taastrup</button>
-          <button id="fillAllHorsens" class="ghost" type="button">Sæt alle uger: Horsens</button>
-          <button id="fillAllBirkeroed" class="ghost" type="button">Sæt alle uger: Birkerød</button>
-          <button id="rotate" class="ghost" type="button">Fordel på skift (T/H/B)</button>
-        </div>
-
-        <div class="muted small" style="margin-top:10px;">
-          Tip: Du kan udfylde hurtigt med knapperne og stadig rette enkelte uger bagefter.
-        </div>
-
-        <div id="errorBoxWeeks" class="errorBox"></div>
-      </div>
-
-      <div class="card weeks" id="weeksList"></div>
-    </div>
+  <div id="msg" class="msg"></div>
+  <div id="ok" class="ok" style="display:none;">
+    Login virker – her kan kalenderen ligge ✅
   </div>
+</div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>
-    /* ======= LOGIN ======= */
-    const SHARED_CODE = "kalkhavesvej";
+<script>
+  const KODE = "kalkhavesvej";
 
-    const lockScreen = document.getElementById("lockScreen");
-    const appWrap = document.getElementById("appWrap");
-    const lockMsg = document.getElementById("lockMsg");
-    const passInput = document.getElementById("passInput");
-    const unlockBtn = document.getElementById("unlockBtn");
+  const code = document.getElementById("code");
+  const btn = document.getElementById("btn");
+  const msg = document.getElementById("msg");
+  const ok = document.getElementById("ok");
 
-    function normalize(s){ return (s || "").trim().toLowerCase(); }
-    function unlockOk(){ localStorage.setItem("samsoehuset_ok","1"); }
-    function isUnlocked(){ return localStorage.getItem("samsoehuset_ok")==="1"; }
+  function norm(v){ return (v||"").trim().toLowerCase(); }
 
-    function showApp(){
-      lockScreen.classList.add("hidden");
-      appWrap.style.display = "";
+  function unlock(){
+    if(norm(code.value) === norm(KODE)){
+      msg.textContent = "Korrekt kode 🎉";
+      ok.style.display = "block";
+    }else{
+      msg.textContent = "Forkert kode – prøv igen";
+      ok.style.display = "none";
     }
-    function showLock(){
-      lockScreen.classList.remove("hidden");
-      appWrap.style.display = "none";
-    }
+  }
 
-    function tryUnlock(){
-      const entered = normalize(passInput.value);
-      const correct = normalize(SHARED_CODE);
+  btn.onclick = unlock;
+  code.onkeydown = e => { if(e.key==="Enter") unlock(); };
+</script>
 
-      if (entered === correct){
-        unlockOk();
-        lockMsg.textContent = "";
-        passInput.value = "";
-        showApp();
-        startApp();
-      } else {
-        lockMsg.textContent = "Forkert kode. Prøv igen.";
-      }
-    }
-
-    unlockBtn.addEventListener("click", tryUnlock);
-    passInput.addEventListener("keydown", (e) => { if (e.key === "Enter") tryUnlock(); });
-
-    /* ======= SUPABASE ======= */
-    const SUPABASE_URL = "https://jbweskxscyxjonrhbdcd.supabase.co";
-    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_2qMwF5JFmVmQuf9jJCERxw_25bMzbyu";
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
-
-    const FAMILIES = ["Familien Taastrup","Familien Horsens","Familien Birkerød"];
-
-    /* ======= UI (tabs) ======= */
-    const tabs = document.querySelectorAll(".tab");
-    const calendarTab = document.getElementById("calendarTab");
-    const weeksTab = document.getElementById("weeksTab");
-
-    tabs.forEach(t => t.addEventListener("click", () => {
-      tabs.forEach(x => x.classList.remove("active"));
-      t.classList.add("active");
-      const which = t.dataset.tab;
-      calendarTab.style.display = which === "calendar" ? "grid" : "none";
-      weeksTab.style.display = which === "weeks" ? "grid" : "none";
-    }));
-
-    /* ======= helpers ======= */
-    const msgEl = document.getElementById("msg");
-    function setMsg(t){ msgEl.textContent = t || ""; }
-
-    function showError(id, text){
-      const el = document.getElementById(id);
-      if (!el) return;
-      if (!text){
-        el.style.display = "none";
-        el.textContent = "";
-        return;
-      }
-      el.style.display = "block";
-      el.textContent = text;
-    }
-
-    function toISODate(d){
-      const y = d.getFullYear();
-      const m = String(d.getMonth()+1).padStart(2,"0");
-      const day = String(d.getDate()).padStart(2,"0");
-      return `${y}-${m}-${day}`;
-    }
-
-    function startOfWeekISO(date){
-      const d = new Date(date);
-      const day = (d.getDay() + 6) % 7;
-      d.setDate(d.getDate() - day);
-      d.setHours(12,0,0,0);
-      return d;
-    }
-
-    function isoWeek(date){
-      const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
-      const dayNum = d.getUTCDay() || 7;
-      d.setUTCDate(d.getUTCDate() + 4 - dayNum);
-      const yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
-      return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
-    }
-
-    /* ======= data ======= */
-    let weekOwners = new Map();
-    let stays = [];
-    let view = new Date();
-    let selectingStart = null;
-
-    const calendarEl = document.getElementById("calendar");
-    const monthLabel = document.getElementById("monthLabel");
-
-    function renderFamilySelect(sel){
-      sel.innerHTML = FAMILIES.map(f => `<option value="${f}">${f}</option>`).join("");
-    }
-
-    async function loadWeekOwners(year){
-      const { data, error } = await supabase.from("week_owner").select("*").eq("year", year);
-      if (error) throw error;
-
-      weekOwners.clear();
-      (data || []).forEach(r => weekOwners.set(`${r.year}-${r.week}`, r.family));
-    }
-
-    async function loadStaysForMonth(year, monthIdx){
-      const monthStart = new Date(year, monthIdx, 1);
-      const monthEnd = new Date(year, monthIdx+1, 0);
-
-      const start = toISODate(monthStart);
-      const end = toISODate(monthEnd);
-
-      const { data, error } = await supabase
-        .from("stays")
-        .select("*")
-        .lte("start_date", end)
-        .gte("end_date", start)
-        .order("start_date", { ascending: true });
-
-      if (error) throw error;
-      stays = data || [];
-    }
-
-    function ownerForDay(date){
-      const y = date.getFullYear();
-      const w = isoWeek(date);
-      return weekOwners.get(`${y}-${w}`) || "";
-    }
-
-    function stayPillsForDay(iso){
-      const items = stays.filter(s => iso >= s.start_date && iso <= s.end_date);
-      return items.map(s => ({ text: `${s.family}: ${s.booked_by}`, note: s.note || "" }));
-    }
-
-    function setFormDates(start, end){
-      document.getElementById("startDate").value = start;
-      document.getElementById("endDate").value = end;
-    }
-
-    function onDayClick(date){
-      const iso = toISODate(date);
-
-      if (!selectingStart){
-        selectingStart = iso;
-        setFormDates(iso, iso);
-        setMsg("Start valgt. Klik på en slutdato.");
-        return;
-      }
-
-      const a = selectingStart;
-      const b = iso;
-      selectingStart = null;
-
-      const start = a <= b ? a : b;
-      const end = a <= b ? b : a;
-
-      setFormDates(start, end);
-      setMsg("Datoer valgt. Udfyld navn og gem booking.");
-
-      const owner = ownerForDay(new Date(start));
-      if (owner) document.getElementById("family").value = owner;
-    }
-
-    function renderCalendar(){
-      const y = view.getFullYear();
-      const m = view.getMonth();
-      const first = new Date(y, m, 1);
-      const last = new Date(y, m+1, 0);
-
-      monthLabel.textContent = first.toLocaleDateString("da-DK", { month:"long", year:"numeric" });
-      calendarEl.innerHTML = "";
-
-      const startGrid = startOfWeekISO(first);
-      const endGrid = new Date(last);
-      const endDow = (endGrid.getDay()+6)%7;
-      endGrid.setDate(endGrid.getDate() + (6 - endDow));
-      endGrid.setHours(12,0,0,0);
-
-      let d = new Date(startGrid);
-      while (d <= endGrid){
-        const iso = toISODate(d);
-        const inMonth = d.getMonth() === m;
-
-        const cell = document.createElement("div");
-        cell.className = "day";
-        cell.style.opacity = inMonth ? "1" : "0.45";
-
-        const header = document.createElement("div");
-        header.className = "dayHeader";
-        header.innerHTML = `<span>${d.getDate()}</span><span class="muted small">${["Man","Tir","Ons","Tor","Fre","Lør","Søn"][(d.getDay()+6)%7]}</span>`;
-        cell.appendChild(header);
-
-        const owner = ownerForDay(d);
-        if (owner){
-          const p = document.createElement("div");
-          p.className = "pill owner";
-          p.textContent = owner;
-          cell.appendChild(p);
-        }
-
-        const pills = stayPillsForDay(iso);
-        pills.slice(0,2).forEach(it => {
-          const p = document.createElement("div");
-          p.className = "pill booked";
-          p.title = it.note ? it.note : it.text;
-          p.textContent = it.text;
-          cell.appendChild(p);
-        });
-
-        if (pills.length > 2){
-          const more = document.createElement("div");
-          more.className = "pill";
-          more.textContent = `+${pills.length - 2} mere`;
-          cell.appendChild(more);
-        }
-
-        cell.addEventListener("click", () => onDayClick(new Date(d)));
-        calendarEl.appendChild(cell);
-
-        d.setDate(d.getDate() + 1);
-      }
-    }
-
-    async function refreshMonth(){
-      showError("errorBoxCal", "");
-      const y = view.getFullYear();
-      const m = view.getMonth();
-      await loadWeekOwners(y);
-      await loadStaysForMonth(y, m);
-      renderCalendar();
-    }
-
-    /* ======= calendar buttons ======= */
-    document.getElementById("prevMonth").addEventListener("click", async () => {
-      view.setMonth(view.getMonth() - 1);
-      await refreshMonth();
-    });
-    document.getElementById("nextMonth").addEventListener("click", async () => {
-      view.setMonth(view.getMonth() + 1);
-      await refreshMonth();
-    });
-
-    /* ======= booking ======= */
-    document.getElementById("clear").addEventListener("click", () => {
-      selectingStart = null;
-      setFormDates("", "");
-      document.getElementById("bookedBy").value = "";
-      document.getElementById("note").value = "";
-      setMsg("");
-      showError("errorBoxForm", "");
-    });
-
-    document.getElementById("saveStay").addEventListener("click", async () => {
-      try{
-        showError("errorBoxForm", "");
-        setMsg("Gemmer...");
-
-        const start = document.getElementById("startDate").value;
-        const end = document.getElementById("endDate").value;
-        const family = document.getElementById("family").value;
-        const bookedBy = document.getElementById("bookedBy").value.trim();
-        const note = document.getElementById("note").value.trim();
-
-        if (!start || !end) return setMsg("Vælg start og slut.");
-        if (!bookedBy) return setMsg("Skriv navn på den der booker.");
-
-        const hasConflict = stays.some(s => !(end < s.start_date || start > s.end_date));
-        if (hasConflict) return setMsg("Der ligger allerede en booking i det interval.");
-
-        const { error } = await supabase.from("stays").insert([{
-          start_date: start,
-          end_date: end,
-          family,
-          booked_by: bookedBy,
-          note: note || null
-        }]);
-
-        if (error) throw error;
-
-        await refreshMonth();
-        setMsg("Gemt ✅");
-      } catch(e){
-        showError("errorBoxForm", "Supabase siger nej. Det kan være RLS/permissions. Fejl: " + (e.message || e));
-        setMsg("");
-      }
-    });
-
-    /* ======= weeks editor ======= */
-    const weeksList = document.getElementById("weeksList");
-
-    function renderWeeksEditor(year){
-      weeksList.innerHTML = "";
-      for (let w = 1; w <= 53; w++){
-        const row = document.createElement("div");
-        row.className = "weekRow";
-
-        const lab = document.createElement("div");
-        lab.className = "muted";
-        lab.textContent = `Uge ${w}`;
-        row.appendChild(lab);
-
-        const sel = document.createElement("select");
-        sel.dataset.week = String(w);
-        renderFamilySelect(sel);
-
-        const current = weekOwners.get(`${year}-${w}`) || FAMILIES[0];
-        sel.value = current;
-
-        row.appendChild(sel);
-        weeksList.appendChild(row);
-      }
-    }
-
-    function setAllWeeksTo(family){
-      weeksList.querySelectorAll("select[data-week]").forEach(s => { s.value = family; });
-    }
-
-    function rotateWeeks(){
-      weeksList.querySelectorAll("select[data-week]").forEach((s, idx) => {
-        s.value = FAMILIES[idx % FAMILIES.length];
-      });
-    }
-
-    document.getElementById("fillAllTaastrup").addEventListener("click", () => setAllWeeksTo(FAMILIES[0]));
-    document.getElementById("fillAllHorsens").addEventListener("click", () => setAllWeeksTo(FAMILIES[1]));
-    document.getElementById("fillAllBirkeroed").addEventListener("click", () => setAllWeeksTo(FAMILIES[2]));
-    document.getElementById("rotate").addEventListener("click", rotateWeeks);
-
-    document.getElementById("loadWeeks").addEventListener("click", async () => {
-      try{
-        showError("errorBoxWeeks", "");
-        const year = Number(document.getElementById("year").value);
-        setMsg("Henter ugefordeling...");
-        await loadWeekOwners(year);
-        renderWeeksEditor(year);
-        setMsg("Klar ✅");
-      } catch(e){
-        showError("errorBoxWeeks", "Fejl ved hentning: " + (e.message || e));
-        setMsg("");
-      }
-    });
-
-    document.getElementById("saveWeeks").addEventListener("click", async () => {
-      try{
-        showError("errorBoxWeeks", "");
-        const year = Number(document.getElementById("year").value);
-        setMsg("Gemmer ugefordeling...");
-
-        const rows = [];
-        weeksList.querySelectorAll("select[data-week]").forEach(s => {
-          rows.push({ year, week: Number(s.dataset.week), family: s.value });
-        });
-
-        const { error } = await supabase
-          .from("week_owner")
-          .upsert(rows, { onConflict: "year,week" });
-
-        if (error) throw error;
-
-        await loadWeekOwners(year);
-        await refreshMonth();
-        setMsg("Ugefordeling gemt ✅");
-      } catch(e){
-        showError("errorBoxWeeks", "Supabase siger nej. Fejl: " + (e.message || e));
-        setMsg("");
-      }
-    });
-
-    /* ======= realtime (så alle ser updates straks) ======= */
-    function subscribeRealtime(){
-      try{
-        supabase.channel("realtime-samsoehuset")
-          .on("postgres_changes", { event: "*", schema: "public", table: "stays" }, async () => {
-            await refreshMonth();
-          })
-          .on("postgres_changes", { event: "*", schema: "public", table: "week_owner" }, async () => {
-            await refreshMonth();
-          })
-          .subscribe();
-      } catch(e){
-        // Hvis realtime ikke er slået til i Supabase, ignorerer vi.
-      }
-    }
-
-    async function startApp(){
-      renderFamilySelect(document.getElementById("family"));
-      await refreshMonth();
-
-      const year = Number(document.getElementById("year").value);
-      await loadWeekOwners(year);
-      renderWeeksEditor(year);
-
-      subscribeRealtime();
-      setMsg("");
-    }
-
-    if (isUnlocked()){
-      showApp();
-      startApp();
-    } else {
-      showLock();
-    }
-  </script>
 </body>
 </html>
