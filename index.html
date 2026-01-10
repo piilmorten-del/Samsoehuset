@@ -9,189 +9,169 @@
     :root{
       --card: rgba(20,24,28,.55);
       --border: rgba(255,255,255,.18);
-      --muted: rgba(255,255,255,.75);
-      --ok: rgba(34,197,94,.25);
-      --okBorder: rgba(34,197,94,.6);
+      --muted: rgba(255,255,255,.78);
       --shadow: 0 20px 50px rgba(0,0,0,.45);
+
+      --okBg: rgba(34,197,94,.20);
+      --okBorder: rgba(34,197,94,.55);
+
+      --blueBg: rgba(80,180,255,.12);
+      --blueBorder: rgba(80,180,255,.45);
+
+      --bookBg: rgba(255,200,80,.14);
+      --bookBorder: rgba(255,200,80,.55);
     }
 
     html,body{height:100%;margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;}
-    body{
-      background:#0b0b0b;
-      color:#fff;
-      padding:24px;
-    }
+    body{background:#0b0b0b;color:#fff;padding:24px;}
 
-    .wrap{
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
+    .wrap{max-width:1100px;margin:0 auto;}
     .card{
-      width: 100%;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      box-shadow: var(--shadow);
+      width:100%;
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:18px;
+      box-shadow:var(--shadow);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
     }
+    .pad{padding:18px;}
 
-    .pad{ padding: 18px; }
+    h1{margin:0;font-size:clamp(22px,3.5vw,34px);}
+    h2{margin:0;font-size:18px;}
+    .muted{opacity:.78;}
+    .small{font-size:13px;opacity:.78;}
 
-    h1{ margin:0; font-size: clamp(22px, 3.5vw, 34px); }
-    h2{ margin:0; font-size: 18px; }
-    .muted{ opacity:.78; }
-    .small{ font-size: 13px; opacity:.78; }
+    .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+    .between{justify-content:space-between;}
 
-    .row{ display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
-    .between{ justify-content:space-between; }
-
-    input, select, button, textarea{
-      font-size: 16px;
-      padding: 12px 14px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,.18);
-      background: rgba(255,255,255,.06);
-      color: #fff;
-      outline: none;
+    input, button, textarea{
+      font-size:16px;
+      padding:12px 14px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.18);
+      background:rgba(255,255,255,.06);
+      color:#fff;
+      outline:none;
     }
-    textarea{ width:100%; resize: vertical; }
+    textarea{width:100%;resize:vertical;}
+    button{cursor:pointer;font-weight:900;}
+    .primary{background:var(--okBg);border-color:var(--okBorder);}
+    .ghost{background:rgba(255,255,255,.04);}
 
-    button{
-      cursor:pointer;
-      font-weight: 900;
-    }
-    .primary{
-      background: var(--ok);
-      border-color: var(--okBorder);
-    }
-    .ghost{
-      background: rgba(255,255,255,.04);
-    }
-
-    .msg{ margin-top: 10px; min-height: 18px; }
+    .msg{margin-top:10px;min-height:18px;}
 
     /* Login */
     #loginScreen{
       min-height: calc(100vh - 48px);
-      display:flex;
-      align-items:center;
-      justify-content:center;
+      display:flex;align-items:center;justify-content:center;
     }
-    .loginBox{
-      width: min(680px, 100%);
-    }
-    .loginRow{ display:flex; gap:10px; margin-top: 12px; }
-    .loginRow input{ flex:1; }
+    .loginBox{width:min(680px,100%);}
+    .loginRow{display:flex;gap:10px;margin-top:12px;}
+    .loginRow input{flex:1;}
 
-    /* App layout */
-    #app{ display:none; }
+    /* App */
+    #app{display:none;}
     .grid{
       display:grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
-      margin-top: 12px;
+      grid-template-columns:1fr;
+      gap:12px;
+      margin-top:12px;
     }
     @media (min-width: 920px){
-      .grid{ grid-template-columns: 1.25fr 0.75fr; }
+      .grid{grid-template-columns:1.25fr 0.75fr;}
     }
 
     /* Calendar */
     .calHeader{
       display:flex;
-      gap: 10px;
+      gap:10px;
       flex-wrap:wrap;
       align-items:center;
       justify-content:space-between;
-      margin-bottom: 10px;
+      margin-bottom:10px;
     }
-    .month{
-      font-weight: 950;
-      font-size: 18px;
-    }
+    .month{font-weight:950;font-size:18px;}
 
     .dow{
       display:grid;
-      grid-template-columns: repeat(7, minmax(0, 1fr));
-      gap: 8px;
-      margin: 10px 0 8px;
-      font-size: 12px;
-      opacity: .8;
+      grid-template-columns:repeat(7,minmax(0,1fr));
+      gap:8px;
+      margin:10px 0 8px;
+      font-size:12px;
+      opacity:.85;
     }
-    .dow div{ text-align:center; }
+    .dow div{text-align:center;}
 
     .calendar{
       display:grid;
-      grid-template-columns: repeat(7, minmax(0, 1fr));
-      gap: 8px;
+      grid-template-columns:repeat(7,minmax(0,1fr));
+      gap:8px;
     }
     .day{
-      min-height: 88px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.03);
-      padding: 8px;
+      min-height:98px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.03);
+      padding:8px;
       cursor:pointer;
-      transition: transform .12s ease, background .12s ease;
+      transition:transform .12s ease, background .12s ease;
     }
-    .day:hover{ transform: translateY(-1px); background: rgba(255,255,255,.05); }
-    .day.off{ opacity: .42; }
+    .day:hover{transform:translateY(-1px);background:rgba(255,255,255,.05);}
+    .day.off{opacity:.42;}
     .day.selected{
       border-color: rgba(34,197,94,.65);
-      background: rgba(34,197,94,.12);
+      background: rgba(34,197,94,.10);
     }
 
     .dayTop{
       display:flex;
       justify-content:space-between;
-      gap: 8px;
-      font-weight: 900;
+      gap:8px;
+      font-weight:900;
     }
+
+    /* Piller: vis fulde navne på 2 linjer */
     .pill{
-      margin-top: 6px;
-      padding: 6px 9px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.16);
-      background: rgba(255,255,255,.04);
-      font-size: 12px;
-      overflow:hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
+      margin-top:6px;
+      padding:7px 10px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.16);
+      background:rgba(255,255,255,.04);
+      font-size:12px;
+      line-height:1.2;
+      white-space: normal;        /* vigtigt */
+      overflow: visible;          /* vigtigt */
+      text-overflow: clip;        /* vigtigt */
+      word-break: break-word;
     }
     .pill.owner{
-      border-color: rgba(80,180,255,.45);
-      background: rgba(80,180,255,.12);
+      border-color: var(--blueBorder);
+      background: var(--blueBg);
     }
     .pill.booked{
-      border-color: rgba(34,197,94,.55);
-      background: rgba(34,197,94,.14);
+      border-color: var(--bookBorder);
+      background: var(--bookBg);
     }
 
     .list{
       display:flex;
       flex-direction:column;
-      gap: 10px;
-      margin-top: 10px;
+      gap:10px;
+      margin-top:10px;
     }
     .stayItem{
       border:1px solid rgba(255,255,255,.14);
-      border-radius: 14px;
-      padding: 12px;
-      background: rgba(255,255,255,.03);
+      border-radius:14px;
+      padding:12px;
+      background:rgba(255,255,255,.03);
     }
-    .stayItem .title{
-      font-weight: 950;
-      margin-bottom: 4px;
-    }
-    .stayItem .meta{
-      font-size: 13px;
-      opacity: .8;
-    }
+    .stayItem .title{font-weight:950;margin-bottom:4px;}
+    .stayItem .meta{font-size:13px;opacity:.82;}
 
     @media (max-width: 520px){
-      .calendar{ gap: 6px; }
-      .day{ min-height: 80px; padding: 7px; }
+      .calendar{gap:6px;}
+      .day{min-height:92px;padding:7px;}
     }
   </style>
 </head>
@@ -222,7 +202,7 @@
       <div class="row between" style="margin-top:6px;">
         <div>
           <h1>Samsøhuset</h1>
-          <div class="muted">Kalender og bookinger (lige nu gemmes de lokalt på din enhed)</div>
+          <div class="muted">Kalender og bookinger (gemmes lokalt på din enhed lige nu)</div>
         </div>
         <div class="row">
           <button id="logout" class="ghost" type="button">Lås igen</button>
@@ -273,8 +253,8 @@
 
             <div class="row" style="margin-top:10px;">
               <div style="flex:1;">
-                <div class="small">Familie</div>
-                <select id="family" style="width:100%;"></select>
+                <div class="small">Hvem har huset (kan være familie/venner)</div>
+                <input id="whoHas" placeholder="Fx Familien Taastrup / Vennegruppe / etc." style="width:100%;">
               </div>
             </div>
 
@@ -350,17 +330,12 @@
 
   /* ===== DATA (lokal) ===== */
   const FAMILIES = ["Familien Taastrup","Familien Horsens","Familien Birkerød"];
-  const familySel = document.getElementById("family");
-  familySel.innerHTML = FAMILIES.map(f => `<option value="${f}">${f}</option>`).join("");
 
-  const STORAGE_KEY = "samsoehuset_stays_v1";
+  const STORAGE_KEY = "samsoehuset_stays_v2";
 
   function loadStays(){
-    try{
-      return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-    }catch{
-      return [];
-    }
+    try{ return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"); }
+    catch{ return []; }
   }
   function saveStays(list){
     localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
@@ -373,36 +348,28 @@
     return `${y}-${m}-${day}`;
   }
 
-  function parseISO(s){
-    const [y,m,d] = s.split("-").map(Number);
-    return new Date(y, m-1, d);
-  }
-
-  function startOfWeek(d){
+  function startOfWeekMonday(d){
     const x = new Date(d);
-    const dow = (x.getDay() + 6) % 7;
+    const dow = (x.getDay() + 6) % 7; // Man=0 ... Søn=6
     x.setDate(x.getDate() - dow);
     x.setHours(12,0,0,0);
     return x;
   }
 
-  /* ===== SIMPLE UGE-EJER (uden Supabase) =====
-     Vi laver en enkel "default" fordeling:
-     Uge 1: Taastrup, uge 2: Horsens, uge 3: Birkerød, og så gentager den.
-     Det kan vi senere gøre “rigtigt” med Supabase-ugefordeling.
-  */
-  function defaultOwnerForDate(d){
-    const week = isoWeek(d);
-    const idx = (week - 1) % FAMILIES.length;
-    return FAMILIES[idx];
-  }
-
   function isoWeek(date){
+    // ISO uge: mandag-baseret
     const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
-    const dayNum = d.getUTCDay() || 7;
+    const dayNum = d.getUTCDay() || 7; // man=1..søn=7
     d.setUTCDate(d.getUTCDate() + 4 - dayNum);
     const yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
     return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+  }
+
+  function ownerForDateMondayToSunday(d){
+    // Familie skifter pr ISO uge, mandag->søndag
+    const week = isoWeek(d);
+    const idx = (week - 1) % FAMILIES.length;
+    return FAMILIES[idx];
   }
 
   /* ===== UI STATE ===== */
@@ -415,6 +382,7 @@
 
   const startInput = document.getElementById("startDate");
   const endInput = document.getElementById("endDate");
+  const whoHasInput = document.getElementById("whoHas");
   const bookedByInput = document.getElementById("bookedBy");
   const noteInput = document.getElementById("note");
   const formMsg = document.getElementById("formMsg");
@@ -427,6 +395,7 @@
     selectionStart = null;
     startInput.value = "";
     endInput.value = "";
+    whoHasInput.value = "";
     bookedByInput.value = "";
     noteInput.value = "";
     formMsg.textContent = "";
@@ -436,7 +405,7 @@
   document.getElementById("save").onclick = () => {
     const start = startInput.value;
     const end = endInput.value;
-    const family = familySel.value;
+    const whoHas = (whoHasInput.value || "").trim();
     const bookedBy = (bookedByInput.value || "").trim();
     const note = (noteInput.value || "").trim();
 
@@ -444,17 +413,20 @@
       formMsg.textContent = "Vælg start og slut først.";
       return;
     }
-    if(!bookedBy){
-      formMsg.textContent = "Skriv navn på den der booker.";
-      return;
-    }
     if(end < start){
       formMsg.textContent = "Slutdato må ikke være før startdato.";
       return;
     }
+    if(!whoHas){
+      formMsg.textContent = "Skriv hvem der har huset i perioden.";
+      return;
+    }
+    if(!bookedBy){
+      formMsg.textContent = "Skriv navn på den der booker.";
+      return;
+    }
 
     const stays = loadStays();
-
     const conflict = stays.some(s => !(end < s.start_date || start > s.end_date));
     if(conflict){
       formMsg.textContent = "Der ligger allerede en booking i det interval.";
@@ -462,10 +434,10 @@
     }
 
     stays.push({
-      id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
+      id: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now())),
       start_date: start,
       end_date: end,
-      family,
+      who_has: whoHas,
       booked_by: bookedBy,
       note: note || ""
     });
@@ -487,6 +459,37 @@
     monthLabel.textContent = view.toLocaleDateString("da-DK", { month:"long", year:"numeric" });
   }
 
+  function onDayClick(iso, owner){
+    formMsg.textContent = "";
+
+    if(!selectionStart){
+      selectionStart = iso;
+      startInput.value = iso;
+      endInput.value = iso;
+      // forslag: sæt hvem-har til ugefamilien, men brugeren kan ændre det
+      if(!whoHasInput.value.trim()){
+        whoHasInput.value = owner;
+      }
+      return;
+    }
+
+    const a = selectionStart;
+    const b = iso;
+    selectionStart = null;
+
+    const start = a <= b ? a : b;
+    const end = a <= b ? b : a;
+
+    startInput.value = start;
+    endInput.value = end;
+
+    renderCalendar();
+  }
+
+  function staysForDay(iso, stays){
+    return stays.filter(s => iso >= s.start_date && iso <= s.end_date);
+  }
+
   function renderCalendar(){
     calendarEl.innerHTML = "";
 
@@ -495,9 +498,12 @@
     const first = new Date(year, month, 1);
     const last = new Date(year, month+1, 0);
 
-    const gridStart = startOfWeek(first);
+    // grid fra mandag før/lig første i måneden
+    const gridStart = startOfWeekMonday(first);
+
+    // gridEnd til søndag efter/lig sidste i måneden
     const gridEnd = new Date(last);
-    const endDow = (gridEnd.getDay() + 6) % 7;
+    const endDow = (gridEnd.getDay() + 6) % 7; // man=0..søn=6
     gridEnd.setDate(gridEnd.getDate() + (6 - endDow));
     gridEnd.setHours(12,0,0,0);
 
@@ -516,21 +522,25 @@
       top.innerHTML = `<span>${d.getDate()}</span><span class="small">${["Man","Tir","Ons","Tor","Fre","Lør","Søn"][(d.getDay()+6)%7]}</span>`;
       cell.appendChild(top);
 
-      const owner = defaultOwnerForDate(d);
+      // ugefamilie (mandag->søndag)
+      const owner = ownerForDateMondayToSunday(d);
       const ownerPill = document.createElement("div");
       ownerPill.className = "pill owner";
-      ownerPill.textContent = owner;
+      ownerPill.textContent = `Standard uge: ${owner}`;
       cell.appendChild(ownerPill);
 
-      const hits = stays.filter(s => iso >= s.start_date && iso <= s.end_date);
+      // bookings
+      const hits = staysForDay(iso, stays);
       if(hits.length){
+        const firstHit = hits[0];
         const p = document.createElement("div");
         p.className = "pill booked";
-        p.textContent = `${hits[0].family}: ${hits[0].booked_by}`;
+        p.textContent = `BOOKET: ${firstHit.who_has}`;
         cell.appendChild(p);
+
         if(hits.length > 1){
           const more = document.createElement("div");
-          more.className = "pill";
+          more.className = "pill booked";
           more.textContent = `+${hits.length-1} mere`;
           cell.appendChild(more);
         }
@@ -550,28 +560,10 @@
     }
   }
 
-  function onDayClick(iso, owner){
-    formMsg.textContent = "";
-
-    if(!selectionStart){
-      selectionStart = iso;
-      startInput.value = iso;
-      endInput.value = iso;
-      familySel.value = owner;
-      return;
-    }
-
-    const a = selectionStart;
-    const b = iso;
-    selectionStart = null;
-
-    const start = a <= b ? a : b;
-    const end = a <= b ? b : a;
-
-    startInput.value = start;
-    endInput.value = end;
-    familySel.value = owner;
-    renderCalendar();
+  function escapeHtml(str){
+    return String(str).replace(/[&<>"']/g, m => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+    }[m]));
   }
 
   function renderStaysList(){
@@ -590,7 +582,7 @@
       const item = document.createElement("div");
       item.className = "stayItem";
       item.innerHTML = `
-        <div class="title">${s.family}</div>
+        <div class="title">${escapeHtml(s.who_has)}</div>
         <div class="meta">${s.start_date} → ${s.end_date}</div>
         <div class="meta">Booket af: ${escapeHtml(s.booked_by)}</div>
         ${s.note ? `<div class="meta">Note: ${escapeHtml(s.note)}</div>` : ""}
@@ -601,9 +593,9 @@
       staysListEl.appendChild(item);
     });
 
-    staysListEl.querySelectorAll("button[data-del]").forEach(btn => {
-      btn.onclick = () => {
-        const id = btn.getAttribute("data-del");
+    staysListEl.querySelectorAll("button[data-del]").forEach(b => {
+      b.onclick = () => {
+        const id = b.getAttribute("data-del");
         const stays = loadStays().filter(x => x.id !== id);
         saveStays(stays);
         formMsg.textContent = "Slettet ✅";
@@ -612,13 +604,7 @@
     });
   }
 
-  function escapeHtml(str){
-    return String(str).replace(/[&<>"']/g, m => ({
-      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
-    }[m]));
-  }
-
-  // Start: vis login
+  // Start
   showLogin();
 </script>
 </body>
