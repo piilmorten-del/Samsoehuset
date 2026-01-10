@@ -108,7 +108,6 @@
     .ghost{background:rgba(255,255,255,.04);}
     .msg{margin-top:10px;min-height:18px;}
 
-    /* Login */
     #loginScreen{
       min-height: calc(100vh - 48px);
       display:flex;align-items:center;justify-content:center;
@@ -118,7 +117,6 @@
     .loginRow input{flex:1;width:auto;}
     .loginRow button{width:auto;}
 
-    /* App */
     #app{display:none;}
     .grid{
       display:grid;
@@ -207,15 +205,14 @@
       line-height: 1.1;
     }
 
-    /* Gør undertekst lidt mindre, så den altid kan være der */
     .pill .sub{
       display:block;
       margin-top:4px;
       opacity:.92;
       font-size:10.5px;
       white-space: nowrap;
-      overflow: hidden;      /* klip hellere end at gøre det grimt */
-      text-overflow: clip;   /* ingen ... */
+      overflow: hidden;
+      text-overflow: clip;
       word-break: keep-all;
       overflow-wrap: normal;
       hyphens: none;
@@ -231,22 +228,7 @@
     .pill.family-horsens{ border-color: var(--horsensBorder); background: var(--horsensBg); }
     .pill.family-birkerod{ border-color: var(--birkBorder); background: var(--birkBg); }
 
-    /* Skiftedag: label + to chips */
     .pill.split{ padding:10px; }
-    .splitLabel{
-      font-size:10.5px;
-      font-weight:900;
-      letter-spacing:.2px;
-      opacity:.9;
-      margin-bottom:8px;
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      padding:5px 8px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.18);
-      background:rgba(255,255,255,.04);
-    }
     .splitChips{
       display:flex;
       flex-direction:column;
@@ -278,7 +260,6 @@
       grid-template-columns:1fr 1fr;
       gap:12px;
     }
-
     @media (max-width: 560px){
       .calendar{gap:8px;}
       .day{min-height:100px;padding:8px;}
@@ -306,6 +287,15 @@
     @media (max-width: 980px){
       .grid{ grid-template-columns: 1fr; }
     }
+
+    .statusDot{
+      display:inline-block;
+      width:10px;height:10px;border-radius:99px;
+      background: rgba(255,255,255,.35);
+      margin-right:8px;
+    }
+    .statusOk{ background: rgba(34,197,94,.85); }
+    .statusBad{ background: rgba(255,90,90,.85); }
   </style>
 </head>
 
@@ -333,7 +323,10 @@
       <div class="row between" style="margin-top:6px;">
         <div>
           <h1>Samsøhuset</h1>
-          <div class="muted">Kalender og bookinger (gemmes lokalt på din enhed lige nu)</div>
+          <div class="muted">
+            <span id="syncDot" class="statusDot"></span>
+            <span id="syncText">Forbinder…</span>
+          </div>
         </div>
         <div class="row">
           <button id="logout" class="ghost" type="button">Log ud</button>
@@ -404,10 +397,11 @@
             <div id="formMsg" class="msg"></div>
 
             <div style="margin-top:14px;">
-              <h2>Bookinger</h2>
-              <div class="small">Liste over bookinger på denne enhed</div>
+              <h2>Ændringer</h2>
+              <div class="small">Liste over ændringer på denne enhed</div>
               <div class="list" id="staysList"></div>
             </div>
+
           </div>
         </div>
 
@@ -416,7 +410,16 @@
 
   </div>
 
+  <!-- Supabase client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
+  /* ====== DINE SUPABASE-NØGLER ====== */
+  const SUPABASE_URL = "https://jbweskxscyxjonrhbdcd.supabase.co";
+  const SUPABASE_KEY = "sb_publishable_2qMwF5JFmVmQuf9jJCERxw_25bMzbyu";
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  /* ===== LOGIN ===== */
   const KODE = "kalkhavesvej";
 
   const loginScreen = document.getElementById("loginScreen");
@@ -426,13 +429,22 @@
   const loginMsg = document.getElementById("loginMsg");
   const logoutBtn = document.getElementById("logout");
 
+  const syncDot = document.getElementById("syncDot");
+  const syncText = document.getElementById("syncText");
+
+  function setSync(status, text){
+    syncDot.classList.remove("statusOk","statusBad");
+    if(status === "ok") syncDot.classList.add("statusOk");
+    if(status === "bad") syncDot.classList.add("statusBad");
+    syncText.textContent = text;
+  }
+
   function norm(v){ return (v||"").trim().toLowerCase(); }
 
   function showApp(){
     loginScreen.style.display = "none";
     app.style.display = "block";
-    renderAll();
-    updatePrettyDates();
+    initSupabaseAndLoad();
   }
   function showLogin(){
     app.style.display = "none";
@@ -452,18 +464,14 @@
   code.onkeydown = e => { if(e.key==="Enter") unlock(); };
   logoutBtn.onclick = showLogin;
 
+  /* ===== STANDARD-UGER ===== */
   const FAMILIES = ["Taastrup","Horsens","Birkerød"];
 
-  const STORAGE_KEY = "samsoehuset_stays_v10";
+  /* ===== GLOBAL STATE ===== */
+  let staysCache = [];
+  let realtimeChannel = null;
 
-  function loadStays(){
-    try{ return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"); }
-    catch{ return []; }
-  }
-  function saveStays(list){
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
-  }
-
+  /* ===== Helpers ===== */
   function toISO(d){
     const y = d.getFullYear();
     const m = String(d.getMonth()+1).padStart(2,"0");
@@ -507,6 +515,7 @@
     return "";
   }
 
+  // Søndag-til-søndag: søndag er skiftedag (to chips), men uden label
   function ownerInfoForDate(d){
     const day = d.getDay(); // 0=søn
     const w = isoWeek(d);
@@ -521,10 +530,90 @@
     return { kind:"split", a: prev, b: next, className: "" };
   }
 
-  function staysForDay(iso, stays){
-    return stays.filter(s => iso >= s.start_date && iso <= s.end_date);
+  function staysForDay(iso){
+    return staysCache.filter(s => iso >= s.start_date && iso <= s.end_date);
   }
 
+  function escapeHtml(str){
+    return String(str).replace(/[&<>"']/g, m => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+    }[m]));
+  }
+
+  function formatPretty(iso){
+    if(!iso) return "";
+    const d = new Date(iso + "T12:00:00");
+    return d.toLocaleDateString("da-DK", { weekday:"long", day:"numeric", month:"long", year:"numeric" });
+  }
+
+  /* ===== Supabase I/O ===== */
+  async function fetchStays(){
+    const { data, error } = await supabase
+      .from("stays")
+      .select("*")
+      .order("start_date", { ascending: true });
+
+    if(error) throw error;
+    staysCache = (data || []).map(x => ({
+      id: x.id,
+      start_date: x.start_date,
+      end_date: x.end_date,
+      who_has: x.who_has,
+      changed_by: x.changed_by,
+      note: x.note || ""
+    }));
+  }
+
+  async function createStay(payload){
+    const { error } = await supabase.from("stays").insert([payload]);
+    if(error) throw error;
+  }
+
+  async function deleteStay(id){
+    const { error } = await supabase.from("stays").delete().eq("id", id);
+    if(error) throw error;
+  }
+
+  function setupRealtime(){
+    if(realtimeChannel){
+      supabase.removeChannel(realtimeChannel);
+      realtimeChannel = null;
+    }
+
+    realtimeChannel = supabase
+      .channel("stays-changes")
+      .on("postgres_changes", { event: "*", schema: "public", table: "stays" }, async () => {
+        try{
+          await fetchStays();
+          renderAll();
+          setSync("ok","Synkroniseret (opdateret)");
+        }catch(e){
+          setSync("bad","Kunne ikke opdatere lige nu");
+        }
+      })
+      .subscribe((status) => {
+        if(status === "SUBSCRIBED"){
+          setSync("ok","Synkroniseret (live)");
+        }
+      });
+  }
+
+  async function initSupabaseAndLoad(){
+    setSync("", "Forbinder…");
+    try{
+      await fetchStays();
+      setupRealtime();
+      renderAll();
+      setSync("ok","Synkroniseret (live)");
+    }catch(e){
+      console.error(e);
+      setSync("bad","Fejl: tjek Supabase (RLS/policies)");
+      // Vi rendrer stadig UI, så du kan se kalenderen
+      renderAll();
+    }
+  }
+
+  /* ===== UI ===== */
   let view = new Date();
   let selectionStart = null;
 
@@ -542,11 +631,6 @@
   const prettyStart = document.getElementById("prettyStart");
   const prettyEnd = document.getElementById("prettyEnd");
 
-  function formatPretty(iso){
-    if(!iso) return "";
-    const d = new Date(iso + "T12:00:00");
-    return d.toLocaleDateString("da-DK", { weekday:"long", day:"numeric", month:"long", year:"numeric" });
-  }
   function updatePrettyDates(){
     prettyStart.textContent = startInput.value ? formatPretty(startInput.value) : "";
     prettyEnd.textContent = endInput.value ? formatPretty(endInput.value) : "";
@@ -570,7 +654,7 @@
     renderAll();
   };
 
-  document.getElementById("save").onclick = () => {
+  document.getElementById("save").onclick = async () => {
     const start = startInput.value;
     const end = endInput.value;
     const whoHas = (whoHasInput.value || "").trim();
@@ -582,31 +666,35 @@
     if(!whoHas){ formMsg.textContent = "Skriv hvem der har huset i perioden."; return; }
     if(!changedBy){ formMsg.textContent = "Skriv hvem der har ændret."; return; }
 
-    const stays = loadStays();
-    const conflict = stays.some(s => !(end < s.start_date || start > s.end_date));
-    if(conflict){ formMsg.textContent = "Der ligger allerede en booking i det interval."; return; }
+    // Konflikt-check mod cache (alle)
+    const conflict = staysCache.some(s => !(end < s.start_date || start > s.end_date));
+    if(conflict){
+      formMsg.textContent = "Der ligger allerede en reservation i det interval.";
+      return;
+    }
 
-    stays.push({
-      id: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now())),
-      start_date: start,
-      end_date: end,
-      who_has: whoHas,
-      changed_by: changedBy,
-      note: note || ""
-    });
+    formMsg.textContent = "Gemmer…";
 
-    stays.sort((a,b) => a.start_date.localeCompare(b.start_date));
-    saveStays(stays);
+    try{
+      await createStay({
+        start_date: start,
+        end_date: end,
+        who_has: whoHas,
+        changed_by: changedBy,
+        note: note || ""
+      });
 
-    formMsg.textContent = "Gemt ✅";
-    renderAll();
+      // Realtime vil opdatere, men vi henter også hurtigt for at være sikker
+      await fetchStays();
+      renderAll();
+      formMsg.textContent = "Gemt ✅";
+      setSync("ok","Synkroniseret (live)");
+    }catch(e){
+      console.error(e);
+      formMsg.textContent = "Kunne ikke gemme. Tjek Supabase.";
+      setSync("bad","Kunne ikke gemme");
+    }
   };
-
-  function escapeHtml(str){
-    return String(str).replace(/[&<>"']/g, m => ({
-      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
-    }[m]));
-  }
 
   function onDayClick(iso, suggested){
     formMsg.textContent = "";
@@ -657,8 +745,6 @@
     gridEnd.setDate(gridEnd.getDate() + (6 - endDow));
     gridEnd.setHours(12,0,0,0);
 
-    const stays = loadStays();
-
     let d = new Date(gridStart);
     while(d <= gridEnd){
       const iso = toISO(d);
@@ -673,7 +759,7 @@
       cell.appendChild(top);
 
       const info = ownerInfoForDate(d);
-      const hits = staysForDay(iso, stays);
+      const hits = staysForDay(iso);
 
       if(hits.length){
         const firstHit = hits[0];
@@ -694,7 +780,6 @@
           const p = document.createElement("div");
           p.className = "pill split";
           p.innerHTML = `
-            <div class="splitLabel">Skiftedag</div>
             <div class="splitChips">
               <div class="chip ${chipClass(info.a)}">${info.a}</div>
               <div class="chip ${chipClass(info.b)}">${info.b}</div>
@@ -719,18 +804,17 @@
   }
 
   function renderStaysList(){
-    const stays = loadStays();
     staysListEl.innerHTML = "";
 
-    if(!stays.length){
+    if(!staysCache.length){
       const empty = document.createElement("div");
       empty.className = "stayItem";
-      empty.innerHTML = `<div class="muted">Ingen bookinger endnu</div>`;
+      empty.innerHTML = `<div class="muted">Ingen ændringer endnu</div>`;
       staysListEl.appendChild(empty);
       return;
     }
 
-    stays.forEach(s => {
+    staysCache.forEach(s => {
       const item = document.createElement("div");
       item.className = "stayItem";
       item.innerHTML = `
@@ -746,12 +830,20 @@
     });
 
     staysListEl.querySelectorAll("button[data-del]").forEach(b => {
-      b.onclick = () => {
+      b.onclick = async () => {
         const id = b.getAttribute("data-del");
-        const stays = loadStays().filter(x => x.id !== id);
-        saveStays(stays);
-        formMsg.textContent = "Slettet ✅";
-        renderAll();
+        formMsg.textContent = "Sletter…";
+        try{
+          await deleteStay(id);
+          await fetchStays();
+          renderAll();
+          formMsg.textContent = "Slettet ✅";
+          setSync("ok","Synkroniseret (live)");
+        }catch(e){
+          console.error(e);
+          formMsg.textContent = "Kunne ikke slette. Tjek Supabase.";
+          setSync("bad","Kunne ikke slette");
+        }
       };
     });
   }
