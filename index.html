@@ -621,11 +621,18 @@
 
     let stays = [];
 
+    let showPast = false;
+
     function isoDate(d){
       const y = d.getFullYear();
       const m = String(d.getMonth()+1).padStart(2,"0");
       const da = String(d.getDate()).padStart(2,"0");
       return `${y}-${m}-${da}`;
+    }
+    function todayISO(){
+      const t = new Date();
+      t.setHours(12,0,0,0);
+      return isoDate(t);
     }
     function parseISO(s){
       const [y,m,d] = s.split("-").map(Number);
@@ -921,6 +928,53 @@
       }
     }
 
+    function createStayItem(s, allowDelete){
+      const it = document.createElement("div");
+      it.className = "item";
+
+      const meta = document.createElement("div");
+      meta.className = "meta";
+
+      const who = document.createElement("div");
+      who.className = "who";
+      who.textContent = s.family || "(ukendt)";
+
+      const dates = document.createElement("div");
+      dates.className = "dates";
+      dates.textContent = `${s.start_date} → ${s.end_date}`;
+
+      const by = document.createElement("div");
+      by.className = "by";
+      by.textContent = `Ændret af: ${s.booked_by || "-"}`;
+
+      meta.appendChild(who);
+      meta.appendChild(dates);
+      meta.appendChild(by);
+
+      if (s.note && String(s.note).trim()){
+        const note = document.createElement("div");
+        note.className = "note";
+        note.textContent = `Note: ${String(s.note).trim()}`;
+        meta.appendChild(note);
+      }
+
+      it.appendChild(meta);
+
+      if (allowDelete){
+        const del = document.createElement("button");
+        del.className = "btn danger";
+        del.type = "button";
+        del.textContent = "Slet";
+        del.addEventListener("click", ()=>{
+          if (!confirmDeleteStay(s)) return;
+          deleteStay(s.id);
+        });
+        it.appendChild(del);
+      }
+
+      return it;
+    }
+
     function renderList(){
       listEl.innerHTML = "";
 
@@ -938,49 +992,38 @@
         return bb.localeCompare(aa);
       });
 
-      for (const s of sorted){
-        const it = document.createElement("div");
-        it.className = "item";
+      const today = todayISO();
+      const active = sorted.filter(s => (s.end_date || "") >= today);
+      const past = sorted.filter(s => (s.end_date || "") < today);
 
-        const meta = document.createElement("div");
-        meta.className = "meta";
+      for (const s of active){
+        listEl.appendChild(createStayItem(s, true));
+      }
 
-        const who = document.createElement("div");
-        who.className = "who";
-        who.textContent = s.family || "(ukendt)";
+      if (past.length){
+        const toggle = document.createElement("button");
+        toggle.className = "btn";
+        toggle.type = "button";
+        toggle.style.width = "100%";
+        toggle.style.marginTop = active.length ? "6px" : "0";
+        toggle.textContent = showPast ? `Skjul historiske ændringer (${past.length})` : `Vis historiske ændringer (${past.length})`;
 
-        const dates = document.createElement("div");
-        dates.className = "dates";
-        dates.textContent = `${s.start_date} → ${s.end_date}`;
+        const pastWrap = document.createElement("div");
+        pastWrap.style.marginTop = "10px";
+        if (!showPast) pastWrap.classList.add("hidden");
 
-        const by = document.createElement("div");
-        by.className = "by";
-        by.textContent = `Ændret af: ${s.booked_by || "-"}`;
-
-        meta.appendChild(who);
-        meta.appendChild(dates);
-        meta.appendChild(by);
-
-        if (s.note && String(s.note).trim()){
-          const note = document.createElement("div");
-          note.className = "note";
-          note.textContent = `Note: ${String(s.note).trim()}`;
-          meta.appendChild(note);
+        for (const s of past){
+          pastWrap.appendChild(createStayItem(s, false));
         }
 
-        const del = document.createElement("button");
-        del.className = "btn danger";
-        del.type = "button";
-        del.textContent = "Slet";
-        del.addEventListener("click", ()=>{
-          if (!confirmDeleteStay(s)) return;
-          deleteStay(s.id);
+        toggle.addEventListener("click", ()=>{
+          showPast = !showPast;
+          pastWrap.classList.toggle("hidden", !showPast);
+          toggle.textContent = showPast ? `Skjul historiske ændringer (${past.length})` : `Vis historiske ændringer (${past.length})`;
         });
 
-        it.appendChild(meta);
-        it.appendChild(del);
-
-        listEl.appendChild(it);
+        listEl.appendChild(toggle);
+        listEl.appendChild(pastWrap);
       }
     }
 
