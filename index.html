@@ -14,16 +14,25 @@
       --okBg: rgba(34,197,94,.20);
       --okBorder: rgba(34,197,94,.55);
 
-      --ownerBg: rgba(80,180,255,.12);
-      --ownerBorder: rgba(80,180,255,.45);
+      --bookBg: rgba(255,200,80,.18);
+      --bookBorder: rgba(255,200,80,.65);
 
-      --bookBg: rgba(255,200,80,.16);
-      --bookBorder: rgba(255,200,80,.60);
+      --pillBg: rgba(255,255,255,.05);
+      --pillBorder: rgba(255,255,255,.16);
+
+      --taastrupBg: rgba(80,180,255,.15);
+      --taastrupBorder: rgba(80,180,255,.60);
+
+      --horsensBg: rgba(175,120,255,.16);
+      --horsensBorder: rgba(175,120,255,.62);
+
+      --birkBg: rgba(60,220,160,.14);
+      --birkBorder: rgba(60,220,160,.58);
     }
 
     *, *::before, *::after{ box-sizing: border-box; }
-
     html,body{height:100%;margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;}
+
     body{
       color:#fff;
       padding:24px;
@@ -37,10 +46,10 @@
       background-attachment: fixed;
     }
     @media (max-width: 700px){
-      body{ background-attachment: scroll; }
+      body{ background-attachment: scroll; padding:16px; }
     }
 
-    .wrap{max-width:1100px;margin:0 auto;}
+    .wrap{max-width:1180px;margin:0 auto;}
     .card{
       width:100%;
       background:var(--card);
@@ -51,6 +60,7 @@
       -webkit-backdrop-filter: blur(16px);
     }
     .pad{padding:18px;}
+    @media (max-width: 520px){ .pad{padding:14px;} }
 
     h1{margin:0;font-size:clamp(22px,3.5vw,34px);letter-spacing:.2px;}
     h2{margin:0;font-size:18px;}
@@ -103,7 +113,7 @@
       min-height: calc(100vh - 48px);
       display:flex;align-items:center;justify-content:center;
     }
-    .loginBox{width:min(680px,100%);}
+    .loginBox{width:min(720px,100%);}
     .loginRow{display:flex;gap:10px;margin-top:12px;}
     .loginRow input{flex:1;width:auto;}
     .loginRow button{width:auto;}
@@ -116,11 +126,11 @@
       gap:12px;
       margin-top:12px;
     }
-    @media (min-width: 920px){
-      .grid{grid-template-columns:1.25fr 0.75fr;}
+    @media (min-width: 980px){
+      .grid{grid-template-columns:1.35fr 0.65fr;}
     }
 
-    /* Calendar */
+    /* Calendar header */
     .calHeader{
       display:flex;
       gap:10px;
@@ -134,24 +144,27 @@
     .dow{
       display:grid;
       grid-template-columns:repeat(7,minmax(0,1fr));
-      gap:8px;
+      gap:10px;
       margin:10px 0 8px;
       font-size:12px;
       opacity:.85;
     }
     .dow div{text-align:center;}
 
+    /* Calendar grid */
     .calendar{
       display:grid;
       grid-template-columns:repeat(7,minmax(0,1fr));
-      gap:8px;
+      gap:10px;
     }
+
+    /* Web-first: giv lidt mere luft, så navne kan stå pænt */
     .day{
-      min-height:98px;
+      min-height:110px;
       border-radius:14px;
       border:1px solid rgba(255,255,255,.12);
       background:rgba(255,255,255,.03);
-      padding:8px;
+      padding:10px;
       cursor:pointer;
       transition:transform .12s ease, background .12s ease, border-color .12s ease;
     }
@@ -170,49 +183,69 @@
       display:flex;
       justify-content:space-between;
       gap:8px;
-      font-weight:900;
+      font-weight:950;
+      letter-spacing:.2px;
+      font-size:13px;
     }
 
-    /* Piller */
+    /* Pills */
     .pill{
-      margin-top:8px;
-      padding:9px 10px;
+      margin-top:10px;
+      padding:10px 10px;
       border-radius:12px;
-      border:1px solid rgba(255,255,255,.16);
-      background:rgba(255,255,255,.04);
-      font-size:13px;
-      line-height:1.15;
-      white-space: normal;
-      overflow-wrap: anywhere;
+      border:1px solid var(--pillBorder);
+      background:var(--pillBg);
+      text-align:center;
     }
-    .pill.owner{
-      border-color: var(--ownerBorder);
-      background: var(--ownerBg);
+
+    /* VIGTIGT: Ingen ord-delinger, ingen ellipsis. Altid én linje og fulde ord. */
+    .pill .title{
+      font-weight:950;
+      display:block;
+      white-space: nowrap;
+      overflow: visible;            /* ikke klippe */
+      text-overflow: clip;          /* ingen ... */
+      word-break: keep-all;         /* ikke splitte ord */
+      overflow-wrap: normal;        /* ikke tvinge brydning */
+      hyphens: none;
+      font-size: 12px;              /* lidt mindre så det kan stå pænt */
+      line-height: 1.1;
     }
+
+    .pill .sub{
+      display:block;
+      margin-top:4px;
+      opacity:.92;
+      font-size:11px;
+      white-space: nowrap;
+      overflow: visible;
+      text-overflow: clip;
+      word-break: keep-all;
+      overflow-wrap: normal;
+      hyphens: none;
+      line-height: 1.1;
+    }
+
     .pill.booked{
       border-color: var(--bookBorder);
       background: var(--bookBg);
     }
-    .pill .title{
-      font-weight:950;
-      display:block;
-    }
-    .pill .sub{
-      display:block;
-      margin-top:3px;
-      opacity:.9;
-      font-size:12px;
-    }
 
-    /* Booking layout */
+    .pill.family-taastrup{ border-color: var(--taastrupBorder); background: var(--taastrupBg); }
+    .pill.family-horsens{ border-color: var(--horsensBorder); background: var(--horsensBg); }
+    .pill.family-birkerod{ border-color: var(--birkBorder); background: var(--birkBg); }
+
+    /* Booking form layout */
     .twoCols{
       display:grid;
       grid-template-columns:1fr 1fr;
       gap:12px;
     }
-    @media (max-width: 520px){
-      .calendar{gap:6px;}
-      .day{min-height:92px;padding:7px;}
+
+    /* Mobil: gør lidt mere kompakt (ikke hovedfokus) */
+    @media (max-width: 560px){
+      .calendar{gap:8px;}
+      .day{min-height:100px;padding:8px;}
       .twoCols{ grid-template-columns:1fr; }
     }
 
@@ -221,6 +254,7 @@
       font-size:12px;
       opacity:.82;
       padding-left:2px;
+      text-transform:capitalize;
     }
 
     .list{display:flex;flex-direction:column;gap:10px;margin-top:10px;}
@@ -232,6 +266,11 @@
     }
     .stayItem .title{font-weight:950;margin-bottom:4px;}
     .stayItem .meta{font-size:13px;opacity:.82;}
+
+    /* Mindre vindue: booking-panelet ryger under, men kalenderen bevarer læsbarhed */
+    @media (max-width: 980px){
+      .grid{ grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 
@@ -243,11 +282,11 @@
       <div class="card loginBox">
         <div class="pad">
           <h1>Samsøhuset</h1>
-          <div class="muted">Indtast koden for at komme ind</div>
+          <div class="muted">Indtast koden for at logge ind</div>
 
           <div class="loginRow">
             <input id="code" type="password" placeholder="Kode" autocomplete="off">
-            <button id="btn" class="primary" type="button">Lås op</button>
+            <button id="btn" class="primary" type="button">Log ind</button>
           </div>
 
           <div id="loginMsg" class="msg"></div>
@@ -264,7 +303,7 @@
           <div class="muted">Kalender og bookinger (gemmes lokalt på din enhed lige nu)</div>
         </div>
         <div class="row">
-          <button id="logout" class="ghost" type="button">Lås igen</button>
+          <button id="logout" class="ghost" type="button">Log ud</button>
         </div>
       </div>
 
@@ -339,12 +378,12 @@
               <div class="small">Liste over bookinger på denne enhed</div>
               <div class="list" id="staysList"></div>
             </div>
-
           </div>
         </div>
 
       </div>
     </div>
+
   </div>
 
 <script>
@@ -374,7 +413,7 @@
   }
   function unlock(){
     if(norm(code.value) === norm(KODE)){
-      loginMsg.textContent = "Korrekt kode 🎉";
+      loginMsg.textContent = "Logget ind ✅";
       showApp();
     }else{
       loginMsg.textContent = "Forkert kode – prøv igen";
@@ -384,9 +423,11 @@
   code.onkeydown = e => { if(e.key==="Enter") unlock(); };
   logoutBtn.onclick = showLogin;
 
-  /* ===== DATA (lokal) ===== */
+  /* ===== STANDARD-UGER: rækkefølge her ===== */
   const FAMILIES = ["Taastrup","Horsens","Birkerød"];
-  const STORAGE_KEY = "samsoehuset_stays_v5";
+
+  /* ===== DATA (lokal) ===== */
+  const STORAGE_KEY = "samsoehuset_stays_v8";
 
   function loadStays(){
     try{ return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"); }
@@ -405,24 +446,55 @@
 
   function startOfWeekMonday(d){
     const x = new Date(d);
-    const dow = (x.getDay() + 6) % 7;
+    const dow = (x.getDay() + 6) % 7; // 0=man
     x.setDate(x.getDate() - dow);
     x.setHours(12,0,0,0);
     return x;
   }
 
+  // ISO uge (mandag som start)
   function isoWeek(date){
     const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
-    const dayNum = d.getUTCDay() || 7;
+    const dayNum = d.getUTCDay() || 7;  // 1..7 (man..søn)
     d.setUTCDate(d.getUTCDate() + 4 - dayNum);
     const yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
     return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
   }
 
-  function ownerForDate(d){
-    const week = isoWeek(d);
+  function ownerForWeekIndex(week){
     const idx = (week - 1) % FAMILIES.length;
     return FAMILIES[idx];
+  }
+
+  // Søndag-til-søndag logik:
+  // Man-lør: vis ugens ejer
+  // Søn: vis "forrige/næste" (skiftedag)
+  function ownerLabelForDate(d){
+    const day = d.getDay(); // 0=søn, 1=man ... 6=lør
+    const w = isoWeek(d);
+
+    if(day !== 0){
+      return { label: ownerForWeekIndex(w), className: familyClass(ownerForWeekIndex(w)) };
+    }
+
+    // Søndag: deling / skift
+    // "forrige uge" vs "næste uge"
+    const prev = ownerForWeekIndex(w);
+    const next = ownerForWeekIndex(w + 1);
+    const label = `${prev}/${next}`;
+    return { label, className: "" }; // neutral farve (eller vi kan style særskilt senere)
+  }
+
+  function familyClass(name){
+    const n = (name || "").toLowerCase();
+    if(n.includes("taastrup")) return "family-taastrup";
+    if(n.includes("horsens")) return "family-horsens";
+    if(n.includes("birker")) return "family-birkerod";
+    return "";
+  }
+
+  function staysForDay(iso, stays){
+    return stays.filter(s => iso >= s.start_date && iso <= s.end_date);
   }
 
   /* ===== UI ===== */
@@ -448,7 +520,6 @@
     const d = new Date(iso + "T12:00:00");
     return d.toLocaleDateString("da-DK", { weekday:"long", day:"numeric", month:"long", year:"numeric" });
   }
-
   function updatePrettyDates(){
     prettyStart.textContent = startInput.value ? formatPretty(startInput.value) : "";
     prettyEnd.textContent = endInput.value ? formatPretty(endInput.value) : "";
@@ -479,29 +550,14 @@
     const bookedBy = (bookedByInput.value || "").trim();
     const note = (noteInput.value || "").trim();
 
-    if(!start || !end){
-      formMsg.textContent = "Vælg start og slut først.";
-      return;
-    }
-    if(end < start){
-      formMsg.textContent = "Slutdato må ikke være før startdato.";
-      return;
-    }
-    if(!whoHas){
-      formMsg.textContent = "Skriv hvem der har huset i perioden.";
-      return;
-    }
-    if(!bookedBy){
-      formMsg.textContent = "Skriv navn på den der booker.";
-      return;
-    }
+    if(!start || !end){ formMsg.textContent = "Vælg start og slut først."; return; }
+    if(end < start){ formMsg.textContent = "Slutdato må ikke være før startdato."; return; }
+    if(!whoHas){ formMsg.textContent = "Skriv hvem der har huset i perioden."; return; }
+    if(!bookedBy){ formMsg.textContent = "Skriv navn på den der booker."; return; }
 
     const stays = loadStays();
     const conflict = stays.some(s => !(end < s.start_date || start > s.end_date));
-    if(conflict){
-      formMsg.textContent = "Der ligger allerede en booking i det interval.";
-      return;
-    }
+    if(conflict){ formMsg.textContent = "Der ligger allerede en booking i det interval."; return; }
 
     stays.push({
       id: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now())),
@@ -525,23 +581,19 @@
     }[m]));
   }
 
-  function renderAll(){
-    monthLabel.textContent = view.toLocaleDateString("da-DK", { month:"long", year:"numeric" });
-    renderCalendar();
-    renderStaysList();
-    updatePrettyDates();
-  }
-
-  function onDayClick(iso, owner){
+  function onDayClick(iso, suggested){
     formMsg.textContent = "";
 
     if(!selectionStart){
       selectionStart = iso;
       startInput.value = iso;
       endInput.value = iso;
+
+      // Smart forslag: udfyld "hvem har huset" hvis tomt
       if(!whoHasInput.value.trim()){
-        whoHasInput.value = owner;
+        whoHasInput.value = suggested;
       }
+
       updatePrettyDates();
       renderCalendar();
       return;
@@ -553,18 +605,17 @@
 
     startInput.value = (a <= b ? a : b);
     endInput.value = (a <= b ? b : a);
-    updatePrettyDates();
 
+    updatePrettyDates();
     renderCalendar();
   }
 
-  function staysForDay(iso, stays){
-    return stays.filter(s => iso >= s.start_date && iso <= s.end_date);
+  function renderAll(){
+    monthLabel.textContent = view.toLocaleDateString("da-DK", { month:"long", year:"numeric" });
+    renderCalendar();
+    renderStaysList();
+    updatePrettyDates();
   }
-
-  document.getElementById("calendar").addEventListener("dblclick", () => {
-    selectionStart = null;
-  });
 
   function renderCalendar(){
     calendarEl.innerHTML = "";
@@ -595,7 +646,7 @@
       top.innerHTML = `<span>${d.getDate()}</span><span class="small">${["Man","Tir","Ons","Tor","Fre","Lør","Søn"][(d.getDay()+6)%7]}</span>`;
       cell.appendChild(top);
 
-      const owner = ownerForDate(d);
+      const labelInfo = ownerLabelForDate(d);
       const hits = staysForDay(iso, stays);
 
       if(hits.length){
@@ -609,8 +660,8 @@
         cell.appendChild(p);
       }else{
         const p = document.createElement("div");
-        p.className = "pill owner";
-        p.innerHTML = `<span class="title">${owner}</span>`;
+        p.className = "pill " + labelInfo.className;
+        p.innerHTML = `<span class="title">${labelInfo.label}</span>`;
         cell.appendChild(p);
       }
 
@@ -620,7 +671,7 @@
         cell.classList.add("selected");
       }
 
-      cell.onclick = () => onDayClick(iso, owner);
+      cell.onclick = () => onDayClick(iso, labelInfo.label.includes("/") ? labelInfo.label.split("/")[0] : labelInfo.label);
       calendarEl.appendChild(cell);
 
       d.setDate(d.getDate() + 1);
