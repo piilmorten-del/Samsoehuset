@@ -130,7 +130,6 @@
       .grid{grid-template-columns:1.35fr 0.65fr;}
     }
 
-    /* Calendar header */
     .calHeader{
       display:flex;
       gap:10px;
@@ -151,7 +150,6 @@
     }
     .dow div{text-align:center;}
 
-    /* Calendar grid */
     .calendar{
       display:grid;
       grid-template-columns:repeat(7,minmax(0,1fr));
@@ -187,7 +185,6 @@
       font-size:13px;
     }
 
-    /* Pills */
     .pill{
       margin-top:10px;
       padding:10px 10px;
@@ -197,7 +194,6 @@
       text-align:center;
     }
 
-    /* Altid fulde ord: ingen deling, ingen ... */
     .pill .title{
       font-weight:950;
       display:block;
@@ -211,14 +207,15 @@
       line-height: 1.1;
     }
 
+    /* Gør undertekst lidt mindre, så den altid kan være der */
     .pill .sub{
       display:block;
       margin-top:4px;
       opacity:.92;
-      font-size:11px;
+      font-size:10.5px;
       white-space: nowrap;
-      overflow: visible;
-      text-overflow: clip;
+      overflow: hidden;      /* klip hellere end at gøre det grimt */
+      text-overflow: clip;   /* ingen ... */
       word-break: keep-all;
       overflow-wrap: normal;
       hyphens: none;
@@ -234,9 +231,21 @@
     .pill.family-horsens{ border-color: var(--horsensBorder); background: var(--horsensBg); }
     .pill.family-birkerod{ border-color: var(--birkBorder); background: var(--birkBg); }
 
-    /* ✅ Forslag A: Søndag viser 2 chips */
-    .pill.split{
-      padding:10px;
+    /* Skiftedag: label + to chips */
+    .pill.split{ padding:10px; }
+    .splitLabel{
+      font-size:10.5px;
+      font-weight:900;
+      letter-spacing:.2px;
+      opacity:.9;
+      margin-bottom:8px;
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:5px 8px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.18);
+      background:rgba(255,255,255,.04);
     }
     .splitChips{
       display:flex;
@@ -264,7 +273,6 @@
     .chip.ho{ border-color: var(--horsensBorder); background: var(--horsensBg); }
     .chip.bi{ border-color: var(--birkBorder); background: var(--birkBg); }
 
-    /* Booking form layout */
     .twoCols{
       display:grid;
       grid-template-columns:1fr 1fr;
@@ -304,7 +312,6 @@
 <body>
   <div class="wrap">
 
-    <!-- LOGIN -->
     <div id="loginScreen">
       <div class="card loginBox">
         <div class="pad">
@@ -322,7 +329,6 @@
       </div>
     </div>
 
-    <!-- APP -->
     <div id="app">
       <div class="row between" style="margin-top:6px;">
         <div>
@@ -335,8 +341,6 @@
       </div>
 
       <div class="grid">
-
-        <!-- Kalender -->
         <div class="card">
           <div class="pad">
             <div class="calHeader">
@@ -359,7 +363,6 @@
           </div>
         </div>
 
-        <!-- Booking -->
         <div class="card">
           <div class="pad">
             <h2>Book datoer</h2>
@@ -384,8 +387,8 @@
             </div>
 
             <div style="margin-top:10px;">
-              <div class="small">Navn på den der booker</div>
-              <input id="bookedBy" placeholder="Navn">
+              <div class="small">Ændret af</div>
+              <input id="changedBy" placeholder="Navn">
             </div>
 
             <div style="margin-top:10px;">
@@ -395,7 +398,7 @@
 
             <div class="row between" style="margin-top:10px;">
               <button id="clear" class="ghost" type="button">Nulstil</button>
-              <button id="save" class="primary" type="button">Gem booking</button>
+              <button id="save" class="primary" type="button">Gem</button>
             </div>
 
             <div id="formMsg" class="msg"></div>
@@ -414,7 +417,6 @@
   </div>
 
 <script>
-  /* ===== LOGIN ===== */
   const KODE = "kalkhavesvej";
 
   const loginScreen = document.getElementById("loginScreen");
@@ -450,11 +452,9 @@
   code.onkeydown = e => { if(e.key==="Enter") unlock(); };
   logoutBtn.onclick = showLogin;
 
-  /* ===== STANDARD-UGER: rækkefølge her ===== */
   const FAMILIES = ["Taastrup","Horsens","Birkerød"];
 
-  /* ===== DATA (lokal) ===== */
-  const STORAGE_KEY = "samsoehuset_stays_v9";
+  const STORAGE_KEY = "samsoehuset_stays_v10";
 
   function loadStays(){
     try{ return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"); }
@@ -473,16 +473,15 @@
 
   function startOfWeekMonday(d){
     const x = new Date(d);
-    const dow = (x.getDay() + 6) % 7; // 0=man
+    const dow = (x.getDay() + 6) % 7;
     x.setDate(x.getDate() - dow);
     x.setHours(12,0,0,0);
     return x;
   }
 
-  // ISO uge (mandag som start)
   function isoWeek(date){
     const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
-    const dayNum = d.getUTCDay() || 7;  // 1..7 (man..søn)
+    const dayNum = d.getUTCDay() || 7;
     d.setUTCDate(d.getUTCDate() + 4 - dayNum);
     const yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
     return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
@@ -508,9 +507,6 @@
     return "";
   }
 
-  // Søndag-til-søndag logik:
-  // Man-lør: én ejer
-  // Søn: to chips (forrige/næste)
   function ownerInfoForDate(d){
     const day = d.getDay(); // 0=søn
     const w = isoWeek(d);
@@ -529,7 +525,6 @@
     return stays.filter(s => iso >= s.start_date && iso <= s.end_date);
   }
 
-  /* ===== UI ===== */
   let view = new Date();
   let selectionStart = null;
 
@@ -540,7 +535,7 @@
   const startInput = document.getElementById("startDate");
   const endInput = document.getElementById("endDate");
   const whoHasInput = document.getElementById("whoHas");
-  const bookedByInput = document.getElementById("bookedBy");
+  const changedByInput = document.getElementById("changedBy");
   const noteInput = document.getElementById("note");
   const formMsg = document.getElementById("formMsg");
 
@@ -568,7 +563,7 @@
     startInput.value = "";
     endInput.value = "";
     whoHasInput.value = "";
-    bookedByInput.value = "";
+    changedByInput.value = "";
     noteInput.value = "";
     formMsg.textContent = "";
     updatePrettyDates();
@@ -579,13 +574,13 @@
     const start = startInput.value;
     const end = endInput.value;
     const whoHas = (whoHasInput.value || "").trim();
-    const bookedBy = (bookedByInput.value || "").trim();
+    const changedBy = (changedByInput.value || "").trim();
     const note = (noteInput.value || "").trim();
 
     if(!start || !end){ formMsg.textContent = "Vælg start og slut først."; return; }
     if(end < start){ formMsg.textContent = "Slutdato må ikke være før startdato."; return; }
     if(!whoHas){ formMsg.textContent = "Skriv hvem der har huset i perioden."; return; }
-    if(!bookedBy){ formMsg.textContent = "Skriv navn på den der booker."; return; }
+    if(!changedBy){ formMsg.textContent = "Skriv hvem der har ændret."; return; }
 
     const stays = loadStays();
     const conflict = stays.some(s => !(end < s.start_date || start > s.end_date));
@@ -596,7 +591,7 @@
       start_date: start,
       end_date: end,
       who_has: whoHas,
-      booked_by: bookedBy,
+      changed_by: changedBy,
       note: note || ""
     });
 
@@ -685,7 +680,7 @@
         const p = document.createElement("div");
         p.className = "pill booked";
         p.innerHTML = `
-          <span class="title">Ny booking</span>
+          <span class="title">Bruges af</span>
           <span class="sub">${escapeHtml(firstHit.who_has)}</span>
         `;
         cell.appendChild(p);
@@ -699,6 +694,7 @@
           const p = document.createElement("div");
           p.className = "pill split";
           p.innerHTML = `
+            <div class="splitLabel">Skiftedag</div>
             <div class="splitChips">
               <div class="chip ${chipClass(info.a)}">${info.a}</div>
               <div class="chip ${chipClass(info.b)}">${info.b}</div>
@@ -714,13 +710,10 @@
         cell.classList.add("selected");
       }
 
-      // forslag i feltet ved klik:
-      // på split-dage foreslår vi den "første" (før skift)
       const suggested = info.kind === "split" ? info.a : info.a;
-
       cell.onclick = () => onDayClick(iso, suggested);
-      calendarEl.appendChild(cell);
 
+      calendarEl.appendChild(cell);
       d.setDate(d.getDate() + 1);
     }
   }
@@ -743,7 +736,7 @@
       item.innerHTML = `
         <div class="title">${escapeHtml(s.who_has)}</div>
         <div class="meta">${formatPretty(s.start_date)} → ${formatPretty(s.end_date)}</div>
-        <div class="meta">Booket af: ${escapeHtml(s.booked_by)}</div>
+        <div class="meta">Ændret af: ${escapeHtml(s.changed_by || "")}</div>
         ${s.note ? `<div class="meta">Note: ${escapeHtml(s.note)}</div>` : ""}
         <div class="row" style="margin-top:10px; justify-content:flex-end;">
           <button class="ghost" type="button" data-del="${s.id}">Slet</button>
