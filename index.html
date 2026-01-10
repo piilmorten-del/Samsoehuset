@@ -696,6 +696,16 @@
       setTimeout(()=>{ statusEl.style.display = "none"; }, 2500);
     }
 
+    function confirmDeleteStay(stay){
+      const by = (stay && stay.booked_by && String(stay.booked_by).trim()) ? String(stay.booked_by).trim() : "-";
+      const msg =
+        `OBS.\n\n` +
+        `Denne ændring er lavet af ${by}.\n\n` +
+        `Hvis du sletter denne ændring, forsvinder den permanent og kan ikke genskabes.\n\n` +
+        `Vil du slette ændringen?`;
+      return window.confirm(msg);
+    }
+
     async function loadStays(){
       const client = getSupabaseClient();
       if (!client){
@@ -962,7 +972,10 @@
         del.className = "btn danger";
         del.type = "button";
         del.textContent = "Slet";
-        del.addEventListener("click", ()=> deleteStay(s.id));
+        del.addEventListener("click", ()=>{
+          if (!confirmDeleteStay(s)) return;
+          deleteStay(s.id);
+        });
 
         it.appendChild(meta);
         it.appendChild(del);
