@@ -101,8 +101,6 @@
       gap: 16px;
       align-items:start;
     }
-
-    /* FIX: tillad grid-items at krympe (undgå at indhold tvinger bredde og klipper søndag) */
     .grid > *{ min-width: 0; }
 
     .card{
@@ -292,7 +290,7 @@
     .pill.birkeroed{ border-color: rgba(62,230,195,.55); background: rgba(62,230,195,.14); }
     .pill.booking{ border-color: rgba(45,212,122,.55); background: rgba(45,212,122,.16); }
 
-    /* ===== NY: tydelig "ÆNDRING" markering i kalenderen ===== */
+    /* Ændrede dage: behold tydelig grøn markering, men uden ekstra badge */
     .day.changed{
       border-color: rgba(45,212,122,.55);
       background: rgba(45,212,122,.10);
@@ -302,21 +300,14 @@
       border-color: rgba(45,212,122,.70);
       background: rgba(45,212,122,.12);
     }
-    .changeBadge{
-      position:absolute;
-      top:8px;
-      left:8px;
-      padding: 4px 8px;
-      border-radius: 999px;
-      font-size: 11px;
-      font-weight: 900;
-      letter-spacing: .6px;
-      text-transform: uppercase;
-      color: rgba(255,255,255,.92);
-      border: 1px solid rgba(45,212,122,.62);
-      background: rgba(45,212,122,.22);
-      box-shadow: 0 10px 20px rgba(0,0,0,.25);
-      pointer-events:none;
+
+    /* Oprindelig ejer når der er en ændring */
+    .pill.original{
+      opacity: .55;
+      text-decoration: line-through;
+      text-decoration-thickness: 2px;
+      text-decoration-color: rgba(255,255,255,.55);
+      filter: saturate(.8);
     }
 
     .shiftWrap{
@@ -945,38 +936,18 @@
         const stay = findStayForDate(d);
         if (stay){
           day.classList.add("changed");
-
-          const badge = document.createElement("div");
-          badge.className = "changeBadge";
-          badge.textContent = "Ændring";
-          day.appendChild(badge);
         }
 
         const base = baseOwnerForDate(d);
 
         if (base.type === "shift"){
-          const wrap = document.createElement("div");
-          wrap.className = "shiftWrap";
-
-          const names = document.createElement("div");
-          names.className = "shiftNames";
-
-          const p1 = document.createElement("div");
-          p1.className = "pill " + ownerClass(base.current);
-          p1.textContent = base.current;
-
-          const p2 = document.createElement("div");
-          p2.className = "pill " + ownerClass(base.next);
-          p2.textContent = base.next;
-
-          names.appendChild(p1);
-          names.appendChild(p2);
-
-          wrap.appendChild(names);
-          day.appendChild(wrap);
+          const p = document.createElement("div");
+          p.className = "pill " + ownerClass(base.current) + (stay ? " original" : "");
+          p.textContent = `Skiftedag: ${base.current} → ${base.next}`;
+          day.appendChild(p);
         } else {
           const p = document.createElement("div");
-          p.className = "pill " + ownerClass(base.owner);
+          p.className = "pill " + ownerClass(base.owner) + (stay ? " original" : "");
           p.textContent = base.owner;
           day.appendChild(p);
         }
