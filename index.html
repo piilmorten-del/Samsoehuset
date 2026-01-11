@@ -50,7 +50,7 @@
     .wrap{
       position:relative;
       min-height:100%;
-      padding: 18px 18px 28px;
+      padding: 22px 22px 34px;
     }
 
     header{
@@ -60,13 +60,11 @@
       gap:16px;
       margin-bottom: 14px;
     }
-
     .title h1{
       margin:0;
-      font-size: clamp(28px, 3.8vw, 46px);
+      font-size: clamp(28px, 4vw, 46px);
       letter-spacing: .2px;
       line-height: 1.05;
-      font-weight: 900;
     }
     .title p{
       margin:6px 0 0;
@@ -77,7 +75,6 @@
     .topActions{
       display:flex; align-items:center; gap:10px;
     }
-
     .btn{
       border: 1px solid var(--stroke2);
       background: rgba(255,255,255,.06);
@@ -88,6 +85,7 @@
       cursor:pointer;
       transition: transform .08s ease, background .18s ease, border-color .18s ease;
       user-select:none;
+      white-space: nowrap;
     }
     .btn:hover{ background: rgba(255,255,255,.10); border-color: rgba(255,255,255,.22); }
     .btn:active{ transform: translateY(1px); }
@@ -97,16 +95,11 @@
     }
     .btnPrimary:hover{ background: rgba(45,212,122,.20); border-color: rgba(45,212,122,.62); }
 
-    .danger{
-      border-color: rgba(255,100,100,.35);
-      background: rgba(255,60,60,.10);
-    }
-
     .grid{
       display:grid;
-      grid-template-columns: minmax(0, 1.35fr) minmax(280px, .65fr);
+      grid-template-columns: minmax(0, 1.65fr) minmax(280px, .55fr);
       gap: 16px;
-      align-items:stretch;
+      align-items: stretch;
     }
 
     .card{
@@ -117,12 +110,8 @@
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       height: 100%;
-      display:flex;
-      flex-direction:column;
-      min-height: 0;
     }
-    .cardInner{ padding: 16px; }
-    .cardGrow{ flex:1; min-height:0; display:flex; flex-direction:column; }
+    .cardInner{ padding: 16px; height: 100%; }
 
     .card h2{
       margin:0 0 4px;
@@ -135,7 +124,6 @@
       font-size: 13px;
     }
 
-    /* ===== Login screen ===== */
     #loginScreen{
       min-height: calc(100vh - 48px);
       display:flex;
@@ -188,9 +176,25 @@
       border-color: rgba(255,255,255,.28);
       box-shadow: 0 0 0 4px rgba(255,255,255,.07);
     }
-    textarea.field{
-      resize: vertical;
-      min-height: 58px;
+
+    select.field{
+      appearance: none;
+      -webkit-appearance: none;
+      background-image:
+        linear-gradient(45deg, transparent 50%, rgba(255,255,255,.85) 50%),
+        linear-gradient(135deg, rgba(255,255,255,.85) 50%, transparent 50%),
+        linear-gradient(to right, transparent, transparent);
+      background-position:
+        calc(100% - 22px) calc(50% - 4px),
+        calc(100% - 16px) calc(50% - 4px),
+        calc(100% - 44px) 50%;
+      background-size: 6px 6px, 6px 6px, 1px 22px;
+      background-repeat: no-repeat;
+      padding-right: 46px;
+    }
+    select.field option{
+      background: #0b0f14;
+      color: #f3f5f7;
     }
 
     .msg{
@@ -201,7 +205,6 @@
     }
     .msg.ok{ color: rgba(205,255,225,.92); }
 
-    /* ===== Calendar ===== */
     .calHeader{
       display:flex;
       align-items:center;
@@ -244,10 +247,7 @@
       display:grid;
       grid-template-columns: repeat(7, 1fr);
       gap: 10px;
-      flex: 1;
-      min-height: 0;
     }
-
     .day{
       border: 1px solid rgba(255,255,255,.10);
       background: rgba(255,255,255,.05);
@@ -269,6 +269,11 @@
       cursor: default;
     }
     .day.muted:hover{ background: rgba(255,255,255,.05); border-color: rgba(255,255,255,.10); }
+    .day.disabled{
+      opacity: .42;
+      cursor: not-allowed;
+    }
+    .day.disabled:hover{ background: rgba(255,255,255,.05); border-color: rgba(255,255,255,.10); }
     .dayTop{
       display:flex; justify-content:space-between; align-items:baseline;
       gap: 8px;
@@ -286,7 +291,7 @@
       background: rgba(0,0,0,.20);
       font-weight: 750;
       font-size: 12px;
-      line-height: 1;
+      line-height: 1.1;
       letter-spacing:.2px;
       white-space: nowrap;
       max-width: 100%;
@@ -296,23 +301,13 @@
     .pill.taastrup{ border-color: rgba(74,166,255,.55); background: rgba(74,166,255,.14); }
     .pill.horsens{ border-color: rgba(183,123,255,.55); background: rgba(183,123,255,.14); }
     .pill.birkeroed{ border-color: rgba(62,230,195,.55); background: rgba(62,230,195,.14); }
-    .pill.booking{ border-color: rgba(45,212,122,.55); background: rgba(45,212,122,.16); }
-
-    .pill.baseOverridden{
-      opacity: .55;
+    .pill.booking{ border-color: rgba(45,212,122,.62); background: rgba(45,212,122,.16); }
+    .pill.shift{ font-weight: 850; }
+    .pill.strike{
       text-decoration: line-through;
-      text-decoration-thickness: 2px;
-      text-decoration-color: rgba(255,255,255,.55);
+      opacity: .55;
     }
 
-    /* Sunday shift pill */
-    .pill.shift{
-      width: 100%;
-      justify-content:flex-start;
-      font-weight: 800;
-    }
-
-    /* ===== Form ===== */
     .formGrid{
       display:grid;
       grid-template-columns: 1fr 1fr;
@@ -327,6 +322,7 @@
       font-size: 12px;
       color: rgba(255,255,255,.74);
     }
+    textarea.field{ min-height: 54px; resize: vertical; }
 
     .rowBtns{
       display:flex;
@@ -341,35 +337,15 @@
       font-size: 13px;
       color: rgba(205,255,225,.92);
       display:none;
-      white-space: pre-wrap;
-      line-height: 1.25;
-    }
-
-    .listWrap{
-      margin-top:16px;
-      display:flex;
-      flex-direction:column;
-      gap: 10px;
-      min-height: 0;
-    }
-
-    .listHeaderRow{
-      display:flex;
-      align-items:flex-end;
-      justify-content:space-between;
-      gap: 10px;
+      white-space: pre-line;
     }
 
     .list{
+      margin-top: 12px;
       display:flex;
       flex-direction:column;
       gap: 10px;
-      overflow:auto;
-      padding-right: 2px;
-      min-height: 0;
-      max-height: 340px;
     }
-
     .item{
       border: 1px solid rgba(255,255,255,.10);
       background: rgba(255,255,255,.05);
@@ -398,6 +374,10 @@
       color: rgba(255,255,255,.72);
       font-size: 12px;
     }
+    .item .meta .vis{
+      color: rgba(255,255,255,.72);
+      font-size: 12px;
+    }
     .item .meta .note{
       color: rgba(255,255,255,.74);
       font-size: 12px;
@@ -405,92 +385,78 @@
       white-space: normal;
       word-break: break-word;
     }
-    .item .actions{
+
+    .danger{
+      border-color: rgba(255,100,100,.35);
+      background: rgba(255,60,60,.10);
+    }
+
+    .btnSmall{
+      padding: 9px 12px;
+      border-radius: 12px;
+      font-weight: 750;
+      font-size: 13px;
+    }
+
+    .itemActions{
       display:flex;
       gap: 8px;
-      align-items:flex-end;
-      flex-shrink: 0;
+      align-items:center;
+      justify-content:flex-end;
+      flex-wrap: wrap;
     }
 
     .hidden{ display:none !important; }
 
-    /* Dropdown readability */
-    select.field{
-      appearance: none;
-      -webkit-appearance: none;
-      background-image:
-        linear-gradient(45deg, transparent 50%, rgba(255,255,255,.85) 50%),
-        linear-gradient(135deg, rgba(255,255,255,.85) 50%, transparent 50%);
-      background-position:
-        calc(100% - 18px) calc(1em + 2px),
-        calc(100% - 13px) calc(1em + 2px);
-      background-size: 5px 5px, 5px 5px;
-      background-repeat: no-repeat;
-      padding-right: 36px;
-    }
-    select.field option{
-      background: #0f131a;
-      color: #f3f5f7;
+    @media (max-width: 980px){
+      .grid{ grid-template-columns: 1fr; }
     }
 
-    /* Simple modal */
-    .modalBackdrop{
-      position:fixed; inset:0;
-      background: rgba(0,0,0,.62);
+    /* Modal */
+    .modalOverlay{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.55);
       display:none;
       align-items:center;
       justify-content:center;
       padding: 18px;
-      z-index: 30;
+      z-index: 999;
     }
+    .modalOverlay.show{ display:flex; }
     .modal{
-      width: min(860px, 96vw);
-      max-height: min(82vh, 780px);
-      overflow:hidden;
-      display:flex;
-      flex-direction:column;
-    }
-    .modalTop{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap: 10px;
-      padding: 14px 16px;
-      border-bottom: 1px solid rgba(255,255,255,.10);
-    }
-    .modalTop h2{
-      margin:0;
-      font-size: 18px;
-    }
-    .modalBody{
-      padding: 14px 16px;
+      width: min(820px, 96vw);
+      max-height: min(80vh, 760px);
       overflow:auto;
     }
-    .tabs{
+    .modalHeader{
       display:flex;
-      gap: 8px;
-      flex-wrap:wrap;
-      margin-bottom: 12px;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      margin-bottom: 10px;
     }
-    .tab{
+    .modalHeader h2{ margin:0; font-size: 18px; }
+    .modalGrid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    .miniRow{
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      flex-wrap: wrap;
+    }
+    .tag{
+      display:inline-flex;
+      padding: 6px 10px;
+      border-radius: 999px;
       border: 1px solid rgba(255,255,255,.14);
       background: rgba(255,255,255,.06);
-      color: rgba(255,255,255,.88);
-      border-radius: 999px;
-      padding: 8px 10px;
-      font-weight: 800;
-      cursor:pointer;
-      font-size: 13px;
-    }
-    .tab.active{
-      border-color: rgba(45,212,122,.55);
-      background: rgba(45,212,122,.16);
-      color: rgba(255,255,255,.95);
-    }
-
-    @media (max-width: 980px){
-      .grid{ grid-template-columns: 1fr; }
-      .list{ max-height: 260px; }
+      font-size: 12px;
+      color: rgba(255,255,255,.85);
+      font-weight: 750;
     }
   </style>
 </head>
@@ -499,10 +465,9 @@
   <div class="bg"></div>
 
   <div class="wrap">
-    <!-- Header vises kun når man er logget ind -->
     <header id="appHeader" class="hidden">
       <div class="title">
-        <h1 id="welcomeTitle">Velkommen til Samsøhuset</h1>
+        <h1 id="welcomeTitle">Samsøhuset</h1>
         <p>Kalender og eventuelle ændringer</p>
       </div>
 
@@ -512,7 +477,6 @@
       </div>
     </header>
 
-    <!-- LOGIN -->
     <section id="loginScreen">
       <div>
         <div class="loginHero">
@@ -536,15 +500,13 @@
       </div>
     </section>
 
-    <!-- APP -->
     <main id="app" class="grid hidden">
 
-      <!-- Calendar -->
-      <section class="card">
-        <div class="cardInner cardGrow">
+      <section class="card" id="calCard">
+        <div class="cardInner" style="display:flex; flex-direction:column;">
           <div class="calHeader">
             <div class="monthTitle">
-              <div id="monthName" class="m"> </div>
+              <div id="monthName" class="m">—</div>
               <div class="t">Klik på en dag for start. Klik igen for slut.</div>
             </div>
             <div class="nav">
@@ -558,117 +520,102 @@
             <div>Man</div><div>Tir</div><div>Ons</div><div>Tor</div><div>Fre</div><div>Lør</div><div>Søn</div>
           </div>
 
-          <div id="days" class="days"></div>
+          <div id="days" class="days" style="flex:1;"></div>
         </div>
       </section>
 
-      <!-- Booking panel -->
-      <aside class="card">
-        <div class="cardInner cardGrow">
-          <h2>Foretag ændringer</h2>
-          <p class="sub">Vælg i kalenderen, eller udfyld felterne her.</p>
+      <aside class="card" id="sideCard">
+        <div class="cardInner" style="display:flex; flex-direction:column;">
+          <div>
+            <h2>Foretag ændringer</h2>
+            <p class="sub">Vælg i kalenderen, eller udfyld felterne her.</p>
 
-          <div class="formGrid">
-            <div>
-              <label for="startInput">Start</label>
-              <input id="startInput" class="field" type="date" />
-            </div>
-            <div>
-              <label for="endInput">Slut</label>
-              <input id="endInput" class="field" type="date" />
-            </div>
-
-            <div class="full">
-              <label for="whoInput">Hvem har huset (kan være familie/venner)</label>
-              <input id="whoInput" class="field" type="text" placeholder="Fx Taastrup / Vennegruppe / etc." />
-            </div>
-
-            <div class="full">
-              <label for="changedByInput">Ændret af</label>
-              <input id="changedByInput" class="field" type="text" placeholder="Navn" />
-            </div>
-
-            <div class="full">
-              <label for="visibilitySelect">Synlighed</label>
-              <select id="visibilitySelect" class="field">
-                <option value="">Vælg...</option>
-              </select>
-            </div>
-
-            <div class="full">
-              <label for="noteInput">Note (valgfri)</label>
-              <textarea id="noteInput" class="field" placeholder="Kort note"></textarea>
-            </div>
-          </div>
-
-          <div class="rowBtns">
-            <button id="resetBtn" class="btn" type="button">Nulstil</button>
-            <button id="saveBtn" class="btn btnPrimary" type="button">Gem</button>
-          </div>
-
-          <div id="status" class="status"> </div>
-
-          <div class="listWrap">
-            <div class="listHeaderRow">
+            <div class="formGrid">
               <div>
-                <h2 style="margin:0 0 4px">Ændringer</h2>
-                <p class="sub" style="margin:0">Liste over ændringer</p>
+                <label for="startInput">Start</label>
+                <input id="startInput" class="field" type="date" />
               </div>
-              <button id="toggleHistoryBtn" class="btn" type="button">Vis historiske ændringer</button>
+              <div>
+                <label for="endInput">Slut</label>
+                <input id="endInput" class="field" type="date" />
+              </div>
+
+              <div class="full">
+                <label for="whoInput">Hvem har huset (kan være familie/venner)</label>
+                <input id="whoInput" class="field" type="text" placeholder="Fx Taastrup / Vennegruppe / etc." />
+              </div>
+
+              <div class="full">
+                <label for="changedByInput">Ændret af</label>
+                <input id="changedByInput" class="field" type="text" placeholder="Navn" />
+              </div>
+
+              <div class="full">
+                <label for="visibilitySelect">Synlighed</label>
+                <select id="visibilitySelect" class="field">
+                  <option value="">Vælg...</option>
+                </select>
+              </div>
+
+              <div class="full">
+                <label for="noteInput">Note (valgfri)</label>
+                <textarea id="noteInput" class="field" placeholder="Kort note"></textarea>
+              </div>
             </div>
 
-            <div id="list" class="list"></div>
+            <div class="rowBtns">
+              <button id="resetBtn" class="btn" type="button">Nulstil</button>
+              <button id="saveBtn" class="btn btnPrimary" type="button">Gem</button>
+            </div>
+
+            <div id="status" class="status">—</div>
           </div>
+
+          <div style="margin-top:16px">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
+              <div>
+                <h2>Ændringer</h2>
+                <p class="sub" style="margin-bottom:0">Liste over ændringer</p>
+              </div>
+              <button id="toggleHistoryBtn" class="btn btnSmall" type="button">Vis historiske ændringer</button>
+            </div>
+
+            <div id="listFuture" class="list"></div>
+            <div id="historyWrap" class="hidden" style="margin-top:10px">
+              <div id="listPast" class="list"></div>
+            </div>
+          </div>
+
         </div>
       </aside>
 
     </main>
   </div>
 
-  <!-- Info modal -->
-  <div id="modalBackdrop" class="modalBackdrop">
+  <div id="infoOverlay" class="modalOverlay" aria-hidden="true">
     <div class="card modal">
-      <div class="modalTop">
-        <h2>Yderligere info</h2>
-        <button id="closeModalBtn" class="btn" type="button">Luk</button>
-      </div>
-      <div class="modalBody">
-        <div id="infoTabs" class="tabs"></div>
-
-        <div class="formGrid">
-          <div class="full">
-            <label for="infoTitleInput">Titel</label>
-            <input id="infoTitleInput" class="field" type="text" placeholder="Fx Vedtægter" />
-          </div>
-          <div class="full">
-            <label for="infoBodyInput">Indhold</label>
-            <textarea id="infoBodyInput" class="field" placeholder="Skriv tekst her"></textarea>
-          </div>
+      <div class="cardInner">
+        <div class="modalHeader">
+          <h2>Yderligere info</h2>
+          <button id="closeInfoBtn" class="btn btnSmall" type="button">Luk</button>
         </div>
 
-        <div class="rowBtns">
-          <button id="infoNewBtn" class="btn" type="button">Nyt punkt</button>
-          <div style="display:flex; gap:10px; justify-content:flex-end; width:100%">
-            <button id="infoDeleteBtn" class="btn danger" type="button">Slet</button>
-            <button id="infoSaveBtn" class="btn btnPrimary" type="button">Gem</button>
-          </div>
+        <div class="miniRow" style="margin-bottom:10px">
+          <span id="infoRoleTag" class="tag">—</span>
+          <button id="addInfoBtn" class="btn btnSmall btnPrimary hidden" type="button">Tilføj punkt</button>
         </div>
 
-        <div id="infoStatus" class="status"> </div>
+        <div id="infoList" class="modalGrid"></div>
       </div>
     </div>
   </div>
 
-  <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
-    /* =========================================================
-       KONFIGURATION
-       ========================================================= */
-    const PASSWORDS = {
-      guest: "kalkhavesvej",
-      admin: "Kalkhavesvej100!",
+    const SHARED_CODE = "kalkhavesvej";
+    const ADMIN_CODE = "Kalkhavesvej100!";
+    const FAMILY_CODES = {
       taastrup: "Taastrup",
       horsens: "Horsens",
       birkeroed: "Birkerød"
@@ -680,7 +627,6 @@
     const YEAR = 2026;
     const ROTATION = ["Taastrup", "Horsens", "Birkerød"];
     const ROTATION_START_MONDAY = "2025-12-29";
-    /* ========================================================= */
 
     const appHeader = document.getElementById("appHeader");
     const welcomeTitle = document.getElementById("welcomeTitle");
@@ -691,6 +637,13 @@
     const loginBtn = document.getElementById("loginBtn");
     const loginMsg = document.getElementById("loginMsg");
     const logoutBtn = document.getElementById("logoutBtn");
+
+    const infoBtn = document.getElementById("infoBtn");
+    const infoOverlay = document.getElementById("infoOverlay");
+    const closeInfoBtn = document.getElementById("closeInfoBtn");
+    const addInfoBtn = document.getElementById("addInfoBtn");
+    const infoList = document.getElementById("infoList");
+    const infoRoleTag = document.getElementById("infoRoleTag");
 
     const monthName = document.getElementById("monthName");
     const daysEl = document.getElementById("days");
@@ -707,22 +660,23 @@
     const resetBtn = document.getElementById("resetBtn");
     const saveBtn = document.getElementById("saveBtn");
     const statusEl = document.getElementById("status");
-    const listEl = document.getElementById("list");
-    const toggleHistoryBtn = document.getElementById("toggleHistoryBtn");
 
-    const infoBtn = document.getElementById("infoBtn");
-    const modalBackdrop = document.getElementById("modalBackdrop");
-    const closeModalBtn = document.getElementById("closeModalBtn");
-    const infoTabs = document.getElementById("infoTabs");
-    const infoTitleInput = document.getElementById("infoTitleInput");
-    const infoBodyInput = document.getElementById("infoBodyInput");
-    const infoNewBtn = document.getElementById("infoNewBtn");
-    const infoDeleteBtn = document.getElementById("infoDeleteBtn");
-    const infoSaveBtn = document.getElementById("infoSaveBtn");
-    const infoStatus = document.getElementById("infoStatus");
+    const listFutureEl = document.getElementById("listFuture");
+    const listPastEl = document.getElementById("listPast");
+    const historyWrap = document.getElementById("historyWrap");
+    const toggleHistoryBtn = document.getElementById("toggleHistoryBtn");
 
     const DK_MONTHS = ["januar","februar","marts","april","maj","juni","juli","august","september","oktober","november","december"];
     const DK_DOW = ["Søn","Man","Tir","Ons","Tor","Fre","Lør"];
+
+    let view = new Date(YEAR, 0, 1);
+    view.setHours(12,0,0,0);
+
+    let selectedStart = null;
+    let selectedEnd = null;
+
+    let staysAll = [];
+    let editingId = null;
 
     function getSupabaseClient(){
       if (!window.supabase || !window.supabase.createClient) return null;
@@ -730,7 +684,6 @@
     }
 
     function normalize(v){ return (v || "").toString().trim().toLowerCase(); }
-
     function setLoginMsg(text, ok=false){
       loginMsg.textContent = text;
       loginMsg.className = "msg" + (ok ? " ok" : "");
@@ -745,165 +698,8 @@
       statusEl.textContent = text;
       statusEl.style.display = "block";
       statusEl.style.color = ok ? "rgba(205,255,225,.92)" : "rgba(255,220,220,.92)";
-      setTimeout(()=>{ statusEl.style.display = "none"; }, 3800);
+      setTimeout(()=>{ statusEl.style.display = "none"; }, 3200);
     }
-
-    function setInfoStatus(text, ok=true){
-      infoStatus.textContent = text;
-      infoStatus.style.display = "block";
-      infoStatus.style.color = ok ? "rgba(205,255,225,.92)" : "rgba(255,220,220,.92)";
-      setTimeout(()=>{ infoStatus.style.display = "none"; }, 3800);
-    }
-
-    function roleLabel(role){
-      if (role === "admin") return "Administrator";
-      if (role === "taastrup") return "Taastrup familien";
-      if (role === "horsens") return "Horsens familien";
-      if (role === "birkeroed") return "Birkerød familien";
-      return "Gæst";
-    }
-
-    function isLoggedIn(){ return localStorage.getItem("samsoehuset_ok") === "1"; }
-    function getRole(){ return localStorage.getItem("samsoehuset_role") || ""; }
-
-    function setLoggedIn(role){
-      localStorage.setItem("samsoehuset_ok", "1");
-      localStorage.setItem("samsoehuset_role", role);
-      showApp();
-    }
-    function setLoggedOut(){
-      localStorage.removeItem("samsoehuset_ok");
-      localStorage.removeItem("samsoehuset_role");
-      showLogin();
-    }
-
-    function showLogin(){
-      appHeader.classList.add("hidden");
-      loginScreen.classList.remove("hidden");
-      app.classList.add("hidden");
-    }
-    function showApp(){
-      appHeader.classList.remove("hidden");
-      loginScreen.classList.add("hidden");
-      app.classList.remove("hidden");
-      const role = getRole();
-      welcomeTitle.textContent = `Velkommen til Samsøhuset - ${roleLabel(role)}`;
-      buildVisibilityOptions();
-    }
-
-    function resolveRoleFromPassword(pw){
-      const entered = normalize(pw);
-      if (entered === normalize(PASSWORDS.admin)) return "admin";
-      if (entered === normalize(PASSWORDS.taastrup)) return "taastrup";
-      if (entered === normalize(PASSWORDS.horsens)) return "horsens";
-      if (entered === normalize(PASSWORDS.birkeroed)) return "birkeroed";
-      if (entered === normalize(PASSWORDS.guest)) return "guest";
-      return "";
-    }
-
-    function tryLogin(){
-      clearLoginMsg();
-      const entered = (passInput.value || "").trim();
-      if (!entered){
-        setLoginMsg("Skriv koden først.");
-        return;
-      }
-
-      const role = resolveRoleFromPassword(entered);
-      if (!role){
-        setLoginMsg("Forkert kode. Prøv igen.");
-        return;
-      }
-
-      setLoggedIn(role);
-      loadStays();
-      loadInfoPages();
-    }
-
-    loginBtn.addEventListener("click", tryLogin);
-    passInput.addEventListener("keydown", (e)=>{ if (e.key === "Enter") tryLogin(); });
-    logoutBtn.addEventListener("click", ()=>{ setLoggedOut(); });
-
-    /* ===== Visibility ===== */
-    const VIS_LABELS = {
-      all: "Ses af alle",
-      taastrup: "Kun Taastrup",
-      horsens: "Kun Horsens",
-      birkeroed: "Kun Birkerød"
-    };
-
-    function buildVisibilityOptions(){
-      const role = getRole();
-      const isAdmin = role === "admin";
-      const isFamily = role === "taastrup" || role === "horsens" || role === "birkeroed";
-      const isGuest = role === "guest";
-
-      visibilitySelect.innerHTML = "";
-      const opt0 = document.createElement("option");
-      opt0.value = "";
-      opt0.textContent = "Vælg...";
-      visibilitySelect.appendChild(opt0);
-
-      const addOpt = (value)=>{
-        const o = document.createElement("option");
-        o.value = value;
-        o.textContent = VIS_LABELS[value] || value;
-        visibilitySelect.appendChild(o);
-      };
-
-      addOpt("all");
-
-      if (isAdmin){
-        addOpt("taastrup");
-        addOpt("horsens");
-        addOpt("birkeroed");
-      } else if (isFamily){
-        addOpt(role);
-      } else if (isGuest){
-        /* guest only "all" */
-      }
-    }
-
-    function canSeeStay(stay){
-      const role = getRole();
-      if (role === "admin") return true;
-
-      const v = (stay.visibility || "all").toString().trim().toLowerCase();
-      if (!v || v === "all") return true;
-
-      if (role === "taastrup" || role === "horsens" || role === "birkeroed"){
-        return v === role;
-      }
-      return false;
-    }
-
-    function canModifyStay(stay){
-      const role = getRole();
-      if (!stay) return false;
-
-      const isAdmin = role === "admin";
-      if (isAdmin) return true;
-
-      const familyRole = role === "taastrup" || role === "horsens" || role === "birkeroed";
-      if (!familyRole) return false;
-
-      const ownerRole = normalize(stay.created_role || "");
-      return ownerRole === normalize(role);
-    }
-
-    function canModifyHistorical(){
-      return getRole() === "admin";
-    }
-
-    /* ===== Dates and rotation ===== */
-    let view = new Date(YEAR, 0, 1);
-    view.setHours(12,0,0,0);
-
-    let selectedStart = null;
-    let selectedEnd = null;
-
-    let staysAll = [];
-    let showHistory = false;
 
     function isoDate(d){
       const y = d.getFullYear();
@@ -973,23 +769,232 @@
       return "";
     }
 
-    function monthLabel(d){
-      return `${DK_MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+    function roleFromPassword(raw){
+      const v = (raw || "").trim();
+      if (!v) return null;
+
+      if (v === ADMIN_CODE) return { key: "admin", label: "Administrator", isAdmin: true };
+      if (v === SHARED_CODE) return { key: "shared", label: "Samsøhuset", isAdmin: false };
+
+      if (v === FAMILY_CODES.taastrup) return { key: "taastrup", label: "Taastrup familien", isAdmin: false };
+      if (v === FAMILY_CODES.horsens) return { key: "horsens", label: "Horsens familien", isAdmin: false };
+      if (v === FAMILY_CODES.birkeroed) return { key: "birkeroed", label: "Birkerød familien", isAdmin: false };
+
+      return null;
     }
 
-    function todayISO(){
-      const t = new Date();
-      t.setHours(12,0,0,0);
-      return isoDate(t);
+    function setWelcome(role){
+      if (!role){
+        welcomeTitle.textContent = "Samsøhuset";
+        return;
+      }
+      if (role.key === "admin"){
+        welcomeTitle.textContent = "Velkommen til Samsøhuset - Administrator";
+        return;
+      }
+      if (role.key === "shared"){
+        welcomeTitle.textContent = "Velkommen til Samsøhuset";
+        return;
+      }
+      welcomeTitle.textContent = `Velkommen til Samsøhuset - ${role.label}`;
     }
 
-    function tomorrowISO(){
-      const t = new Date();
-      t.setHours(12,0,0,0);
-      return isoDate(addDays(t, 1));
+    function isLoggedIn(){ return localStorage.getItem("samsoehuset_ok") === "1"; }
+    function getRole(){
+      const raw = localStorage.getItem("samsoehuset_role") || "";
+      try { return JSON.parse(raw) || null; } catch { return null; }
+    }
+    function setLoggedIn(role){
+      localStorage.setItem("samsoehuset_ok", "1");
+      localStorage.setItem("samsoehuset_role", JSON.stringify(role));
+      showApp();
+    }
+    function setLoggedOut(){
+      localStorage.removeItem("samsoehuset_ok");
+      localStorage.removeItem("samsoehuset_role");
+      showLogin();
     }
 
-    /* ===== Supabase stays ===== */
+    function showLogin(){
+      appHeader.classList.add("hidden");
+      loginScreen.classList.remove("hidden");
+      app.classList.add("hidden");
+    }
+    function showApp(){
+      const role = getRole();
+      setWelcome(role);
+
+      appHeader.classList.remove("hidden");
+      loginScreen.classList.add("hidden");
+      app.classList.remove("hidden");
+
+      buildVisibilityOptions();
+      applyMinDate();
+      render();
+      renderLists();
+      renderInfoModal();
+    }
+
+    function applyMinDate(){
+      const now = new Date();
+      now.setHours(12,0,0,0);
+      const tomorrow = addDays(now, 1);
+      const min = isoDate(tomorrow);
+      startInput.min = min;
+      endInput.min = min;
+    }
+
+    function buildVisibilityOptions(){
+      const role = getRole();
+      visibilitySelect.innerHTML = "";
+
+      const opt0 = document.createElement("option");
+      opt0.value = "";
+      opt0.textContent = "Vælg...";
+      visibilitySelect.appendChild(opt0);
+
+      const optAll = document.createElement("option");
+      optAll.value = "all";
+      optAll.textContent = "Ses af alle";
+      visibilitySelect.appendChild(optAll);
+
+      if (!role) return;
+
+      if (role.key === "admin"){
+        const o1 = document.createElement("option");
+        o1.value = "taastrup";
+        o1.textContent = "Kun Taastrup";
+        const o2 = document.createElement("option");
+        o2.value = "horsens";
+        o2.textContent = "Kun Horsens";
+        const o3 = document.createElement("option");
+        o3.value = "birkeroed";
+        o3.textContent = "Kun Birkerød";
+        visibilitySelect.appendChild(o1);
+        visibilitySelect.appendChild(o2);
+        visibilitySelect.appendChild(o3);
+        return;
+      }
+
+      if (role.key === "taastrup"){
+        const o = document.createElement("option");
+        o.value = "taastrup";
+        o.textContent = "Kun Taastrup";
+        visibilitySelect.appendChild(o);
+        return;
+      }
+      if (role.key === "horsens"){
+        const o = document.createElement("option");
+        o.value = "horsens";
+        o.textContent = "Kun Horsens";
+        visibilitySelect.appendChild(o);
+        return;
+      }
+      if (role.key === "birkeroed"){
+        const o = document.createElement("option");
+        o.value = "birkeroed";
+        o.textContent = "Kun Birkerød";
+        visibilitySelect.appendChild(o);
+        return;
+      }
+
+      // shared: kun "all"
+    }
+
+    function canViewStay(stay){
+      const role = getRole();
+      if (!role) return false;
+      if (role.key === "admin") return true;
+      if ((stay.visibility || "all") === "all") return true;
+
+      const v = String(stay.visibility || "").toLowerCase();
+      if (role.key === "taastrup" && v === "taastrup") return true;
+      if (role.key === "horsens" && v === "horsens") return true;
+      if (role.key === "birkeroed" && v === "birkeroed") return true;
+      return false;
+    }
+
+    function canDeleteStay(stay){
+      const role = getRole();
+      if (!role) return false;
+
+      const now = new Date();
+      now.setHours(12,0,0,0);
+      const todayISO = isoDate(now);
+
+      const isPast = (stay.end_date || "") < todayISO;
+
+      if (role.key === "admin"){
+        return true; // admin må også slette historisk
+      }
+
+      if (isPast) return false;
+
+      return (String(stay.created_role || "") === role.key);
+    }
+
+    function canEditStay(stay){
+      const role = getRole();
+      if (!role) return false;
+
+      const now = new Date();
+      now.setHours(12,0,0,0);
+      const todayISO = isoDate(now);
+
+      const isPast = (stay.end_date || "") < todayISO;
+
+      if (isPast) return false; // ingen redigering af historik, heller ikke admin
+
+      if (role.key === "admin"){
+        return true;
+      }
+
+      return (String(stay.created_role || "") === role.key);
+    }
+
+    function isDateAllowedForNewChange(aISO, bISO){
+      const now = new Date();
+      now.setHours(12,0,0,0);
+      const min = isoDate(addDays(now, 1));
+      if (aISO < min) return false;
+      if (bISO < min) return false;
+      return true;
+    }
+
+    function overlapsAny(aISO, bISO, ignoreId=null){
+      const a = aISO;
+      const b = bISO;
+      for (const s of staysAll){
+        if (ignoreId && String(s.id) === String(ignoreId)) continue;
+        if (!s.start_date || !s.end_date) continue;
+        const x1 = s.start_date;
+        const x2 = s.end_date;
+        if (a <= x2 && b >= x1) return true;
+      }
+      return false;
+    }
+
+    function tryLogin(){
+      clearLoginMsg();
+      const role = roleFromPassword(passInput.value);
+
+      if (!passInput.value.trim()){
+        setLoginMsg("Skriv koden først.");
+        return;
+      }
+      if (!role){
+        setLoginMsg("Forkert kode. Prøv igen.");
+        return;
+      }
+
+      setLoggedIn(role);
+      loadStays();
+    }
+
+    loginBtn.addEventListener("click", tryLogin);
+    passInput.addEventListener("keydown", (e)=>{ if (e.key === "Enter") tryLogin(); });
+    logoutBtn.addEventListener("click", ()=>{ setLoggedOut(); });
+
     async function loadStays(){
       const client = getSupabaseClient();
       if (!client){
@@ -1003,85 +1008,44 @@
         .order("start_date", { ascending: true });
 
       if (error){
-        setStatus("Kunne ikke hente data.\n" + (error.message || ""), false);
+        setStatus("Kunne ikke hente data.", false);
         console.error(error);
         return;
       }
 
       staysAll = Array.isArray(data) ? data : [];
       render();
-      renderList();
+      renderLists();
     }
 
-    function visibleStays(){
-      return staysAll.filter(s => canSeeStay(s));
-    }
-
-    function findVisibleStayForDate(d){
+    function findStayForDateVisible(d){
       const dayISO = isoDate(d);
-      const list = visibleStays();
-      return list.find(s => s.start_date <= dayISO && s.end_date >= dayISO) || null;
-    }
-
-    function overlapsAny(aISO, bISO, ignoreId=null){
-      return staysAll.some(s=>{
-        if (ignoreId && String(s.id) === String(ignoreId)) return false;
-        const sStart = s.start_date;
-        const sEnd = s.end_date;
-        return !(bISO < sStart || aISO > sEnd);
-      });
-    }
-
-    let editingId = null;
-
-    function resetForm(clearSelection=true){
-      editingId = null;
-      startInput.value = "";
-      endInput.value = "";
-      whoInput.value = "";
-      changedByInput.value = "";
-      noteInput.value = "";
-      visibilitySelect.value = "";
-
-      if (clearSelection){
-        selectedStart = null;
-        selectedEnd = null;
-        render();
+      for (const s of staysAll){
+        if (s.start_date <= dayISO && s.end_date >= dayISO){
+          if (canViewStay(s)) return s;
+        }
       }
+      return null;
     }
 
-    function validateVisibilitySelection(){
-      const v = (visibilitySelect.value || "").trim().toLowerCase();
-      if (!v) return { ok:false, msg:"Vælg synlighed." };
-
-      const role = getRole();
-      if (role === "admin") return { ok:true };
-
-      if (role === "taastrup" || role === "horsens" || role === "birkeroed"){
-        if (v === "all" || v === role) return { ok:true };
-        return { ok:false, msg:"Du kan kun vælge Ses af alle eller Kun din egen familie." };
-      }
-
-      if (role === "guest"){
-        if (v === "all") return { ok:true };
-        return { ok:false, msg:"Du kan kun vælge Ses af alle." };
-      }
-
-      return { ok:false, msg:"Ugyldig synlighed." };
-    }
-
-    function dateNotInPast(aISO, bISO){
-      const min = tomorrowISO();
-      return aISO >= min && bISO >= min;
+    function findStayForDateAny(d){
+      const dayISO = isoDate(d);
+      return staysAll.find(s => s.start_date <= dayISO && s.end_date >= dayISO) || null;
     }
 
     async function saveStay(){
+      const role = getRole();
+      if (!role){
+        setStatus("Du er ikke logget ind.", false);
+        return;
+      }
+
       const s = startInput.value;
       const e = endInput.value;
       const who = (whoInput.value || "").trim();
       const changedBy = (changedByInput.value || "").trim();
       const note = (noteInput.value || "").trim();
-      const visibility = (visibilitySelect.value || "").trim().toLowerCase();
+      const visibility = (visibilitySelect.value || "").trim();
 
       if (!s || !e){
         setStatus("Vælg både start og slut.", false);
@@ -1095,22 +1059,20 @@
         setStatus("Skriv hvem der har ændret.", false);
         return;
       }
-
-      const visCheck = validateVisibilitySelection();
-      if (!visCheck.ok){
-        setStatus(visCheck.msg, false);
+      if (!visibility){
+        setStatus("Vælg synlighed.", false);
         return;
       }
 
       const [a,b] = clampDateOrder(s, e);
 
-      if (!dateNotInPast(a,b)){
+      if (!isDateAllowedForNewChange(a,b)){
         setStatus("Du kan kun lave ændringer fra i morgen og frem.", false);
         return;
       }
 
       if (overlapsAny(a,b, editingId)){
-        setStatus("Der findes allerede en ændring i perioden. Slet den først.", false);
+        setStatus("Der findes allerede en ændring i den valgte periode. Slet den først.", false);
         return;
       }
 
@@ -1127,72 +1089,61 @@
         booked_by: changedBy,
         note: note,
         visibility: visibility,
-        created_role: getRole()
+        created_role: role.key
       };
 
       if (editingId){
-        const existing = staysAll.find(x => String(x.id) === String(editingId)) || null;
-        if (!existing || !canModifyStay(existing)){
-          setStatus("Du kan ikke redigere denne ændring.", false);
+        const existing = staysAll.find(x => String(x.id) === String(editingId));
+        if (!existing || !canEditStay(existing)){
+          setStatus("Du må ikke redigere denne ændring.", false);
           return;
         }
 
-        const endDt = parseISO(existing.end_date);
-        const isHistorical = endDt.getTime() < startOfDay(new Date()).getTime();
-        if (isHistorical && !canModifyHistorical()){
-          setStatus("Historiske ændringer kan ikke redigeres.", false);
-          return;
-        }
+        const { error } = await client
+          .from("stays")
+          .update(payload)
+          .eq("id", editingId);
 
-        const { error } = await client.from("stays").update(payload).eq("id", editingId);
         if (error){
+          setStatus("Kunne ikke gemme.", false);
           console.error(error);
-          setStatus("Kunne ikke gemme.\n" + (error.message || ""), false);
           return;
         }
 
+        setStatus("Opdateret ✅");
+      } else {
+        const { error } = await client.from("stays").insert(payload);
+        if (error){
+          setStatus("Kunne ikke gemme.", false);
+          console.error(error);
+          return;
+        }
         setStatus("Gemt ✅");
-        resetForm(false);
-        await loadStays();
-        return;
       }
 
-      const { error } = await client.from("stays").insert(payload);
-      if (error){
-        console.error(error);
-        const msg = (error.message || "").toLowerCase().includes("column") && (error.message || "").toLowerCase().includes("visibility")
-          ? "Kunne ikke gemme.\nManglende kolonne i Supabase: visibility"
-          : "Kunne ikke gemme.\n" + (error.message || "");
-        setStatus(msg, false);
-        return;
-      }
-
-      setStatus("Gemt ✅");
       resetForm(false);
       await loadStays();
     }
 
     async function deleteStay(id){
-      const stay = staysAll.find(s => String(s.id) === String(id)) || null;
-      if (!stay){
+      const existing = staysAll.find(x => String(x.id) === String(id));
+      if (!existing){
         setStatus("Kunne ikke finde ændringen.", false);
         return;
       }
 
-      if (!canModifyStay(stay)){
-        setStatus("Du kan ikke slette denne ændring.", false);
+      if (!canDeleteStay(existing)){
+        setStatus("Du må ikke slette denne ændring.", false);
         return;
       }
 
-      const endDt = parseISO(stay.end_date);
-      const isHistorical = endDt.getTime() < startOfDay(new Date()).getTime();
-      if (isHistorical && !canModifyHistorical()){
-        setStatus("Historiske ændringer kan ikke slettes.", false);
-        return;
-      }
+      const name = (existing.booked_by || "-");
+      const msg =
+        `OBS. Denne ændring er lavet af ${name}\n\n` +
+        `Hvis du sletter denne ændring, forsvinder den permanent og kan ikke genskabes.\n\n` +
+        `Vil du slette ændringen?`;
 
-      const whoMade = stay.booked_by || "-";
-      const ok = window.confirm(`OBS. Denne ændring er lavet af ${whoMade}\n\nHvis du sletter denne ændring, forsvinder den permanent og kan ikke genskabes.\n\nJa, jeg vil slette ændringen?`);
+      const ok = window.confirm(msg);
       if (!ok) return;
 
       const client = getSupabaseClient();
@@ -1203,51 +1154,59 @@
 
       const { error } = await client.from("stays").delete().eq("id", id);
       if (error){
+        setStatus("Kunne ikke slette.", false);
         console.error(error);
-        setStatus("Kunne ikke slette.\n" + (error.message || ""), false);
         return;
       }
-
       setStatus("Slettet");
       await loadStays();
     }
 
-    function editStay(id){
-      const s = staysAll.find(x => String(x.id) === String(id)) || null;
-      if (!s){
-        setStatus("Kunne ikke finde ændringen.", false);
+    function startEdit(stay){
+      if (!canEditStay(stay)){
+        setStatus("Du må ikke redigere denne ændring.", false);
         return;
       }
+      editingId = stay.id;
+      startInput.value = stay.start_date || "";
+      endInput.value = stay.end_date || "";
+      whoInput.value = stay.family || "";
+      changedByInput.value = stay.booked_by || "";
+      noteInput.value = stay.note || "";
+      visibilitySelect.value = (stay.visibility || "");
 
-      if (!canModifyStay(s)){
-        setStatus("Du kan ikke redigere denne ændring.", false);
-        return;
+      saveBtn.textContent = "Opdater";
+      setStatus("Redigering: opdater og tryk Gem.", true);
+    }
+
+    function resetForm(clearSelection=true){
+      editingId = null;
+      saveBtn.textContent = "Gem";
+
+      startInput.value = "";
+      endInput.value = "";
+      whoInput.value = "";
+      changedByInput.value = "";
+      noteInput.value = "";
+      visibilitySelect.value = "";
+
+      if (clearSelection){
+        selectedStart = null;
+        selectedEnd = null;
+        render();
       }
-
-      const endDt = parseISO(s.end_date);
-      const isHistorical = endDt.getTime() < startOfDay(new Date()).getTime();
-      if (isHistorical && !canModifyHistorical()){
-        setStatus("Historiske ændringer kan ikke redigeres.", false);
-        return;
-      }
-
-      editingId = s.id;
-
-      startInput.value = s.start_date;
-      endInput.value = s.end_date;
-      whoInput.value = s.family || "";
-      changedByInput.value = s.booked_by || "";
-      noteInput.value = s.note || "";
-      visibilitySelect.value = (s.visibility || "all").toString().trim().toLowerCase();
-
-      selectedStart = parseISO(s.start_date);
-      selectedEnd = parseISO(s.end_date);
-      render();
-
-      setStatus("Redigerer ændring", true);
     }
 
     function onDayClick(date){
+      const now = new Date();
+      now.setHours(12,0,0,0);
+      const tomorrow = addDays(now, 1);
+
+      if (date < tomorrow){
+        setStatus("Du kan kun vælge dage fra i morgen og frem.", false);
+        return;
+      }
+
       if (!selectedStart || (selectedStart && selectedEnd)){
         selectedStart = date;
         selectedEnd = null;
@@ -1262,6 +1221,10 @@
       render();
     }
 
+    function monthLabel(d){
+      return `${DK_MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+    }
+
     function render(){
       monthName.textContent = monthLabel(view);
 
@@ -1271,13 +1234,19 @@
       const firstMonday = mondayStart(first);
       const start = firstMonday;
 
+      const now = new Date();
+      now.setHours(12,0,0,0);
+      const tomorrow = addDays(now, 1);
+
       daysEl.innerHTML = "";
       for (let i=0; i<42; i++){
         const d = addDays(start, i);
         const inThisMonth = d.getMonth() === view.getMonth();
 
         const day = document.createElement("div");
-        day.className = "day" + (inThisMonth ? "" : " muted");
+
+        const disabled = (d < tomorrow);
+        day.className = "day" + (inThisMonth ? "" : " muted") + (disabled ? " disabled" : "");
 
         const top = document.createElement("div");
         top.className = "dayTop";
@@ -1296,28 +1265,27 @@
 
         const base = baseOwnerForDate(d);
 
+        let basePill = document.createElement("div");
+
         if (base.type === "shift"){
-          const p = document.createElement("div");
-          p.className = "pill shift " + ownerClass(base.next);
-          p.textContent = `Skiftedag: ${base.current} → ${base.next}`;
-          day.appendChild(p);
+          basePill.className = "pill shift " + ownerClass(base.next); // farven følger NÆSTE uge
+          basePill.textContent = `Skiftedag: ${base.current} → ${base.next}`;
+          day.appendChild(basePill);
         } else {
-          const p = document.createElement("div");
-          p.className = "pill " + ownerClass(base.owner);
-          p.textContent = base.owner;
-          day.appendChild(p);
+          basePill.className = "pill " + ownerClass(base.owner);
+          basePill.textContent = base.owner;
+          day.appendChild(basePill);
         }
 
-        const stay = findVisibleStayForDate(d);
-        if (stay){
-          const basePill = day.querySelector(".pill");
-          if (basePill){
-            basePill.classList.add("baseOverridden");
-          }
+        const stayVisible = findStayForDateVisible(d);
+        const stayAny = findStayForDateAny(d);
+
+        if (stayAny && stayVisible){
+          basePill.classList.add("strike");
 
           const b = document.createElement("div");
           b.className = "pill booking";
-          b.textContent = `Bruges af: ${stay.family}`;
+          b.textContent = `Bruges af: ${stayVisible.family}`;
           day.appendChild(b);
         }
 
@@ -1334,7 +1302,7 @@
           day.style.background = "rgba(45,212,122,.08)";
         }
 
-        if (inThisMonth){
+        if (inThisMonth && !disabled){
           day.addEventListener("click", ()=> onDayClick(d));
         }
 
@@ -1342,98 +1310,131 @@
       }
     }
 
-    function renderList(){
-      listEl.innerHTML = "";
-
-      const now = startOfDay(new Date());
-      const list = visibleStays();
-
-      const future = list.filter(s => parseISO(s.end_date).getTime() >= now.getTime());
-      const past = list.filter(s => parseISO(s.end_date).getTime() < now.getTime());
-
-      const orderedFuture = [...future].sort((a,b)=> (a.start_date || "").localeCompare(b.start_date || ""));
-      const orderedPast = [...past].sort((a,b)=> (b.end_date || "").localeCompare(a.end_date || ""));
-
-      const show = showHistory ? [...orderedFuture, ...orderedPast] : orderedFuture;
-
-      if (!show.length){
-        const empty = document.createElement("div");
-        empty.className = "item";
-        empty.innerHTML = `<div class="meta"><div class="who">Ingen ændringer endnu</div><div class="dates"> </div></div>`;
-        listEl.appendChild(empty);
-        return;
-      }
-
-      for (const s of show){
-        const it = document.createElement("div");
-        it.className = "item";
-
-        const meta = document.createElement("div");
-        meta.className = "meta";
-
-        const who = document.createElement("div");
-        who.className = "who";
-        who.textContent = s.family || "(ukendt)";
-
-        const dates = document.createElement("div");
-        dates.className = "dates";
-        dates.textContent = `${s.start_date} → ${s.end_date}`;
-
-        const by = document.createElement("div");
-        by.className = "by";
-        by.textContent = `Ændret af: ${s.booked_by || "-"}`;
-
-        const vis = document.createElement("div");
-        vis.className = "by";
-        const v = (s.visibility || "all").toString().trim().toLowerCase();
-        vis.textContent = `Synlig: ${v === "all" ? "alle" : ("kun " + (v === "birkeroed" ? "Birkerød" : (v.charAt(0).toUpperCase()+v.slice(1))))}`;
-
-        meta.appendChild(who);
-        meta.appendChild(dates);
-        meta.appendChild(by);
-        meta.appendChild(vis);
-
-        if (s.note && String(s.note).trim()){
-          const note = document.createElement("div");
-          note.className = "note";
-          note.textContent = `Note: ${String(s.note).trim()}`;
-          meta.appendChild(note);
-        }
-
-        const actions = document.createElement("div");
-        actions.className = "actions";
-
-        const isHistorical = parseISO(s.end_date).getTime() < now.getTime();
-
-        const allowModify = canModifyStay(s) && (!isHistorical || canModifyHistorical());
-        if (allowModify){
-          const edit = document.createElement("button");
-          edit.className = "btn";
-          edit.type = "button";
-          edit.textContent = "Rediger";
-          edit.addEventListener("click", ()=> editStay(s.id));
-          actions.appendChild(edit);
-
-          const del = document.createElement("button");
-          del.className = "btn danger";
-          del.type = "button";
-          del.textContent = "Slet";
-          del.addEventListener("click", ()=> deleteStay(s.id));
-          actions.appendChild(del);
-        }
-
-        it.appendChild(meta);
-        it.appendChild(actions);
-        listEl.appendChild(it);
-      }
-
-      toggleHistoryBtn.textContent = showHistory ? "Skjul historiske ændringer" : "Vis historiske ændringer";
+    function visText(v){
+      const x = String(v || "all").toLowerCase();
+      if (x === "all") return "alle";
+      if (x === "taastrup") return "kun Taastrup";
+      if (x === "horsens") return "kun Horsens";
+      if (x === "birkeroed") return "kun Birkerød";
+      return x;
     }
 
-    toggleHistoryBtn.addEventListener("click", ()=>{
-      showHistory = !showHistory;
-      renderList();
-    });
+    function renderLists(){
+      const role = getRole();
+
+      const now = new Date();
+      now.setHours(12,0,0,0);
+      const todayISO = isoDate(now);
+
+      const visibleStays = (role && role.key === "admin")
+        ? [...staysAll]
+        : staysAll.filter(canViewStay);
+
+      const sorted = [...visibleStays].sort((a,b)=>{
+        const aa = (a.created_at || "");
+        const bb = (b.created_at || "");
+        return bb.localeCompare(aa);
+      });
+
+      const future = [];
+      const past = [];
+
+      for (const s of sorted){
+        const isPast = (s.end_date || "") < todayISO;
+        if (isPast) past.push(s);
+        else future.push(s);
+      }
+
+      listFutureEl.innerHTML = "";
+      listPastEl.innerHTML = "";
+
+      if (!future.length){
+        const empty = document.createElement("div");
+        empty.className = "item";
+        empty.innerHTML = `<div class="meta"><div class="who">Ingen ændringer endnu</div><div class="dates">—</div></div>`;
+        listFutureEl.appendChild(empty);
+      } else {
+        for (const s of future){
+          listFutureEl.appendChild(buildItem(s));
+        }
+      }
+
+      if (!past.length){
+        const empty2 = document.createElement("div");
+        empty2.className = "item";
+        empty2.innerHTML = `<div class="meta"><div class="who">Ingen historiske ændringer</div><div class="dates">—</div></div>`;
+        listPastEl.appendChild(empty2);
+      } else {
+        for (const s of past){
+          listPastEl.appendChild(buildItem(s, true));
+        }
+      }
+
+      const showing = !historyWrap.classList.contains("hidden");
+      toggleHistoryBtn.textContent = showing ? "Skjul historiske ændringer" : "Vis historiske ændringer";
+    }
+
+    function buildItem(s, isPast=false){
+      const it = document.createElement("div");
+      it.className = "item";
+
+      const meta = document.createElement("div");
+      meta.className = "meta";
+
+      const who = document.createElement("div");
+      who.className = "who";
+      who.textContent = s.family || "(ukendt)";
+
+      const dates = document.createElement("div");
+      dates.className = "dates";
+      dates.textContent = `${s.start_date} → ${s.end_date}`;
+
+      const by = document.createElement("div");
+      by.className = "by";
+      by.textContent = `Ændret af: ${s.booked_by || "-"}`;
+
+      const vis = document.createElement("div");
+      vis.className = "vis";
+      vis.textContent = `Synlig: ${visText(s.visibility)}`;
+
+      meta.appendChild(who);
+      meta.appendChild(dates);
+      meta.appendChild(by);
+      meta.appendChild(vis);
+
+      if (s.note && String(s.note).trim()){
+        const note = document.createElement("div");
+        note.className = "note";
+        note.textContent = `Note: ${String(s.note).trim()}`;
+        meta.appendChild(note);
+      }
+
+      const actions = document.createElement("div");
+      actions.className = "itemActions";
+
+      if (!isPast && canEditStay(s)){
+        const edit = document.createElement("button");
+        edit.className = "btn btnSmall";
+        edit.type = "button";
+        edit.textContent = "Rediger";
+        edit.addEventListener("click", ()=> startEdit(s));
+        actions.appendChild(edit);
+      }
+
+      if (canDeleteStay(s)){
+        const del = document.createElement("button");
+        del.className = "btn btnSmall danger";
+        del.type = "button";
+        del.textContent = "Slet";
+        del.addEventListener("click", ()=> deleteStay(s.id));
+        actions.appendChild(del);
+      }
+
+      it.appendChild(meta);
+      it.appendChild(actions);
+
+      return it;
+    }
 
     prevBtn.addEventListener("click", ()=>{
       view = new Date(view.getFullYear(), view.getMonth()-1, 1);
@@ -1454,129 +1455,157 @@
     resetBtn.addEventListener("click", ()=> resetForm(true));
     saveBtn.addEventListener("click", saveStay);
 
-    /* ===== Info pages (UI-lås) ===== */
-    const INFO_KEY = "samsoehuset_info_pages_v1";
-    let infoPages = [];
-    let activeInfoId = null;
+    toggleHistoryBtn.addEventListener("click", ()=>{
+      const showing = !historyWrap.classList.contains("hidden");
+      if (showing) historyWrap.classList.add("hidden");
+      else historyWrap.classList.remove("hidden");
+      renderLists();
+    });
 
-    function canEditInfo(){
-      return getRole() === "admin";
-    }
-
-    function loadInfoPages(){
-      try{
-        const raw = localStorage.getItem(INFO_KEY);
-        infoPages = raw ? JSON.parse(raw) : [];
-        if (!Array.isArray(infoPages)) infoPages = [];
+    // Yderligere info (UI-lås)
+    function getInfoItems(){
+      try {
+        const raw = localStorage.getItem("samsoehuset_info_items") || "[]";
+        const arr = JSON.parse(raw);
+        return Array.isArray(arr) ? arr : [];
       } catch {
-        infoPages = [];
-      }
-
-      if (!infoPages.length){
-        infoPages = [{ id: String(Date.now()), title: "Info", body: "" }];
-        saveInfoPages();
-      }
-
-      activeInfoId = infoPages[0].id;
-      renderInfoTabs();
-      renderInfoActive();
-    }
-
-    function saveInfoPages(){
-      localStorage.setItem(INFO_KEY, JSON.stringify(infoPages));
-    }
-
-    function renderInfoTabs(){
-      infoTabs.innerHTML = "";
-      for (const p of infoPages){
-        const t = document.createElement("button");
-        t.type = "button";
-        t.className = "tab" + (p.id === activeInfoId ? " active" : "");
-        t.textContent = p.title || " ";
-        t.addEventListener("click", ()=>{
-          activeInfoId = p.id;
-          renderInfoTabs();
-          renderInfoActive();
-        });
-        infoTabs.appendChild(t);
+        return [];
       }
     }
-
-    function renderInfoActive(){
-      const p = infoPages.find(x => x.id === activeInfoId) || infoPages[0];
-      if (!p) return;
-
-      infoTitleInput.value = p.title || "";
-      infoBodyInput.value = p.body || "";
-
-      const editable = canEditInfo();
-      infoTitleInput.disabled = !editable;
-      infoBodyInput.disabled = !editable;
-      infoNewBtn.disabled = !editable;
-      infoSaveBtn.disabled = !editable;
-      infoDeleteBtn.disabled = !editable;
+    function setInfoItems(arr){
+      localStorage.setItem("samsoehuset_info_items", JSON.stringify(arr || []));
+    }
+    function isAdmin(){
+      const r = getRole();
+      return r && r.key === "admin";
     }
 
-    function openModal(){
-      modalBackdrop.style.display = "flex";
-      loadInfoPages();
-    }
-    function closeModal(){
-      modalBackdrop.style.display = "none";
-    }
+    function renderInfoModal(){
+      const r = getRole();
+      if (!r) return;
 
-    infoBtn.addEventListener("click", openModal);
-    closeModalBtn.addEventListener("click", closeModal);
-    modalBackdrop.addEventListener("click", (e)=>{ if (e.target === modalBackdrop) closeModal(); });
+      infoRoleTag.textContent = (r.key === "admin") ? "Administrator" : "Læsning";
+      if (isAdmin()) addInfoBtn.classList.remove("hidden");
+      else addInfoBtn.classList.add("hidden");
 
-    infoNewBtn.addEventListener("click", ()=>{
-      if (!canEditInfo()) return;
-      const id = String(Date.now());
-      infoPages.push({ id, title: "Nyt punkt", body: "" });
-      activeInfoId = id;
-      saveInfoPages();
-      renderInfoTabs();
-      renderInfoActive();
-      setInfoStatus("Oprettet", true);
-    });
+      const items = getInfoItems();
+      infoList.innerHTML = "";
 
-    infoSaveBtn.addEventListener("click", ()=>{
-      if (!canEditInfo()) return;
-      const p = infoPages.find(x => x.id === activeInfoId);
-      if (!p) return;
-      p.title = (infoTitleInput.value || "").trim() || " ";
-      p.body = (infoBodyInput.value || "").trim();
-      saveInfoPages();
-      renderInfoTabs();
-      setInfoStatus("Gemt ✅", true);
-    });
-
-    infoDeleteBtn.addEventListener("click", ()=>{
-      if (!canEditInfo()) return;
-      if (infoPages.length <= 1){
-        setInfoStatus("Der skal være mindst 1 punkt.", false);
+      if (!items.length){
+        const box = document.createElement("div");
+        box.className = "item";
+        box.innerHTML = `<div class="meta"><div class="who">Ingen punkter endnu</div><div class="dates">—</div></div>`;
+        infoList.appendChild(box);
         return;
       }
-      const ok = window.confirm("Vil du slette dette punkt?");
-      if (!ok) return;
-      infoPages = infoPages.filter(x => x.id !== activeInfoId);
-      activeInfoId = infoPages[0].id;
-      saveInfoPages();
-      renderInfoTabs();
-      renderInfoActive();
-      setInfoStatus("Slettet", true);
+
+      for (const it of items){
+        const card = document.createElement("div");
+        card.className = "item";
+
+        const meta = document.createElement("div");
+        meta.className = "meta";
+
+        const t = document.createElement("div");
+        t.className = "who";
+        t.textContent = it.title || "(uden titel)";
+
+        const body = document.createElement("div");
+        body.className = "note";
+        body.textContent = it.body || "";
+
+        meta.appendChild(t);
+        meta.appendChild(body);
+
+        const actions = document.createElement("div");
+        actions.className = "itemActions";
+
+        if (isAdmin()){
+          const edit = document.createElement("button");
+          edit.className = "btn btnSmall";
+          edit.type = "button";
+          edit.textContent = "Rediger";
+          edit.addEventListener("click", ()=>{
+            const title = prompt("Titel:", it.title || "");
+            if (title === null) return;
+            const bodyText = prompt("Tekst:", it.body || "");
+            if (bodyText === null) return;
+
+            const all = getInfoItems();
+            const idx = all.findIndex(x => x.id === it.id);
+            if (idx >= 0){
+              all[idx] = { ...all[idx], title: String(title).trim(), body: String(bodyText).trim() };
+              setInfoItems(all);
+              renderInfoModal();
+            }
+          });
+
+          const del = document.createElement("button");
+          del.className = "btn btnSmall danger";
+          del.type = "button";
+          del.textContent = "Slet";
+          del.addEventListener("click", ()=>{
+            const ok = window.confirm("Vil du slette dette punkt permanent?");
+            if (!ok) return;
+            const all = getInfoItems().filter(x => x.id !== it.id);
+            setInfoItems(all);
+            renderInfoModal();
+          });
+
+          actions.appendChild(edit);
+          actions.appendChild(del);
+        }
+
+        card.appendChild(meta);
+        card.appendChild(actions);
+        infoList.appendChild(card);
+      }
+    }
+
+    infoBtn.addEventListener("click", ()=>{
+      infoOverlay.classList.add("show");
+      infoOverlay.setAttribute("aria-hidden","false");
+      renderInfoModal();
+    });
+    closeInfoBtn.addEventListener("click", ()=>{
+      infoOverlay.classList.remove("show");
+      infoOverlay.setAttribute("aria-hidden","true");
+    });
+    infoOverlay.addEventListener("click", (e)=>{
+      if (e.target === infoOverlay){
+        infoOverlay.classList.remove("show");
+        infoOverlay.setAttribute("aria-hidden","true");
+      }
+    });
+
+    addInfoBtn.addEventListener("click", ()=>{
+      if (!isAdmin()) return;
+
+      const title = prompt("Titel:", "");
+      if (title === null) return;
+      const bodyText = prompt("Tekst:", "");
+      if (bodyText === null) return;
+
+      const items = getInfoItems();
+      items.unshift({
+        id: String(Date.now()) + "_" + Math.random().toString(16).slice(2),
+        title: String(title).trim(),
+        body: String(bodyText).trim()
+      });
+      setInfoItems(items);
+      renderInfoModal();
     });
 
     (function init(){
       if (isLoggedIn()){
         showApp();
         loadStays();
-        loadInfoPages();
       } else {
         showLogin();
       }
+
       render();
-      renderList();
+      renderLists();
     })();
   </script>
 </body>
