@@ -634,6 +634,12 @@
       t.setHours(12,0,0,0);
       return isoDate(t);
     }
+    function tomorrowISO(){
+      const t = new Date();
+      t.setHours(12,0,0,0);
+      t.setDate(t.getDate()+1);
+      return isoDate(t);
+    }
     function parseISO(s){
       const [y,m,d] = s.split("-").map(Number);
       const dt = new Date(y, m-1, d);
@@ -713,6 +719,12 @@
       return window.confirm(msg);
     }
 
+    function applyDateMins(){
+      const min = tomorrowISO();
+      startInput.min = min;
+      endInput.min = min;
+    }
+
     async function loadStays(){
       const client = getSupabaseClient();
       if (!client){
@@ -762,6 +774,12 @@
       }
 
       const [a,b] = clampDateOrder(s, e);
+
+      const min = tomorrowISO();
+      if (a < min || b < min){
+        setStatus("Du kan kun lave ændringer fra i morgen og frem.", false);
+        return;
+      }
 
       const client = getSupabaseClient();
       if (!client){
@@ -1047,6 +1065,8 @@
     saveBtn.addEventListener("click", saveStay);
 
     (function init(){
+      applyDateMins();
+
       if (isLoggedIn()){
         showApp();
         loadStays();
