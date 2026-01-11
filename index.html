@@ -188,6 +188,17 @@
       box-shadow: 0 0 0 4px rgba(255,255,255,.07);
     }
 
+    /* Gør dropdown tydeligere (liste + valgt) */
+    select.field{
+      background: rgba(255,255,255,.10);
+      border-color: rgba(255,255,255,.18);
+      color: var(--text);
+    }
+    select.field option{
+      background: #0b0f14;
+      color: #f3f5f7;
+    }
+
     .msg{
       margin-top: 10px;
       font-size: 14px;
@@ -298,7 +309,6 @@
     .pill.horsens{ border-color: rgba(183,123,255,.55); background: rgba(183,123,255,.14); }
     .pill.birkeroed{ border-color: rgba(62,230,195,.55); background: rgba(62,230,195,.14); }
     .pill.booking{ border-color: rgba(45,212,122,.55); background: rgba(45,212,122,.16); }
-    .pill.private{ border-color: rgba(255,255,255,.22); background: rgba(255,255,255,.08); }
 
     .pill.shiftday{
       white-space: normal;
@@ -543,7 +553,7 @@
       "Horsens": "horsens",
       "Birkerød": "birkeroed"
     };
-    const DEFAULT_SHARED_CODE = "kalkhavesvej";
+    const DEFAULT_SHARED_CODE = "Kalkhavesvej";
 
     const SUPABASE_URL = "https://jbweskxscyxjonrhbdcd.supabase.co";
     const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_2qMwF5JFmVmQuf9jJCERxw_25bMzbyu";
@@ -604,10 +614,15 @@
       localStorage.setItem("samsoehuset_role", role);
       showApp();
       configureVisibilitySelect();
+      resetForm(true);
     }
     function setLoggedOut(){
       localStorage.removeItem("samsoehuset_ok");
       localStorage.removeItem("samsoehuset_role");
+      stays = [];
+      resetForm(true);
+      render();
+      renderList();
       showLogin();
     }
 
@@ -957,7 +972,6 @@
       if (clearSelection){
         selectedStart = null;
         selectedEnd = null;
-        render();
       }
     }
 
@@ -1036,14 +1050,6 @@
           b.className = "pill booking";
           b.textContent = `Bruges af: ${stay.family}`;
           day.appendChild(b);
-
-          const vis = (stay.visibility || "all").toString().toLowerCase();
-          if (vis !== "all"){
-            const pr = document.createElement("div");
-            pr.className = "pill private";
-            pr.textContent = "Privat";
-            day.appendChild(pr);
-          }
         }
 
         if (selectedStart && sameDay(d, selectedStart)) {
@@ -1188,7 +1194,7 @@
       render();
     });
 
-    resetBtn.addEventListener("click", ()=> resetForm(true));
+    resetBtn.addEventListener("click", ()=>{ resetForm(true); render(); });
     saveBtn.addEventListener("click", saveStay);
 
     (function init(){
@@ -1197,6 +1203,7 @@
       if (isLoggedIn()){
         showApp();
         configureVisibilitySelect();
+        resetForm(true);
         loadStays();
       } else {
         showLogin();
