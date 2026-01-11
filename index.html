@@ -31,7 +31,6 @@
       overflow-x:hidden;
     }
 
-    /* ===== Background image ===== */
     .bg{
       position:fixed; inset:0;
       background-image: url("bg.jpg");
@@ -51,7 +50,7 @@
     .wrap{
       position:relative;
       min-height:100%;
-      padding: 22px 22px 34px;
+      padding: 18px 18px 28px;
     }
 
     header{
@@ -59,13 +58,15 @@
       align-items:flex-start;
       justify-content:space-between;
       gap:16px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
+
     .title h1{
       margin:0;
-      font-size: clamp(28px, 4vw, 44px);
+      font-size: clamp(28px, 3.8vw, 46px);
       letter-spacing: .2px;
       line-height: 1.05;
+      font-weight: 900;
     }
     .title p{
       margin:6px 0 0;
@@ -75,9 +76,8 @@
 
     .topActions{
       display:flex; align-items:center; gap:10px;
-      flex-wrap: wrap;
-      justify-content:flex-end;
     }
+
     .btn{
       border: 1px solid var(--stroke2);
       background: rgba(255,255,255,.06);
@@ -97,28 +97,16 @@
     }
     .btnPrimary:hover{ background: rgba(45,212,122,.20); border-color: rgba(45,212,122,.62); }
 
-    .grid{
-      display:grid;
-      grid-template-columns: minmax(0, 1.55fr) minmax(280px, .45fr);
-      gap: 16px;
-      align-items:stretch;
+    .danger{
+      border-color: rgba(255,100,100,.35);
+      background: rgba(255,60,60,.10);
     }
 
-    /* Sørg for at begge kort bliver lige høje */
-    #app{
-      min-height: calc(100vh - 140px);
+    .grid{
+      display:grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(280px, .65fr);
+      gap: 16px;
       align-items:stretch;
-    }
-    #app > .card{
-      height:100%;
-      display:flex;
-      flex-direction:column;
-    }
-    #app > .card > .cardInner{
-      height:100%;
-      display:flex;
-      flex-direction:column;
-      min-height:0;
     }
 
     .card{
@@ -128,8 +116,13 @@
       border-radius: var(--r);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
+      height: 100%;
+      display:flex;
+      flex-direction:column;
+      min-height: 0;
     }
     .cardInner{ padding: 16px; }
+    .cardGrow{ flex:1; min-height:0; display:flex; flex-direction:column; }
 
     .card h2{
       margin:0 0 4px;
@@ -195,15 +188,9 @@
       border-color: rgba(255,255,255,.28);
       box-shadow: 0 0 0 4px rgba(255,255,255,.07);
     }
-
-    select.field{
-      appearance:auto;
-      -webkit-appearance:auto;
-      -moz-appearance:auto;
-    }
-    select.field option{
-      background: #0f131a;
-      color: #ffffff;
+    textarea.field{
+      resize: vertical;
+      min-height: 58px;
     }
 
     .msg{
@@ -244,7 +231,7 @@
 
     .weekdays{
       display:grid;
-      grid-template-columns: repeat(6, 1fr) 1.35fr; /* gør søndag bredere */
+      grid-template-columns: repeat(7, 1fr);
       gap: 8px;
       margin-bottom: 8px;
       padding: 0 2px;
@@ -255,10 +242,10 @@
 
     .days{
       display:grid;
-      grid-template-columns: repeat(6, 1fr) 1.35fr; /* gør søndag bredere */
+      grid-template-columns: repeat(7, 1fr);
       gap: 10px;
       flex: 1;
-      min-height:0;
+      min-height: 0;
     }
 
     .day{
@@ -273,7 +260,7 @@
       cursor:pointer;
       transition: transform .06s ease, border-color .18s ease, background .18s ease;
       user-select:none;
-      min-width:0;
+      overflow:hidden;
     }
     .day:hover{ border-color: rgba(255,255,255,.18); background: rgba(255,255,255,.07); }
     .day:active{ transform: translateY(1px); }
@@ -282,11 +269,9 @@
       cursor: default;
     }
     .day.muted:hover{ background: rgba(255,255,255,.05); border-color: rgba(255,255,255,.10); }
-
     .dayTop{
       display:flex; justify-content:space-between; align-items:baseline;
       gap: 8px;
-      min-width:0;
     }
     .num{ font-weight: 800; font-size: 14px; }
     .dow{ font-size: 12px; color: rgba(255,255,255,.70); }
@@ -301,33 +286,30 @@
       background: rgba(0,0,0,.20);
       font-weight: 750;
       font-size: 12px;
-      line-height: 1.15;
+      line-height: 1;
       letter-spacing:.2px;
       white-space: nowrap;
       max-width: 100%;
       overflow:hidden;
       text-overflow: ellipsis;
-      min-width:0;
     }
     .pill.taastrup{ border-color: rgba(74,166,255,.55); background: rgba(74,166,255,.14); }
     .pill.horsens{ border-color: rgba(183,123,255,.55); background: rgba(183,123,255,.14); }
     .pill.birkeroed{ border-color: rgba(62,230,195,.55); background: rgba(62,230,195,.14); }
     .pill.booking{ border-color: rgba(45,212,122,.55); background: rgba(45,212,122,.16); }
 
-    .pill.shift{
-      white-space: normal;
-      overflow: visible;
-      text-overflow: clip;
-      border-radius: 14px;
-      justify-content:flex-start;
-      text-align:left;
-    }
-
-    .pill.overridden{
+    .pill.baseOverridden{
       opacity: .55;
       text-decoration: line-through;
       text-decoration-thickness: 2px;
       text-decoration-color: rgba(255,255,255,.55);
+    }
+
+    /* Sunday shift pill */
+    .pill.shift{
+      width: 100%;
+      justify-content:flex-start;
+      font-weight: 800;
     }
 
     /* ===== Form ===== */
@@ -345,10 +327,6 @@
       font-size: 12px;
       color: rgba(255,255,255,.74);
     }
-    textarea.field{
-      min-height: 56px; /* mindre note-felt */
-      resize: vertical;
-    }
 
     .rowBtns{
       display:flex;
@@ -363,16 +341,35 @@
       font-size: 13px;
       color: rgba(205,255,225,.92);
       display:none;
+      white-space: pre-wrap;
+      line-height: 1.25;
+    }
+
+    .listWrap{
+      margin-top:16px;
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+      min-height: 0;
+    }
+
+    .listHeaderRow{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap: 10px;
     }
 
     .list{
-      margin-top: 12px;
       display:flex;
       flex-direction:column;
       gap: 10px;
       overflow:auto;
       padding-right: 2px;
+      min-height: 0;
+      max-height: 340px;
     }
+
     .item{
       border: 1px solid rgba(255,255,255,.10);
       background: rgba(255,255,255,.05);
@@ -408,129 +405,93 @@
       white-space: normal;
       word-break: break-word;
     }
-
-    .actions{
+    .item .actions{
       display:flex;
-      gap:8px;
-      align-items:center;
-      justify-content:flex-end;
-      flex-wrap: wrap;
+      gap: 8px;
+      align-items:flex-end;
+      flex-shrink: 0;
     }
 
-    .danger{
-      border-color: rgba(255,100,100,.35);
-      background: rgba(255,60,60,.10);
+    .hidden{ display:none !important; }
+
+    /* Dropdown readability */
+    select.field{
+      appearance: none;
+      -webkit-appearance: none;
+      background-image:
+        linear-gradient(45deg, transparent 50%, rgba(255,255,255,.85) 50%),
+        linear-gradient(135deg, rgba(255,255,255,.85) 50%, transparent 50%);
+      background-position:
+        calc(100% - 18px) calc(1em + 2px),
+        calc(100% - 13px) calc(1em + 2px);
+      background-size: 5px 5px, 5px 5px;
+      background-repeat: no-repeat;
+      padding-right: 36px;
+    }
+    select.field option{
+      background: #0f131a;
+      color: #f3f5f7;
     }
 
-    /* ===== Simple dropdown for "Yderligere info" ===== */
-    .menuWrap{
-      position:relative;
-      display:inline-block;
-    }
-    .menuPanel{
-      position:absolute;
-      right:0;
-      top: calc(100% + 10px);
-      width: min(360px, 86vw);
-      background: rgba(10,12,16,.92);
-      border: 1px solid rgba(255,255,255,.14);
-      border-radius: 14px;
-      box-shadow: 0 18px 50px rgba(0,0,0,.55);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      padding: 10px;
-      z-index: 50;
-      display:none;
-    }
-    .menuPanel.open{ display:block; }
-
-    .menuItem{
-      width:100%;
-      text-align:left;
-      padding: 10px 10px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.04);
-      color: var(--text);
-      cursor:pointer;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-    .menuItem:hover{
-      background: rgba(255,255,255,.08);
-      border-color: rgba(255,255,255,.18);
-    }
-    .menuItemRow{
-      display:flex;
-      gap:8px;
-      align-items:center;
-      justify-content:space-between;
-      margin-bottom:8px;
-    }
-    .menuItemRow .menuItem{ margin-bottom:0; }
-    .menuMiniBtn{
-      padding: 8px 10px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,.16);
-      background: rgba(255,255,255,.06);
-      color: var(--text);
-      cursor:pointer;
-      font-weight: 750;
-    }
-    .menuMiniBtn:hover{ background: rgba(255,255,255,.10); }
-
-    /* ===== Modal ===== */
-    .modalBack{
+    /* Simple modal */
+    .modalBackdrop{
       position:fixed; inset:0;
-      background: rgba(0,0,0,.55);
+      background: rgba(0,0,0,.62);
       display:none;
       align-items:center;
       justify-content:center;
-      z-index: 80;
-      padding: 14px;
+      padding: 18px;
+      z-index: 30;
     }
-    .modalBack.open{ display:flex; }
     .modal{
-      width: min(760px, 96vw);
-      max-height: min(82vh, 860px);
-      overflow:auto;
-      background: rgba(10,12,16,.92);
-      border: 1px solid rgba(255,255,255,.14);
-      border-radius: 18px;
-      box-shadow: 0 18px 50px rgba(0,0,0,.60);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      padding: 16px;
-    }
-    .modalHeader{
+      width: min(860px, 96vw);
+      max-height: min(82vh, 780px);
+      overflow:hidden;
       display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:10px;
-      margin-bottom: 10px;
+      flex-direction:column;
     }
-    .modalHeader h3{
+    .modalTop{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap: 10px;
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255,255,255,.10);
+    }
+    .modalTop h2{
       margin:0;
       font-size: 18px;
-      letter-spacing:.2px;
     }
     .modalBody{
-      color: rgba(255,255,255,.86);
-      font-size: 14px;
-      line-height: 1.45;
-      white-space: pre-wrap;
+      padding: 14px 16px;
+      overflow:auto;
+    }
+    .tabs{
+      display:flex;
+      gap: 8px;
+      flex-wrap:wrap;
+      margin-bottom: 12px;
+    }
+    .tab{
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: rgba(255,255,255,.88);
+      border-radius: 999px;
+      padding: 8px 10px;
+      font-weight: 800;
+      cursor:pointer;
+      font-size: 13px;
+    }
+    .tab.active{
+      border-color: rgba(45,212,122,.55);
+      background: rgba(45,212,122,.16);
+      color: rgba(255,255,255,.95);
     }
 
     @media (max-width: 980px){
       .grid{ grid-template-columns: 1fr; }
-      #app{ min-height: auto; }
-      #app > .card{ height:auto; }
-      .weekdays, .days{
-        grid-template-columns: repeat(7, 1fr);
-      }
+      .list{ max-height: 260px; }
     }
-
-    .hidden{ display:none !important; }
   </style>
 </head>
 
@@ -541,16 +502,12 @@
     <!-- Header vises kun når man er logget ind -->
     <header id="appHeader" class="hidden">
       <div class="title">
-        <h1 id="headerTitle">Samsøhuset</h1>
+        <h1 id="welcomeTitle">Velkommen til Samsøhuset</h1>
         <p>Kalender og eventuelle ændringer</p>
       </div>
 
       <div class="topActions">
-        <div class="menuWrap">
-          <button id="infoBtn" class="btn" type="button">Yderligere info</button>
-          <div id="infoMenu" class="menuPanel"></div>
-        </div>
-
+        <button id="infoBtn" class="btn" type="button">Yderligere info</button>
         <button id="logoutBtn" class="btn" type="button">Log ud</button>
       </div>
     </header>
@@ -581,12 +538,13 @@
 
     <!-- APP -->
     <main id="app" class="grid hidden">
+
       <!-- Calendar -->
       <section class="card">
-        <div class="cardInner">
+        <div class="cardInner cardGrow">
           <div class="calHeader">
             <div class="monthTitle">
-              <div id="monthName" class="m">—</div>
+              <div id="monthName" class="m"> </div>
               <div class="t">Klik på en dag for start. Klik igen for slut.</div>
             </div>
             <div class="nav">
@@ -606,7 +564,7 @@
 
       <!-- Booking panel -->
       <aside class="card">
-        <div class="cardInner">
+        <div class="cardInner cardGrow">
           <h2>Foretag ændringer</h2>
           <p class="sub">Vælg i kalenderen, eller udfyld felterne her.</p>
 
@@ -631,13 +589,9 @@
             </div>
 
             <div class="full">
-              <label for="visibilityInput">Synlighed</label>
-              <select id="visibilityInput" class="field">
-                <option value="">Vælg…</option>
-                <option value="all">Ses af alle</option>
-                <option value="taastrup">Kun Taastrup</option>
-                <option value="horsens">Kun Horsens</option>
-                <option value="birkeroed">Kun Birkerød</option>
+              <label for="visibilitySelect">Synlighed</label>
+              <select id="visibilitySelect" class="field">
+                <option value="">Vælg...</option>
               </select>
             </div>
 
@@ -652,43 +606,55 @@
             <button id="saveBtn" class="btn btnPrimary" type="button">Gem</button>
           </div>
 
-          <div id="status" class="status">—</div>
+          <div id="status" class="status"> </div>
 
-          <div style="margin-top:16px; display:flex; flex-direction:column; min-height:0;">
-            <h2>Ændringer</h2>
-            <p class="sub">Liste over ændringer</p>
+          <div class="listWrap">
+            <div class="listHeaderRow">
+              <div>
+                <h2 style="margin:0 0 4px">Ændringer</h2>
+                <p class="sub" style="margin:0">Liste over ændringer</p>
+              </div>
+              <button id="toggleHistoryBtn" class="btn" type="button">Vis historiske ændringer</button>
+            </div>
+
             <div id="list" class="list"></div>
           </div>
         </div>
       </aside>
+
     </main>
   </div>
 
-  <!-- Modal for info pages -->
-  <div id="modalBack" class="modalBack">
-    <div class="modal">
-      <div class="modalHeader">
-        <h3 id="modalTitle">—</h3>
-        <div class="actions">
-          <button id="modalEditBtn" class="btn hidden" type="button">Rediger</button>
-          <button id="modalDeleteBtn" class="btn danger hidden" type="button">Slet</button>
-          <button id="modalCloseBtn" class="btn" type="button">Luk</button>
-        </div>
+  <!-- Info modal -->
+  <div id="modalBackdrop" class="modalBackdrop">
+    <div class="card modal">
+      <div class="modalTop">
+        <h2>Yderligere info</h2>
+        <button id="closeModalBtn" class="btn" type="button">Luk</button>
       </div>
+      <div class="modalBody">
+        <div id="infoTabs" class="tabs"></div>
 
-      <div id="modalBody" class="modalBody"></div>
-
-      <div id="modalEditArea" class="hidden" style="margin-top:12px;">
-        <label for="infoTitleInput">Titel</label>
-        <input id="infoTitleInput" class="field" type="text" />
-
-        <label for="infoContentInput">Indhold</label>
-        <textarea id="infoContentInput" class="field" style="min-height:180px;"></textarea>
+        <div class="formGrid">
+          <div class="full">
+            <label for="infoTitleInput">Titel</label>
+            <input id="infoTitleInput" class="field" type="text" placeholder="Fx Vedtægter" />
+          </div>
+          <div class="full">
+            <label for="infoBodyInput">Indhold</label>
+            <textarea id="infoBodyInput" class="field" placeholder="Skriv tekst her"></textarea>
+          </div>
+        </div>
 
         <div class="rowBtns">
-          <button id="modalCancelEditBtn" class="btn" type="button">Annuller</button>
-          <button id="modalSaveEditBtn" class="btn btnPrimary" type="button">Gem</button>
+          <button id="infoNewBtn" class="btn" type="button">Nyt punkt</button>
+          <div style="display:flex; gap:10px; justify-content:flex-end; width:100%">
+            <button id="infoDeleteBtn" class="btn danger" type="button">Slet</button>
+            <button id="infoSaveBtn" class="btn btnPrimary" type="button">Gem</button>
+          </div>
         </div>
+
+        <div id="infoStatus" class="status"> </div>
       </div>
     </div>
   </div>
@@ -700,13 +666,12 @@
     /* =========================================================
        KONFIGURATION
        ========================================================= */
-    const SHARED_CODE = "kalkhavesvej";
-    const ADMIN_CODES = ["Kalkhavesvej100!", "DLOGIN"];
-
-    const FAMILY_CODES = {
-      "taastrup": "Taastrup",
-      "horsens": "Horsens",
-      "birkeroed": "Birkerød"
+    const PASSWORDS = {
+      guest: "kalkhavesvej",
+      admin: "Kalkhavesvej100!",
+      taastrup: "Taastrup",
+      horsens: "Horsens",
+      birkeroed: "Birkerød"
     };
 
     const SUPABASE_URL = "https://jbweskxscyxjonrhbdcd.supabase.co";
@@ -718,7 +683,7 @@
     /* ========================================================= */
 
     const appHeader = document.getElementById("appHeader");
-    const headerTitle = document.getElementById("headerTitle");
+    const welcomeTitle = document.getElementById("welcomeTitle");
 
     const loginScreen = document.getElementById("loginScreen");
     const app = document.getElementById("app");
@@ -737,28 +702,27 @@
     const endInput = document.getElementById("endInput");
     const whoInput = document.getElementById("whoInput");
     const changedByInput = document.getElementById("changedByInput");
-    const visibilityInput = document.getElementById("visibilityInput");
+    const visibilitySelect = document.getElementById("visibilitySelect");
     const noteInput = document.getElementById("noteInput");
     const resetBtn = document.getElementById("resetBtn");
     const saveBtn = document.getElementById("saveBtn");
     const statusEl = document.getElementById("status");
     const listEl = document.getElementById("list");
+    const toggleHistoryBtn = document.getElementById("toggleHistoryBtn");
 
     const infoBtn = document.getElementById("infoBtn");
-    const infoMenu = document.getElementById("infoMenu");
-
-    const modalBack = document.getElementById("modalBack");
-    const modalTitle = document.getElementById("modalTitle");
-    const modalBody = document.getElementById("modalBody");
-    const modalCloseBtn = document.getElementById("modalCloseBtn");
-    const modalEditBtn = document.getElementById("modalEditBtn");
-    const modalDeleteBtn = document.getElementById("modalDeleteBtn");
-
-    const modalEditArea = document.getElementById("modalEditArea");
+    const modalBackdrop = document.getElementById("modalBackdrop");
+    const closeModalBtn = document.getElementById("closeModalBtn");
+    const infoTabs = document.getElementById("infoTabs");
     const infoTitleInput = document.getElementById("infoTitleInput");
-    const infoContentInput = document.getElementById("infoContentInput");
-    const modalCancelEditBtn = document.getElementById("modalCancelEditBtn");
-    const modalSaveEditBtn = document.getElementById("modalSaveEditBtn");
+    const infoBodyInput = document.getElementById("infoBodyInput");
+    const infoNewBtn = document.getElementById("infoNewBtn");
+    const infoDeleteBtn = document.getElementById("infoDeleteBtn");
+    const infoSaveBtn = document.getElementById("infoSaveBtn");
+    const infoStatus = document.getElementById("infoStatus");
+
+    const DK_MONTHS = ["januar","februar","marts","april","maj","juni","juli","august","september","oktober","november","december"];
+    const DK_DOW = ["Søn","Man","Tir","Ons","Tor","Fre","Lør"];
 
     function getSupabaseClient(){
       if (!window.supabase || !window.supabase.createClient) return null;
@@ -781,46 +745,36 @@
       statusEl.textContent = text;
       statusEl.style.display = "block";
       statusEl.style.color = ok ? "rgba(205,255,225,.92)" : "rgba(255,220,220,.92)";
-      setTimeout(()=>{ statusEl.style.display = "none"; }, 2800);
+      setTimeout(()=>{ statusEl.style.display = "none"; }, 3800);
+    }
+
+    function setInfoStatus(text, ok=true){
+      infoStatus.textContent = text;
+      infoStatus.style.display = "block";
+      infoStatus.style.color = ok ? "rgba(205,255,225,.92)" : "rgba(255,220,220,.92)";
+      setTimeout(()=>{ infoStatus.style.display = "none"; }, 3800);
+    }
+
+    function roleLabel(role){
+      if (role === "admin") return "Administrator";
+      if (role === "taastrup") return "Taastrup familien";
+      if (role === "horsens") return "Horsens familien";
+      if (role === "birkeroed") return "Birkerød familien";
+      return "Gæst";
     }
 
     function isLoggedIn(){ return localStorage.getItem("samsoehuset_ok") === "1"; }
     function getRole(){ return localStorage.getItem("samsoehuset_role") || ""; }
-    function setSession(role){
+
+    function setLoggedIn(role){
       localStorage.setItem("samsoehuset_ok", "1");
       localStorage.setItem("samsoehuset_role", role);
-      updateHeaderTitle();
       showApp();
     }
-    function clearSession(){
+    function setLoggedOut(){
       localStorage.removeItem("samsoehuset_ok");
       localStorage.removeItem("samsoehuset_role");
       showLogin();
-    }
-
-    function isAdmin(){
-      return getRole() === "admin";
-    }
-
-    function roleLabel(role){
-      if (role === "taastrup") return "Taastrup";
-      if (role === "horsens") return "Horsens";
-      if (role === "birkeroed") return "Birkerød";
-      if (role === "admin") return "Administrator";
-      return "";
-    }
-
-    function updateHeaderTitle(){
-      const role = getRole();
-      if (role === "taastrup" || role === "horsens" || role === "birkeroed"){
-        headerTitle.textContent = `Velkommen til Samsøhuset - ${roleLabel(role)} familien`;
-        return;
-      }
-      if (role === "admin"){
-        headerTitle.textContent = "Velkommen til Samsøhuset - Administrator";
-        return;
-      }
-      headerTitle.textContent = "Velkommen til Samsøhuset";
     }
 
     function showLogin(){
@@ -832,66 +786,124 @@
       appHeader.classList.remove("hidden");
       loginScreen.classList.add("hidden");
       app.classList.remove("hidden");
+      const role = getRole();
+      welcomeTitle.textContent = `Velkommen til Samsøhuset - ${roleLabel(role)}`;
+      buildVisibilityOptions();
     }
 
-    function detectRoleFromCode(codeRaw){
-      const c = (codeRaw || "").toString().trim();
-      const cNorm = normalize(c);
-
-      if (!cNorm) return null;
-
-      if (normalize(SHARED_CODE) === cNorm) return "guest";
-
-      for (const a of ADMIN_CODES){
-        if (normalize(a) === cNorm) return "admin";
-      }
-
-      for (const [role, code] of Object.entries(FAMILY_CODES)){
-        if (normalize(code) === cNorm) return role;
-      }
-
-      return null;
+    function resolveRoleFromPassword(pw){
+      const entered = normalize(pw);
+      if (entered === normalize(PASSWORDS.admin)) return "admin";
+      if (entered === normalize(PASSWORDS.taastrup)) return "taastrup";
+      if (entered === normalize(PASSWORDS.horsens)) return "horsens";
+      if (entered === normalize(PASSWORDS.birkeroed)) return "birkeroed";
+      if (entered === normalize(PASSWORDS.guest)) return "guest";
+      return "";
     }
 
     function tryLogin(){
       clearLoginMsg();
-      const entered = passInput.value;
-      const role = detectRoleFromCode(entered);
-
-      if (!entered || !entered.trim()){
+      const entered = (passInput.value || "").trim();
+      if (!entered){
         setLoginMsg("Skriv koden først.");
         return;
       }
+
+      const role = resolveRoleFromPassword(entered);
       if (!role){
         setLoginMsg("Forkert kode. Prøv igen.");
         return;
       }
 
-      setSession(role);
-      loadAll();
+      setLoggedIn(role);
+      loadStays();
+      loadInfoPages();
     }
 
     loginBtn.addEventListener("click", tryLogin);
     passInput.addEventListener("keydown", (e)=>{ if (e.key === "Enter") tryLogin(); });
-    logoutBtn.addEventListener("click", ()=>{ clearSession(); });
+    logoutBtn.addEventListener("click", ()=>{ setLoggedOut(); });
 
-    /* =========================================================
-       Kalender logik
-       ========================================================= */
-    const DK_MONTHS = ["januar","februar","marts","april","maj","juni","juli","august","september","oktober","november","december"];
-    const DK_DOW = ["Søn","Man","Tir","Ons","Tor","Fre","Lør"];
+    /* ===== Visibility ===== */
+    const VIS_LABELS = {
+      all: "Ses af alle",
+      taastrup: "Kun Taastrup",
+      horsens: "Kun Horsens",
+      birkeroed: "Kun Birkerød"
+    };
 
+    function buildVisibilityOptions(){
+      const role = getRole();
+      const isAdmin = role === "admin";
+      const isFamily = role === "taastrup" || role === "horsens" || role === "birkeroed";
+      const isGuest = role === "guest";
+
+      visibilitySelect.innerHTML = "";
+      const opt0 = document.createElement("option");
+      opt0.value = "";
+      opt0.textContent = "Vælg...";
+      visibilitySelect.appendChild(opt0);
+
+      const addOpt = (value)=>{
+        const o = document.createElement("option");
+        o.value = value;
+        o.textContent = VIS_LABELS[value] || value;
+        visibilitySelect.appendChild(o);
+      };
+
+      addOpt("all");
+
+      if (isAdmin){
+        addOpt("taastrup");
+        addOpt("horsens");
+        addOpt("birkeroed");
+      } else if (isFamily){
+        addOpt(role);
+      } else if (isGuest){
+        /* guest only "all" */
+      }
+    }
+
+    function canSeeStay(stay){
+      const role = getRole();
+      if (role === "admin") return true;
+
+      const v = (stay.visibility || "all").toString().trim().toLowerCase();
+      if (!v || v === "all") return true;
+
+      if (role === "taastrup" || role === "horsens" || role === "birkeroed"){
+        return v === role;
+      }
+      return false;
+    }
+
+    function canModifyStay(stay){
+      const role = getRole();
+      if (!stay) return false;
+
+      const isAdmin = role === "admin";
+      if (isAdmin) return true;
+
+      const familyRole = role === "taastrup" || role === "horsens" || role === "birkeroed";
+      if (!familyRole) return false;
+
+      const ownerRole = normalize(stay.created_role || "");
+      return ownerRole === normalize(role);
+    }
+
+    function canModifyHistorical(){
+      return getRole() === "admin";
+    }
+
+    /* ===== Dates and rotation ===== */
     let view = new Date(YEAR, 0, 1);
     view.setHours(12,0,0,0);
 
     let selectedStart = null;
     let selectedEnd = null;
 
-    let stays = [];
-    let infoPages = [];
-
-    let editingStayId = null;
-    let editingInfoId = null;
+    let staysAll = [];
+    let showHistory = false;
 
     function isoDate(d){
       const y = d.getFullYear();
@@ -928,15 +940,6 @@
       return d >= a.getTime() && d <= b.getTime();
     }
 
-    function tomorrowISO(){
-      const t = addDays(startOfDay(new Date()), 1);
-      return isoDate(t);
-    }
-    function isHistoricalStay(stay){
-      const min = tomorrowISO();
-      return (stay && stay.end_date && stay.end_date < min);
-    }
-
     function mondayStart(d){
       const x = startOfDay(d);
       const js = x.getDay();
@@ -970,41 +973,278 @@
       return "";
     }
 
-    function canSeeStay(stay){
-      if (!stay) return false;
-      if (isAdmin()) return true;
-
-      const role = getRole();
-      const vis = (stay.visibility || "all").toString().toLowerCase();
-
-      if (vis === "all" || vis === "") return true;
-      if (role === "taastrup" && vis === "taastrup") return true;
-      if (role === "horsens" && vis === "horsens") return true;
-      if (role === "birkeroed" && vis === "birkeroed") return true;
-
-      return false;
+    function monthLabel(d){
+      return `${DK_MONTHS[d.getMonth()]} ${d.getFullYear()}`;
     }
 
-    function canModifyStay(stay){
-      if (!stay) return false;
-      if (isAdmin()) return true;
+    function todayISO(){
+      const t = new Date();
+      t.setHours(12,0,0,0);
+      return isoDate(t);
+    }
 
-      if (isHistoricalStay(stay)) return false;
+    function tomorrowISO(){
+      const t = new Date();
+      t.setHours(12,0,0,0);
+      return isoDate(addDays(t, 1));
+    }
 
-      const role = getRole();
-      const createdRole = (stay.created_role || "").toString().toLowerCase();
-      return createdRole && role && createdRole === role;
+    /* ===== Supabase stays ===== */
+    async function loadStays(){
+      const client = getSupabaseClient();
+      if (!client){
+        setStatus("Kunne ikke forbinde lige nu. Prøv at genindlæse.", false);
+        return;
+      }
+
+      const { data, error } = await client
+        .from("stays")
+        .select("*")
+        .order("start_date", { ascending: true });
+
+      if (error){
+        setStatus("Kunne ikke hente data.\n" + (error.message || ""), false);
+        console.error(error);
+        return;
+      }
+
+      staysAll = Array.isArray(data) ? data : [];
+      render();
+      renderList();
+    }
+
+    function visibleStays(){
+      return staysAll.filter(s => canSeeStay(s));
     }
 
     function findVisibleStayForDate(d){
       const dayISO = isoDate(d);
-      const matches = stays.filter(s => s.start_date <= dayISO && s.end_date >= dayISO);
-      const visible = matches.filter(canSeeStay);
-      return visible.length ? visible[0] : null;
+      const list = visibleStays();
+      return list.find(s => s.start_date <= dayISO && s.end_date >= dayISO) || null;
     }
 
-    function monthLabel(d){
-      return `${DK_MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+    function overlapsAny(aISO, bISO, ignoreId=null){
+      return staysAll.some(s=>{
+        if (ignoreId && String(s.id) === String(ignoreId)) return false;
+        const sStart = s.start_date;
+        const sEnd = s.end_date;
+        return !(bISO < sStart || aISO > sEnd);
+      });
+    }
+
+    let editingId = null;
+
+    function resetForm(clearSelection=true){
+      editingId = null;
+      startInput.value = "";
+      endInput.value = "";
+      whoInput.value = "";
+      changedByInput.value = "";
+      noteInput.value = "";
+      visibilitySelect.value = "";
+
+      if (clearSelection){
+        selectedStart = null;
+        selectedEnd = null;
+        render();
+      }
+    }
+
+    function validateVisibilitySelection(){
+      const v = (visibilitySelect.value || "").trim().toLowerCase();
+      if (!v) return { ok:false, msg:"Vælg synlighed." };
+
+      const role = getRole();
+      if (role === "admin") return { ok:true };
+
+      if (role === "taastrup" || role === "horsens" || role === "birkeroed"){
+        if (v === "all" || v === role) return { ok:true };
+        return { ok:false, msg:"Du kan kun vælge Ses af alle eller Kun din egen familie." };
+      }
+
+      if (role === "guest"){
+        if (v === "all") return { ok:true };
+        return { ok:false, msg:"Du kan kun vælge Ses af alle." };
+      }
+
+      return { ok:false, msg:"Ugyldig synlighed." };
+    }
+
+    function dateNotInPast(aISO, bISO){
+      const min = tomorrowISO();
+      return aISO >= min && bISO >= min;
+    }
+
+    async function saveStay(){
+      const s = startInput.value;
+      const e = endInput.value;
+      const who = (whoInput.value || "").trim();
+      const changedBy = (changedByInput.value || "").trim();
+      const note = (noteInput.value || "").trim();
+      const visibility = (visibilitySelect.value || "").trim().toLowerCase();
+
+      if (!s || !e){
+        setStatus("Vælg både start og slut.", false);
+        return;
+      }
+      if (!who){
+        setStatus("Skriv hvem der har huset.", false);
+        return;
+      }
+      if (!changedBy){
+        setStatus("Skriv hvem der har ændret.", false);
+        return;
+      }
+
+      const visCheck = validateVisibilitySelection();
+      if (!visCheck.ok){
+        setStatus(visCheck.msg, false);
+        return;
+      }
+
+      const [a,b] = clampDateOrder(s, e);
+
+      if (!dateNotInPast(a,b)){
+        setStatus("Du kan kun lave ændringer fra i morgen og frem.", false);
+        return;
+      }
+
+      if (overlapsAny(a,b, editingId)){
+        setStatus("Der findes allerede en ændring i perioden. Slet den først.", false);
+        return;
+      }
+
+      const client = getSupabaseClient();
+      if (!client){
+        setStatus("Kunne ikke forbinde.", false);
+        return;
+      }
+
+      const payload = {
+        start_date: a,
+        end_date: b,
+        family: who,
+        booked_by: changedBy,
+        note: note,
+        visibility: visibility,
+        created_role: getRole()
+      };
+
+      if (editingId){
+        const existing = staysAll.find(x => String(x.id) === String(editingId)) || null;
+        if (!existing || !canModifyStay(existing)){
+          setStatus("Du kan ikke redigere denne ændring.", false);
+          return;
+        }
+
+        const endDt = parseISO(existing.end_date);
+        const isHistorical = endDt.getTime() < startOfDay(new Date()).getTime();
+        if (isHistorical && !canModifyHistorical()){
+          setStatus("Historiske ændringer kan ikke redigeres.", false);
+          return;
+        }
+
+        const { error } = await client.from("stays").update(payload).eq("id", editingId);
+        if (error){
+          console.error(error);
+          setStatus("Kunne ikke gemme.\n" + (error.message || ""), false);
+          return;
+        }
+
+        setStatus("Gemt ✅");
+        resetForm(false);
+        await loadStays();
+        return;
+      }
+
+      const { error } = await client.from("stays").insert(payload);
+      if (error){
+        console.error(error);
+        const msg = (error.message || "").toLowerCase().includes("column") && (error.message || "").toLowerCase().includes("visibility")
+          ? "Kunne ikke gemme.\nManglende kolonne i Supabase: visibility"
+          : "Kunne ikke gemme.\n" + (error.message || "");
+        setStatus(msg, false);
+        return;
+      }
+
+      setStatus("Gemt ✅");
+      resetForm(false);
+      await loadStays();
+    }
+
+    async function deleteStay(id){
+      const stay = staysAll.find(s => String(s.id) === String(id)) || null;
+      if (!stay){
+        setStatus("Kunne ikke finde ændringen.", false);
+        return;
+      }
+
+      if (!canModifyStay(stay)){
+        setStatus("Du kan ikke slette denne ændring.", false);
+        return;
+      }
+
+      const endDt = parseISO(stay.end_date);
+      const isHistorical = endDt.getTime() < startOfDay(new Date()).getTime();
+      if (isHistorical && !canModifyHistorical()){
+        setStatus("Historiske ændringer kan ikke slettes.", false);
+        return;
+      }
+
+      const whoMade = stay.booked_by || "-";
+      const ok = window.confirm(`OBS. Denne ændring er lavet af ${whoMade}\n\nHvis du sletter denne ændring, forsvinder den permanent og kan ikke genskabes.\n\nJa, jeg vil slette ændringen?`);
+      if (!ok) return;
+
+      const client = getSupabaseClient();
+      if (!client){
+        setStatus("Kunne ikke forbinde.", false);
+        return;
+      }
+
+      const { error } = await client.from("stays").delete().eq("id", id);
+      if (error){
+        console.error(error);
+        setStatus("Kunne ikke slette.\n" + (error.message || ""), false);
+        return;
+      }
+
+      setStatus("Slettet");
+      await loadStays();
+    }
+
+    function editStay(id){
+      const s = staysAll.find(x => String(x.id) === String(id)) || null;
+      if (!s){
+        setStatus("Kunne ikke finde ændringen.", false);
+        return;
+      }
+
+      if (!canModifyStay(s)){
+        setStatus("Du kan ikke redigere denne ændring.", false);
+        return;
+      }
+
+      const endDt = parseISO(s.end_date);
+      const isHistorical = endDt.getTime() < startOfDay(new Date()).getTime();
+      if (isHistorical && !canModifyHistorical()){
+        setStatus("Historiske ændringer kan ikke redigeres.", false);
+        return;
+      }
+
+      editingId = s.id;
+
+      startInput.value = s.start_date;
+      endInput.value = s.end_date;
+      whoInput.value = s.family || "";
+      changedByInput.value = s.booked_by || "";
+      noteInput.value = s.note || "";
+      visibilitySelect.value = (s.visibility || "all").toString().trim().toLowerCase();
+
+      selectedStart = parseISO(s.start_date);
+      selectedEnd = parseISO(s.end_date);
+      render();
+
+      setStatus("Redigerer ændring", true);
     }
 
     function onDayClick(date){
@@ -1055,25 +1295,29 @@
         day.appendChild(top);
 
         const base = baseOwnerForDate(d);
-        const visibleStay = findVisibleStayForDate(d);
 
         if (base.type === "shift"){
-          // Søndag: farven skal tilhøre NÆSTE uge (base.next)
           const p = document.createElement("div");
           p.className = "pill shift " + ownerClass(base.next);
           p.textContent = `Skiftedag: ${base.current} → ${base.next}`;
           day.appendChild(p);
         } else {
           const p = document.createElement("div");
-          p.className = "pill " + ownerClass(base.owner) + (visibleStay ? " overridden" : "");
+          p.className = "pill " + ownerClass(base.owner);
           p.textContent = base.owner;
           day.appendChild(p);
         }
 
-        if (visibleStay){
+        const stay = findVisibleStayForDate(d);
+        if (stay){
+          const basePill = day.querySelector(".pill");
+          if (basePill){
+            basePill.classList.add("baseOverridden");
+          }
+
           const b = document.createElement("div");
           b.className = "pill booking";
-          b.textContent = `Bruges af: ${visibleStay.family}`;
+          b.textContent = `Bruges af: ${stay.family}`;
           day.appendChild(b);
         }
 
@@ -1098,241 +1342,29 @@
       }
     }
 
-    prevBtn.addEventListener("click", ()=>{
-      view = new Date(view.getFullYear(), view.getMonth()-1, 1);
-      view.setHours(12,0,0,0);
-      render();
-    });
-    nextBtn.addEventListener("click", ()=>{
-      view = new Date(view.getFullYear(), view.getMonth()+1, 1);
-      view.setHours(12,0,0,0);
-      render();
-    });
-    todayBtn.addEventListener("click", ()=>{
-      view = new Date();
-      view.setHours(12,0,0,0);
-      render();
-    });
-
-    /* =========================================================
-       Stays (ændringer)
-       ========================================================= */
-    function resetForm(clearSelection=true){
-      startInput.value = "";
-      endInput.value = "";
-      whoInput.value = "";
-      changedByInput.value = "";
-      visibilityInput.value = "";
-      noteInput.value = "";
-
-      editingStayId = null;
-      saveBtn.textContent = "Gem";
-
-      if (clearSelection){
-        selectedStart = null;
-        selectedEnd = null;
-        render();
-      }
-    }
-
-    resetBtn.addEventListener("click", ()=> resetForm(true));
-
-    async function getOverlapCount(client, a, b, excludeId){
-      let q = client
-        .from("stays")
-        .select("id", { count: "exact", head: true })
-        .not("end_date", "lt", a)
-        .not("start_date", "gt", b);
-
-      if (excludeId != null){
-        q = q.neq("id", excludeId);
-      }
-
-      const { count, error } = await q;
-      if (error){
-        console.error(error);
-        return null;
-      }
-      return count || 0;
-    }
-
-    async function saveStay(){
-      const s = startInput.value;
-      const e = endInput.value;
-      const who = (whoInput.value || "").trim();
-      const changedBy = (changedByInput.value || "").trim();
-      const vis = (visibilityInput.value || "").trim();
-      const note = (noteInput.value || "").trim();
-
-      if (!s || !e){
-        setStatus("Vælg både start og slut.", false);
-        return;
-      }
-      if (!who){
-        setStatus("Skriv hvem der har huset.", false);
-        return;
-      }
-      if (!changedBy){
-        setStatus("Skriv hvem der har ændret.", false);
-        return;
-      }
-      if (!vis){
-        setStatus("Vælg synlighed.", false);
-        return;
-      }
-
-      const [a,b] = clampDateOrder(s, e);
-      const min = tomorrowISO();
-      if (a < min || b < min){
-        setStatus("Du kan kun lave ændringer fra i morgen og frem.", false);
-        return;
-      }
-
-      const client = getSupabaseClient();
-      if (!client){
-        setStatus("Kunne ikke forbinde.", false);
-        return;
-      }
-
-      const overlapCount = await getOverlapCount(client, a, b, editingStayId);
-      if (overlapCount == null){
-        setStatus("Kunne ikke validere datoer.", false);
-        return;
-      }
-      if (overlapCount > 0){
-        setStatus("Der findes allerede en ændring i den periode. Slet eller redigér den først.", false);
-        return;
-      }
-
-      const role = getRole();
-      const payload = {
-        start_date: a,
-        end_date: b,
-        family: who,
-        booked_by: changedBy,
-        note: note,
-        visibility: vis,
-        created_role: role // kræver kolonnen created_role i stays
-      };
-
-      if (editingStayId){
-        const current = stays.find(x => String(x.id) === String(editingStayId));
-        if (current && !canModifyStay(current)){
-          setStatus("Du kan ikke redigere denne ændring.", false);
-          return;
-        }
-
-        const { error } = await client
-          .from("stays")
-          .update(payload)
-          .eq("id", editingStayId);
-
-        if (error){
-          setStatus("Kunne ikke gemme ændring.", false);
-          console.error(error);
-          return;
-        }
-
-        setStatus("Opdateret ✅");
-      } else {
-        const { error } = await client.from("stays").insert(payload);
-        if (error){
-          setStatus("Kunne ikke gemme.", false);
-          console.error(error);
-          return;
-        }
-        setStatus("Gemt ✅");
-      }
-
-      resetForm(false);
-      await loadStays();
-    }
-
-    saveBtn.addEventListener("click", saveStay);
-
-    function formatVisibility(v){
-      const x = (v || "all").toString().toLowerCase();
-      if (x === "all") return "alle";
-      if (x === "taastrup") return "kun Taastrup";
-      if (x === "horsens") return "kun Horsens";
-      if (x === "birkeroed") return "kun Birkerød";
-      return x;
-    }
-
-    function startEditStay(stay){
-      if (!stay) return;
-      if (!canModifyStay(stay)){
-        setStatus("Du kan ikke redigere denne ændring.", false);
-        return;
-      }
-
-      editingStayId = stay.id;
-      saveBtn.textContent = "Opdater";
-
-      startInput.value = stay.start_date || "";
-      endInput.value = stay.end_date || "";
-      whoInput.value = stay.family || "";
-      changedByInput.value = stay.booked_by || "";
-      visibilityInput.value = (stay.visibility || "all").toString().toLowerCase();
-      noteInput.value = stay.note || "";
-
-      selectedStart = stay.start_date ? parseISO(stay.start_date) : null;
-      selectedEnd = stay.end_date ? parseISO(stay.end_date) : null;
-      render();
-    }
-
-    async function deleteStay(id){
-      const stay = stays.find(x => String(x.id) === String(id));
-      if (!stay){
-        setStatus("Kunne ikke finde ændringen.", false);
-        return;
-      }
-
-      if (!canModifyStay(stay)){
-        setStatus("Du kan ikke slette denne ændring.", false);
-        return;
-      }
-
-      const who = (stay.booked_by || "-").toString().trim() || "-";
-      const ok = confirm(`OBS. Denne ændring er lavet af ${who}\n\nHvis du sletter denne ændring, forsvinder den permanent og kan ikke genskabes.\n\nVil du slette?`);
-      if (!ok) return;
-
-      const client = getSupabaseClient();
-      if (!client){
-        setStatus("Kunne ikke forbinde.", false);
-        return;
-      }
-
-      const { error } = await client.from("stays").delete().eq("id", id);
-      if (error){
-        setStatus("Kunne ikke slette.", false);
-        console.error(error);
-        return;
-      }
-      setStatus("Slettet");
-      await loadStays();
-    }
-
     function renderList(){
       listEl.innerHTML = "";
 
-      const visibleList = isAdmin() ? stays : stays.filter(canSeeStay);
+      const now = startOfDay(new Date());
+      const list = visibleStays();
 
-      if (!visibleList.length){
+      const future = list.filter(s => parseISO(s.end_date).getTime() >= now.getTime());
+      const past = list.filter(s => parseISO(s.end_date).getTime() < now.getTime());
+
+      const orderedFuture = [...future].sort((a,b)=> (a.start_date || "").localeCompare(b.start_date || ""));
+      const orderedPast = [...past].sort((a,b)=> (b.end_date || "").localeCompare(a.end_date || ""));
+
+      const show = showHistory ? [...orderedFuture, ...orderedPast] : orderedFuture;
+
+      if (!show.length){
         const empty = document.createElement("div");
         empty.className = "item";
-        empty.innerHTML = `<div class="meta"><div class="who">Ingen ændringer endnu</div><div class="dates">—</div></div>`;
+        empty.innerHTML = `<div class="meta"><div class="who">Ingen ændringer endnu</div><div class="dates"> </div></div>`;
         listEl.appendChild(empty);
         return;
       }
 
-      const sorted = [...visibleList].sort((a,b)=>{
-        const aa = (a.created_at || "");
-        const bb = (b.created_at || "");
-        return bb.localeCompare(aa);
-      });
-
-      for (const s of sorted){
+      for (const s of show){
         const it = document.createElement("div");
         it.className = "item";
 
@@ -1353,7 +1385,8 @@
 
         const vis = document.createElement("div");
         vis.className = "by";
-        vis.textContent = `Synlig: ${formatVisibility(s.visibility)}`;
+        const v = (s.visibility || "all").toString().trim().toLowerCase();
+        vis.textContent = `Synlig: ${v === "all" ? "alle" : ("kun " + (v === "birkeroed" ? "Birkerød" : (v.charAt(0).toUpperCase()+v.slice(1))))}`;
 
         meta.appendChild(who);
         meta.appendChild(dates);
@@ -1370,14 +1403,15 @@
         const actions = document.createElement("div");
         actions.className = "actions";
 
-        const canMod = canModifyStay(s);
+        const isHistorical = parseISO(s.end_date).getTime() < now.getTime();
 
-        if (canMod){
+        const allowModify = canModifyStay(s) && (!isHistorical || canModifyHistorical());
+        if (allowModify){
           const edit = document.createElement("button");
           edit.className = "btn";
           edit.type = "button";
           edit.textContent = "Rediger";
-          edit.addEventListener("click", ()=> startEditStay(s));
+          edit.addEventListener("click", ()=> editStay(s.id));
           actions.appendChild(edit);
 
           const del = document.createElement("button");
@@ -1390,300 +1424,159 @@
 
         it.appendChild(meta);
         it.appendChild(actions);
-
         listEl.appendChild(it);
       }
+
+      toggleHistoryBtn.textContent = showHistory ? "Skjul historiske ændringer" : "Vis historiske ændringer";
     }
 
-    async function loadStays(){
-      const client = getSupabaseClient();
-      if (!client){
-        setStatus("Kunne ikke forbinde lige nu. Prøv at genindlæse.", false);
-        return;
-      }
-
-      const { data, error } = await client
-        .from("stays")
-        .select("*")
-        .order("start_date", { ascending: true });
-
-      if (error){
-        setStatus("Kunne ikke hente data.", false);
-        console.error(error);
-        return;
-      }
-
-      stays = Array.isArray(data) ? data : [];
-      render();
+    toggleHistoryBtn.addEventListener("click", ()=>{
+      showHistory = !showHistory;
       renderList();
-    }
-
-    /* =========================================================
-       Info pages (Yderligere info)
-       ========================================================= */
-    function closeInfoMenu(){
-      infoMenu.classList.remove("open");
-    }
-
-    infoBtn.addEventListener("click", (e)=>{
-      e.stopPropagation();
-      infoMenu.classList.toggle("open");
     });
 
-    document.addEventListener("click", ()=>{
-      closeInfoMenu();
+    prevBtn.addEventListener("click", ()=>{
+      view = new Date(view.getFullYear(), view.getMonth()-1, 1);
+      view.setHours(12,0,0,0);
+      render();
+    });
+    nextBtn.addEventListener("click", ()=>{
+      view = new Date(view.getFullYear(), view.getMonth()+1, 1);
+      view.setHours(12,0,0,0);
+      render();
+    });
+    todayBtn.addEventListener("click", ()=>{
+      view = new Date();
+      view.setHours(12,0,0,0);
+      render();
     });
 
-    function openModal(){
-      modalBack.classList.add("open");
+    resetBtn.addEventListener("click", ()=> resetForm(true));
+    saveBtn.addEventListener("click", saveStay);
+
+    /* ===== Info pages (UI-lås) ===== */
+    const INFO_KEY = "samsoehuset_info_pages_v1";
+    let infoPages = [];
+    let activeInfoId = null;
+
+    function canEditInfo(){
+      return getRole() === "admin";
     }
-    function closeModal(){
-      modalBack.classList.remove("open");
-      modalEditArea.classList.add("hidden");
-      modalBody.classList.remove("hidden");
-      modalEditBtn.classList.remove("hidden");
-      modalDeleteBtn.classList.remove("hidden");
-      editingInfoId = null;
-    }
 
-    modalCloseBtn.addEventListener("click", closeModal);
-    modalBack.addEventListener("click", (e)=>{
-      if (e.target === modalBack) closeModal();
-    });
-
-    function renderInfoMenu(){
-      infoMenu.innerHTML = "";
-
-      if (isAdmin()){
-        const newBtn = document.createElement("button");
-        newBtn.className = "menuItem";
-        newBtn.type = "button";
-        newBtn.textContent = "Nyt punkt";
-        newBtn.addEventListener("click", ()=> startCreateInfoPage());
-        infoMenu.appendChild(newBtn);
+    function loadInfoPages(){
+      try{
+        const raw = localStorage.getItem(INFO_KEY);
+        infoPages = raw ? JSON.parse(raw) : [];
+        if (!Array.isArray(infoPages)) infoPages = [];
+      } catch {
+        infoPages = [];
       }
 
       if (!infoPages.length){
-        const empty = document.createElement("div");
-        empty.style.color = "rgba(255,255,255,.70)";
-        empty.style.fontSize = "13px";
-        empty.style.padding = "6px 8px";
-        empty.textContent = "Ingen punkter endnu";
-        infoMenu.appendChild(empty);
-        return;
+        infoPages = [{ id: String(Date.now()), title: "Info", body: "" }];
+        saveInfoPages();
       }
 
+      activeInfoId = infoPages[0].id;
+      renderInfoTabs();
+      renderInfoActive();
+    }
+
+    function saveInfoPages(){
+      localStorage.setItem(INFO_KEY, JSON.stringify(infoPages));
+    }
+
+    function renderInfoTabs(){
+      infoTabs.innerHTML = "";
       for (const p of infoPages){
-        const row = document.createElement("div");
-        row.className = "menuItemRow";
-
-        const btn = document.createElement("button");
-        btn.className = "menuItem";
-        btn.type = "button";
-        btn.textContent = p.title || "(uden titel)";
-        btn.addEventListener("click", ()=> openInfoPage(p));
-
-        row.appendChild(btn);
-        infoMenu.appendChild(row);
+        const t = document.createElement("button");
+        t.type = "button";
+        t.className = "tab" + (p.id === activeInfoId ? " active" : "");
+        t.textContent = p.title || " ";
+        t.addEventListener("click", ()=>{
+          activeInfoId = p.id;
+          renderInfoTabs();
+          renderInfoActive();
+        });
+        infoTabs.appendChild(t);
       }
     }
 
-    function openInfoPage(page){
-      if (!page) return;
-      editingInfoId = page.id;
+    function renderInfoActive(){
+      const p = infoPages.find(x => x.id === activeInfoId) || infoPages[0];
+      if (!p) return;
 
-      modalTitle.textContent = page.title || "(uden titel)";
-      modalBody.textContent = page.content || "";
+      infoTitleInput.value = p.title || "";
+      infoBodyInput.value = p.body || "";
 
-      modalEditArea.classList.add("hidden");
-      modalBody.classList.remove("hidden");
-
-      if (isAdmin()){
-        modalEditBtn.classList.remove("hidden");
-        modalDeleteBtn.classList.remove("hidden");
-      } else {
-        modalEditBtn.classList.add("hidden");
-        modalDeleteBtn.classList.add("hidden");
-      }
-
-      openModal();
-      closeInfoMenu();
+      const editable = canEditInfo();
+      infoTitleInput.disabled = !editable;
+      infoBodyInput.disabled = !editable;
+      infoNewBtn.disabled = !editable;
+      infoSaveBtn.disabled = !editable;
+      infoDeleteBtn.disabled = !editable;
     }
 
-    function startCreateInfoPage(){
-      if (!isAdmin()) return;
-
-      editingInfoId = null;
-      modalTitle.textContent = "Nyt punkt";
-      modalBody.textContent = "";
-
-      infoTitleInput.value = "";
-      infoContentInput.value = "";
-
-      modalBody.classList.add("hidden");
-      modalEditArea.classList.remove("hidden");
-
-      modalEditBtn.classList.add("hidden");
-      modalDeleteBtn.classList.add("hidden");
-
-      openModal();
-      closeInfoMenu();
+    function openModal(){
+      modalBackdrop.style.display = "flex";
+      loadInfoPages();
+    }
+    function closeModal(){
+      modalBackdrop.style.display = "none";
     }
 
-    modalEditBtn.addEventListener("click", ()=>{
-      if (!isAdmin()) return;
-      const page = infoPages.find(x => String(x.id) === String(editingInfoId));
-      if (!page) return;
+    infoBtn.addEventListener("click", openModal);
+    closeModalBtn.addEventListener("click", closeModal);
+    modalBackdrop.addEventListener("click", (e)=>{ if (e.target === modalBackdrop) closeModal(); });
 
-      infoTitleInput.value = page.title || "";
-      infoContentInput.value = page.content || "";
-
-      modalBody.classList.add("hidden");
-      modalEditArea.classList.remove("hidden");
-      modalEditBtn.classList.add("hidden");
-      modalDeleteBtn.classList.add("hidden");
+    infoNewBtn.addEventListener("click", ()=>{
+      if (!canEditInfo()) return;
+      const id = String(Date.now());
+      infoPages.push({ id, title: "Nyt punkt", body: "" });
+      activeInfoId = id;
+      saveInfoPages();
+      renderInfoTabs();
+      renderInfoActive();
+      setInfoStatus("Oprettet", true);
     });
 
-    modalCancelEditBtn.addEventListener("click", ()=>{
-      const page = editingInfoId ? infoPages.find(x => String(x.id) === String(editingInfoId)) : null;
-      if (page){
-        modalTitle.textContent = page.title || "(uden titel)";
-        modalBody.textContent = page.content || "";
-        modalBody.classList.remove("hidden");
-        modalEditArea.classList.add("hidden");
-        if (isAdmin()){
-          modalEditBtn.classList.remove("hidden");
-          modalDeleteBtn.classList.remove("hidden");
-        }
-      } else {
-        closeModal();
-      }
+    infoSaveBtn.addEventListener("click", ()=>{
+      if (!canEditInfo()) return;
+      const p = infoPages.find(x => x.id === activeInfoId);
+      if (!p) return;
+      p.title = (infoTitleInput.value || "").trim() || " ";
+      p.body = (infoBodyInput.value || "").trim();
+      saveInfoPages();
+      renderInfoTabs();
+      setInfoStatus("Gemt ✅", true);
     });
 
-    modalSaveEditBtn.addEventListener("click", async ()=>{
-      if (!isAdmin()) return;
-
-      const title = (infoTitleInput.value || "").trim();
-      const content = (infoContentInput.value || "").trim();
-
-      if (!title){
-        setStatus("Skriv en titel.", false);
+    infoDeleteBtn.addEventListener("click", ()=>{
+      if (!canEditInfo()) return;
+      if (infoPages.length <= 1){
+        setInfoStatus("Der skal være mindst 1 punkt.", false);
         return;
       }
-
-      const client = getSupabaseClient();
-      if (!client){
-        setStatus("Kunne ikke forbinde.", false);
-        return;
-      }
-
-      if (editingInfoId){
-        const { error } = await client
-          .from("info_pages")
-          .update({ title, content })
-          .eq("id", editingInfoId);
-
-        if (error){
-          setStatus("Kunne ikke gemme.", false);
-          console.error(error);
-          return;
-        }
-        setStatus("Gemt ✅");
-      } else {
-        const { error } = await client
-          .from("info_pages")
-          .insert({ title, content });
-
-        if (error){
-          setStatus("Kunne ikke oprette.", false);
-          console.error(error);
-          return;
-        }
-        setStatus("Oprettet ✅");
-      }
-
-      await loadInfoPages();
-
-      const page = editingInfoId ? infoPages.find(x => String(x.id) === String(editingInfoId)) : null;
-      if (page){
-        openInfoPage(page);
-      } else {
-        closeModal();
-      }
-    });
-
-    modalDeleteBtn.addEventListener("click", async ()=>{
-      if (!isAdmin()) return;
-      if (!editingInfoId) return;
-
-      const ok = confirm("Vil du slette dette punkt permanent?");
+      const ok = window.confirm("Vil du slette dette punkt?");
       if (!ok) return;
-
-      const client = getSupabaseClient();
-      if (!client){
-        setStatus("Kunne ikke forbinde.", false);
-        return;
-      }
-
-      const { error } = await client
-        .from("info_pages")
-        .delete()
-        .eq("id", editingInfoId);
-
-      if (error){
-        setStatus("Kunne ikke slette.", false);
-        console.error(error);
-        return;
-      }
-
-      setStatus("Slettet");
-      closeModal();
-      await loadInfoPages();
+      infoPages = infoPages.filter(x => x.id !== activeInfoId);
+      activeInfoId = infoPages[0].id;
+      saveInfoPages();
+      renderInfoTabs();
+      renderInfoActive();
+      setInfoStatus("Slettet", true);
     });
 
-    async function loadInfoPages(){
-      const client = getSupabaseClient();
-      if (!client){
-        return;
-      }
-
-      const { data, error } = await client
-        .from("info_pages")
-        .select("*")
-        .order("sort_order", { ascending: true, nullsFirst: false })
-        .order("created_at", { ascending: true });
-
-      if (error){
-        console.error(error);
-        infoPages = [];
-        renderInfoMenu();
-        return;
-      }
-
-      infoPages = Array.isArray(data) ? data : [];
-      renderInfoMenu();
-    }
-
-    async function loadAll(){
-      updateHeaderTitle();
-      await Promise.all([loadStays(), loadInfoPages()]);
-    }
-
-    /* =========================================================
-       Init
-       ========================================================= */
     (function init(){
       if (isLoggedIn()){
         showApp();
-        updateHeaderTitle();
-        loadAll();
+        loadStays();
+        loadInfoPages();
       } else {
         showLogin();
       }
-
       render();
       renderList();
-      renderInfoMenu();
     })();
   </script>
 </body>
