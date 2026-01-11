@@ -252,6 +252,7 @@
       user-select:none;
       min-width: 0;
       overflow: hidden;
+      position: relative;
     }
     .day:hover{ border-color: rgba(255,255,255,.18); background: rgba(255,255,255,.07); }
     .day:active{ transform: translateY(1px); }
@@ -290,6 +291,33 @@
     .pill.horsens{ border-color: rgba(183,123,255,.55); background: rgba(183,123,255,.14); }
     .pill.birkeroed{ border-color: rgba(62,230,195,.55); background: rgba(62,230,195,.14); }
     .pill.booking{ border-color: rgba(45,212,122,.55); background: rgba(45,212,122,.16); }
+
+    /* ===== NY: tydelig "ÆNDRING" markering i kalenderen ===== */
+    .day.changed{
+      border-color: rgba(45,212,122,.55);
+      background: rgba(45,212,122,.10);
+      box-shadow: inset 0 0 0 1px rgba(45,212,122,.18);
+    }
+    .day.changed:hover{
+      border-color: rgba(45,212,122,.70);
+      background: rgba(45,212,122,.12);
+    }
+    .changeBadge{
+      position:absolute;
+      top:8px;
+      left:8px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .6px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.92);
+      border: 1px solid rgba(45,212,122,.62);
+      background: rgba(45,212,122,.22);
+      box-shadow: 0 10px 20px rgba(0,0,0,.25);
+      pointer-events:none;
+    }
 
     .shiftWrap{
       display:flex;
@@ -517,6 +545,7 @@
        KONFIGURATION (DET ENESTE DU EVT. SKAL ÆNDRE SENERE)
        ========================================================= */
     const SHARED_CODE = "kalkhavesvej";
+    const ADMIN_CODE = "Kalkhavesvej100!";
 
     const SUPABASE_URL = "https://jbweskxscyxjonrhbdcd.supabase.co";
     const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_2qMwF5JFmVmQuf9jJCERxw_25bMzbyu";
@@ -569,12 +598,17 @@
     }
 
     function isLoggedIn(){ return localStorage.getItem("samsoehuset_ok") === "1"; }
-    function setLoggedIn(){
+    function getRole(){ return localStorage.getItem("samsoehuset_role") || "user"; }
+    function isAdmin(){ return getRole() === "admin"; }
+
+    function setLoggedIn(role){
       localStorage.setItem("samsoehuset_ok", "1");
+      localStorage.setItem("samsoehuset_role", role);
       showApp();
     }
     function setLoggedOut(){
       localStorage.removeItem("samsoehuset_ok");
+      localStorage.removeItem("samsoehuset_role");
       showLogin();
     }
 
@@ -591,19 +625,30 @@
 
     function tryLogin(){
       clearLoginMsg();
-      const entered = normalize(passInput.value);
-      const correct = normalize(SHARED_CODE);
+      const enteredRaw = (passInput.value || "").toString().trim();
+      const entered = normalize(enteredRaw);
 
-      if (!entered){
+      const shared = normalize(SHARED_CODE);
+      const admin = ADMIN_CODE.toString().trim();
+
+      if (!enteredRaw){
         setLoginMsg("Skriv koden først.");
         return;
       }
-      if (entered !== correct){
-        setLoginMsg("Forkert kode. Prøv igen.");
+
+      if (entered === shared){
+        setLoggedIn("user");
+        loadStays();
         return;
       }
-      setLoggedIn();
-      loadStays();
+
+      if (enteredRaw === admin){
+        setLoggedIn("admin");
+        loadStays();
+        return;
+      }
+
+      setLoginMsg("Forkert kode. Prøv igen.");
     }
 
     loginBtn.addEventListener("click", tryLogin);
@@ -897,6 +942,16 @@
         top.appendChild(dow);
         day.appendChild(top);
 
+        const stay = findStayForDate(d);
+        if (stay){
+          day.classList.add("changed");
+
+          const badge = document.createElement("div");
+          badge.className = "changeBadge";
+          badge.textContent = "Ændring";
+          day.appendChild(badge);
+        }
+
         const base = baseOwnerForDate(d);
 
         if (base.type === "shift"){
@@ -926,7 +981,6 @@
           day.appendChild(p);
         }
 
-        const stay = findStayForDate(d);
         if (stay){
           const b = document.createElement("div");
           b.className = "pill booking";
@@ -1039,8 +1093,9 @@
         pastWrap.style.marginTop = "10px";
         if (!showPast) pastWrap.classList.add("hidden");
 
+        const allowPastDelete = isAdmin();
         for (const s of past){
-          pastWrap.appendChild(createStayItem(s, true));
+          pastWrap.appendChild(createStayItem(s, allowPastDelete));
         }
 
         toggle.addEventListener("click", ()=>{
