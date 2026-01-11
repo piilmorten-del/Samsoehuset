@@ -225,7 +225,6 @@
     }
     .nav .btn{ padding: 10px 12px; min-width: 44px; }
 
-    /* Weekdays with week-number column */
     .weekdays{
       display:grid;
       grid-template-columns: 62px repeat(7, 1fr);
@@ -243,7 +242,6 @@
       font-weight: 750;
     }
 
-    /* Days with week-number column */
     .days{
       display:grid;
       grid-template-columns: 62px repeat(7, 1fr);
@@ -678,37 +676,23 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
-    /* =========================================================
-       KONFIGURATION
-       ========================================================= */
-
     const ADMIN_CODE = "Kalkhavesvej100!";
     const FAMILY_CODES = {
       "Taastrup": "Taastrup",
       "Horsens": "Horsens",
       "Birkerød": "Birkerød"
     };
-
-    /* Hvis du vil have gæstekode igen, så skriv den her, ellers lad den stå tom */
     const SHARED_CODE = "";
 
     const SUPABASE_URL = "https://jbweskxscyxjonrhbdcd.supabase.co";
     const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_2qMwF5JFmVmQuf9jJCERxw_25bMzbyu";
 
-    /* Kalenderen er kun for 2026 */
     const YEAR = 2026;
 
-    /* Rotation for 2026 */
     const ROTATION = ["Birkerød", "Horsens", "Taastrup"];
-
-    /*
-      Vi definerer at ugen med ISO uge nr 2 i 2026 er Birkerød.
-      Det giver skiftedag søndag 4. januar 2026 ind i Birkerød.
-    */
     const ROTATION_START_ISO_WEEK = 2;
     const ROTATION_START_OWNER = "Birkerød";
 
-    /* Specialuger som ikke tæller med i rotationen */
     const SPECIAL_WEEKS_2026 = {
       17: "Generalforsamling",
       37: "Fællesuge"
@@ -716,8 +700,6 @@
 
     const STAYS_TABLE = "stays";
     const EXTRA_TABLE = "extra_info";
-
-    /* ========================================================= */
 
     const appHeader = document.getElementById("appHeader");
     const welcomeTitle = document.getElementById("welcomeTitle");
@@ -820,7 +802,6 @@
       if (e.target === modalBack) closeModal();
     });
 
-    /* ===== Login roller ===== */
     const ROLE_KEY = "samsoehuset_role";
     const OK_KEY = "samsoehuset_ok";
 
@@ -946,7 +927,6 @@
       visibilityInput.value = "";
     }
 
-    /* ===== Kalender helpers ===== */
     const DK_MONTHS = ["januar","februar","marts","april","maj","juni","juli","august","september","oktober","november","december"];
     const DK_DOW = ["Søn","Man","Tir","Ons","Tor","Fre","Lør"];
 
@@ -966,7 +946,10 @@
       return `${y}-${m}-${da}`;
     }
     function parseISO(s){
-      const [y,m,d] = (s || "").split("-").map(Number);
+      const parts = (s || "").split("-").map(Number);
+      const y = parts[0] || 1970;
+      const m = parts[1] || 1;
+      const d = parts[2] || 1;
       const dt = new Date(y, m-1, d);
       dt.setHours(12,0,0,0);
       return dt;
@@ -1190,11 +1173,8 @@
           top.appendChild(dow);
           day.appendChild(top);
 
+          /* ÆNDRING: ingen "Kun 2026" label på dage udenfor 2026 */
           if (!inYear){
-            const p = document.createElement("div");
-            p.className = "pill special";
-            p.textContent = "Kun 2026";
-            day.appendChild(p);
             daysEl.appendChild(day);
             continue;
           }
@@ -1286,7 +1266,6 @@
       render();
     }
 
-    /* ===== Supabase stays ===== */
     async function loadStays(){
       const client = getSupabaseClient();
       if (!client){
@@ -1592,7 +1571,6 @@
       renderList();
     });
 
-    /* ===== Top navigation låst til 2026 ===== */
     function clampViewTo2026(d){
       const x = new Date(d);
       if (x.getFullYear() < YEAR) return new Date(YEAR, 0, 1, 12,0,0,0);
@@ -1620,7 +1598,6 @@
     resetBtn.addEventListener("click", ()=> resetForm(true));
     saveBtn.addEventListener("click", saveStay);
 
-    /* ===== Yderligere info (Supabase) ===== */
     let extraItems = [];
 
     async function loadExtraInfo(){
@@ -1912,7 +1889,6 @@
       extraMenu.classList.remove("show");
     });
 
-    /* ===== Init ===== */
     (async function init(){
       render();
       renderList();
