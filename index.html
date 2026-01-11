@@ -18,6 +18,7 @@
       --blue:#4aa6ff;
       --purple:#b77bff;
       --teal:#3ee6c3;
+      --orange:#ffb55e;
       --shadow: 0 18px 50px rgba(0,0,0,.55);
       --r: 18px;
     }
@@ -31,7 +32,6 @@
       overflow-x:hidden;
     }
 
-    /* ===== Background image ===== */
     .bg{
       position:fixed; inset:0;
       background-image: url("bg.jpg");
@@ -99,7 +99,6 @@
     }
     .btnPrimary:hover{ background: rgba(45,212,122,.20); border-color: rgba(45,212,122,.62); }
 
-    /* ===== Layout: kalender bredere, højre panel smallere + samme højde ===== */
     .grid{
       display:grid;
       grid-template-columns: minmax(0, 1.35fr) minmax(300px, .65fr);
@@ -128,7 +127,6 @@
       font-size: 13px;
     }
 
-    /* ===== Login screen ===== */
     #loginScreen{
       min-height: calc(100vh - 48px);
       display:flex;
@@ -200,7 +198,6 @@
     }
     .msg.ok{ color: rgba(205,255,225,.92); }
 
-    /* ===== Calendar ===== */
     .calHeader{
       display:flex;
       align-items:center;
@@ -228,9 +225,10 @@
     }
     .nav .btn{ padding: 10px 12px; min-width: 44px; }
 
+    /* Weekdays with week-number column */
     .weekdays{
       display:grid;
-      grid-template-columns: repeat(7, 1fr);
+      grid-template-columns: 62px repeat(7, 1fr);
       gap: 8px;
       margin-bottom: 8px;
       padding: 0 2px;
@@ -238,12 +236,45 @@
       font-size: 12px;
     }
     .weekdays div{ text-align:center; }
+    .weekdays .wlab{
+      text-align:left;
+      padding-left: 6px;
+      opacity: .9;
+      font-weight: 750;
+    }
 
+    /* Days with week-number column */
     .days{
       display:grid;
-      grid-template-columns: repeat(7, 1fr);
+      grid-template-columns: 62px repeat(7, 1fr);
       gap: 10px;
     }
+
+    .weekCell{
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      border-radius: 14px;
+      min-height: 92px;
+      padding: 10px 10px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:flex-start;
+      color: rgba(255,255,255,.70);
+      font-weight: 850;
+      letter-spacing: .2px;
+    }
+    .weekCell .wk{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.18);
+      font-size: 12px;
+      line-height: 1;
+    }
+
     .day{
       border: 1px solid rgba(255,255,255,.10);
       background: rgba(255,255,255,.05);
@@ -283,7 +314,7 @@
       background: rgba(0,0,0,.20);
       font-weight: 750;
       font-size: 12px;
-      line-height: 1;
+      line-height: 1.2;
       letter-spacing:.2px;
       white-space: nowrap;
       max-width: 100%;
@@ -296,23 +327,31 @@
     .pill.birkeroed{ border-color: rgba(62,230,195,.55); background: rgba(62,230,195,.14); }
     .pill.booking{ border-color: rgba(45,212,122,.55); background: rgba(45,212,122,.16); }
 
-    /* Søndag skiftedag pill */
+    .pill.special{
+      border-color: rgba(255,181,94,.55);
+      background: rgba(255,181,94,.14);
+      white-space: normal;
+      overflow: visible;
+      text-overflow: clip;
+      line-height: 1.25;
+      justify-content:flex-start;
+    }
+
     .pill.shiftday{
       font-size: 11px;
       padding: 7px 12px;
-      white-space: nowrap;
+      white-space: normal;
       overflow: visible;
       text-overflow: clip;
-      max-width: 100%;
+      line-height: 1.25;
+      justify-content:flex-start;
     }
 
-    /* Når der ligger en ændring, streg oprindelig familie over */
     .pill.strike{
       text-decoration: line-through;
       opacity: .55;
     }
 
-    /* ===== Form ===== */
     .formGrid{
       display:grid;
       grid-template-columns: 1fr 1fr;
@@ -328,7 +367,7 @@
       color: rgba(255,255,255,.74);
     }
     textarea.field{
-      min-height: 58px; /* mindre note */
+      min-height: 58px;
       resize: vertical;
     }
 
@@ -350,7 +389,7 @@
 
     .listHeaderRow{
       display:flex;
-      align-items:center;
+      align-items:flex-start;
       justify-content:space-between;
       gap: 10px;
     }
@@ -412,11 +451,12 @@
 
     @media (max-width: 980px){
       .grid{ grid-template-columns: 1fr; }
+      .weekdays{ grid-template-columns: 56px repeat(7, 1fr); }
+      .days{ grid-template-columns: 56px repeat(7, 1fr); }
     }
 
     .hidden{ display:none !important; }
 
-    /* ===== Modal ===== */
     .modalBack{
       position:fixed;
       inset:0;
@@ -461,7 +501,6 @@
       gap:10px;
     }
 
-    /* ===== Dropdown for Yderligere info ===== */
     .dropMenu{
       position:absolute;
       top: 48px;
@@ -517,7 +556,6 @@
       </div>
     </header>
 
-    <!-- LOGIN -->
     <section id="loginScreen">
       <div>
         <div class="loginHero">
@@ -541,10 +579,7 @@
       </div>
     </section>
 
-    <!-- APP -->
     <main id="app" class="grid hidden">
-
-      <!-- Calendar -->
       <section class="card">
         <div class="cardInner">
           <div class="calHeader">
@@ -560,6 +595,7 @@
           </div>
 
           <div class="weekdays">
+            <div class="wlab">Uge</div>
             <div>Man</div><div>Tir</div><div>Ons</div><div>Tor</div><div>Fre</div><div>Lør</div><div>Søn</div>
           </div>
 
@@ -567,7 +603,6 @@
         </div>
       </section>
 
-      <!-- Booking panel -->
       <aside class="card">
         <div class="cardInner">
           <h2>Foretag ændringer</h2>
@@ -585,7 +620,7 @@
 
             <div class="full">
               <label for="whoInput">Hvem har huset (kan være familie/venner)</label>
-              <input id="whoInput" class="field" type="text" placeholder="Fx Taastrup / Vennegruppe / etc." />
+              <input id="whoInput" class="field" type="text" placeholder="Fx Birkerød / Vennegruppe / etc." />
             </div>
 
             <div class="full">
@@ -626,11 +661,9 @@
           </div>
         </div>
       </aside>
-
     </main>
   </div>
 
-  <!-- Modal -->
   <div id="modalBack" class="modalBack" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true">
       <div class="head">
@@ -642,14 +675,13 @@
     </div>
   </div>
 
-  <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
     /* =========================================================
        KONFIGURATION
        ========================================================= */
-    const SHARED_CODE = "kalkhavesvej";
+
     const ADMIN_CODE = "Kalkhavesvej100!";
     const FAMILY_CODES = {
       "Taastrup": "Taastrup",
@@ -657,14 +689,31 @@
       "Birkerød": "Birkerød"
     };
 
+    /* Hvis du vil have gæstekode igen, så skriv den her, ellers lad den stå tom */
+    const SHARED_CODE = "";
+
     const SUPABASE_URL = "https://jbweskxscyxjonrhbdcd.supabase.co";
     const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_2qMwF5JFmVmQuf9jJCERxw_25bMzbyu";
 
+    /* Kalenderen er kun for 2026 */
     const YEAR = 2026;
-    const ROTATION = ["Taastrup", "Horsens", "Birkerød"];
-    const ROTATION_START_MONDAY = "2025-12-29";
 
-    /* Supabase tabelnavne */
+    /* Rotation for 2026 */
+    const ROTATION = ["Birkerød", "Horsens", "Taastrup"];
+
+    /*
+      Vi definerer at ugen med ISO uge nr 2 i 2026 er Birkerød.
+      Det giver skiftedag søndag 4. januar 2026 ind i Birkerød.
+    */
+    const ROTATION_START_ISO_WEEK = 2;
+    const ROTATION_START_OWNER = "Birkerød";
+
+    /* Specialuger som ikke tæller med i rotationen */
+    const SPECIAL_WEEKS_2026 = {
+      17: "Generalforsamling",
+      37: "Fællesuge"
+    };
+
     const STAYS_TABLE = "stays";
     const EXTRA_TABLE = "extra_info";
 
@@ -812,8 +861,7 @@
 
       if (code === ADMIN_CODE) return "admin";
 
-      const n = normalize(code);
-      if (n === normalize(SHARED_CODE)) return "shared";
+      if (SHARED_CODE && normalize(code) === normalize(SHARED_CODE)) return "shared";
 
       for (const fam in FAMILY_CODES){
         if ((FAMILY_CODES[fam] || "").trim() === code){
@@ -823,7 +871,7 @@
       return null;
     }
 
-    function tryLogin(){
+    async function tryLogin(){
       clearLoginMsg();
       const entered = (passInput.value || "").trim();
       const role = resolveRoleFromCode(entered);
@@ -838,13 +886,17 @@
       }
 
       setLoggedIn(role);
-      loadStays();
-      loadExtraInfo();
+
+      await Promise.all([
+        loadStays(),
+        loadExtraInfo()
+      ]);
+
       render();
       renderList();
     }
 
-    loginBtn.addEventListener("click", tryLogin);
+    loginBtn.addEventListener("click", ()=>{ tryLogin(); });
     passInput.addEventListener("keydown", (e)=>{ if (e.key === "Enter") tryLogin(); });
     logoutBtn.addEventListener("click", ()=>{ setLoggedOut(); });
 
@@ -860,7 +912,6 @@
       welcomeTitle.textContent = "Velkommen til Samsøhuset - " + roleLabel();
       rebuildVisibilityOptions();
       buildExtraMenu();
-      loadExtraInfo();
     }
 
     function rebuildVisibilityOptions(){
@@ -879,7 +930,7 @@
       const r = getRole();
 
       if (isAdmin()){
-        ["Taastrup","Horsens","Birkerød"].forEach(f=>{
+        ["Birkerød","Horsens","Taastrup"].forEach(f=>{
           const o = document.createElement("option");
           o.value = f;
           o.textContent = "Kun " + f;
@@ -895,7 +946,7 @@
       visibilityInput.value = "";
     }
 
-    /* ===== Kalender ===== */
+    /* ===== Kalender helpers ===== */
     const DK_MONTHS = ["januar","februar","marts","april","maj","juni","juli","august","september","oktober","november","december"];
     const DK_DOW = ["Søn","Man","Tir","Ons","Tor","Fre","Lør"];
 
@@ -915,7 +966,7 @@
       return `${y}-${m}-${da}`;
     }
     function parseISO(s){
-      const [y,m,d] = s.split("-").map(Number);
+      const [y,m,d] = (s || "").split("-").map(Number);
       const dt = new Date(y, m-1, d);
       dt.setHours(12,0,0,0);
       return dt;
@@ -949,24 +1000,17 @@
       const diff = (js === 0) ? -6 : (1 - js);
       return addDays(x, diff);
     }
-    function weekIndexFromRotationStart(monday){
-      const start = parseISO(ROTATION_START_MONDAY);
-      const diffDays = Math.round((monday.getTime()-start.getTime())/(1000*60*60*24));
-      return Math.floor(diffDays / 7);
+
+    function isoWeekInfo(date){
+      const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+      const dayNum = d.getUTCDay() || 7;
+      d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+      const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+      const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+      return { year: d.getUTCFullYear(), week: weekNo };
     }
 
-    function baseOwnerForDate(d){
-      const mon = mondayStart(d);
-      const w = weekIndexFromRotationStart(mon);
-      const idx = ((w % ROTATION.length) + ROTATION.length) % ROTATION.length;
-      const current = ROTATION[idx];
-      const next = ROTATION[(idx+1) % ROTATION.length];
-
-      if (d.getDay() === 0){
-        return { type:"shift", current, next };
-      }
-      return { type:"single", owner: current };
-    }
+    function pad2(n){ return String(n).padStart(2,"0"); }
 
     function ownerClass(name){
       const n = (name||"").toLowerCase();
@@ -974,6 +1018,81 @@
       if (n.includes("horsens")) return "horsens";
       if (n.includes("birker")) return "birkeroed";
       return "";
+    }
+
+    function isSpecialWeek(isoWeek){
+      if (!isoWeek) return false;
+      if (isoWeek.year !== YEAR) return false;
+      return !!SPECIAL_WEEKS_2026[isoWeek.week];
+    }
+
+    function specialLabel(isoWeek){
+      return SPECIAL_WEEKS_2026[isoWeek.week] || "";
+    }
+
+    function rotationIndexOfOwner(owner){
+      const idx = ROTATION.indexOf(owner);
+      return idx >= 0 ? idx : 0;
+    }
+
+    function ownerForIsoWeek(isoWeek){
+      if (!isoWeek || isoWeek.year !== YEAR) return { type: "out", label: "" };
+
+      if (isSpecialWeek(isoWeek)){
+        return { type: "special", label: specialLabel(isoWeek) };
+      }
+
+      const baseWeek = ROTATION_START_ISO_WEEK;
+      let idx = rotationIndexOfOwner(ROTATION_START_OWNER);
+
+      if (isoWeek.week === baseWeek){
+        return { type: "owner", owner: ROTATION[idx] };
+      }
+
+      if (isoWeek.week > baseWeek){
+        for (let w = baseWeek; w < isoWeek.week; w++){
+          if (SPECIAL_WEEKS_2026[w]) continue;
+          idx = (idx + 1) % ROTATION.length;
+        }
+        return { type: "owner", owner: ROTATION[idx] };
+      }
+
+      for (let w = baseWeek - 1; w >= isoWeek.week; w--){
+        if (SPECIAL_WEEKS_2026[w]) continue;
+        idx = (idx - 1 + ROTATION.length) % ROTATION.length;
+      }
+      return { type: "owner", owner: ROTATION[idx] };
+    }
+
+    function baseInfoForDate(d){
+      const mon = mondayStart(d);
+      const w = isoWeekInfo(mon);
+
+      if (w.year !== YEAR){
+        return { type: "out", label: "" };
+      }
+
+      if (d.getDay() === 0){
+        const currentWeek = w;
+        const nextWeek = isoWeekInfo(addDays(mon, 7));
+
+        const cur = ownerForIsoWeek(currentWeek);
+        const nxt = ownerForIsoWeek(nextWeek);
+
+        const curLabel = cur.type === "special" ? cur.label : (cur.owner || "");
+        const nxtLabel = nxt.type === "special" ? nxt.label : (nxt.owner || "");
+
+        return {
+          type: "shift",
+          current: cur,
+          next: nxt,
+          text: `Skiftedag: ${curLabel} → ${nxtLabel}`
+        };
+      }
+
+      const own = ownerForIsoWeek(w);
+      if (own.type === "special") return { type: "special", label: own.label, week: w.week };
+      return { type: "owner", owner: own.owner, week: w.week };
     }
 
     function getViewerRoleForVisibility(){
@@ -1034,76 +1153,121 @@
       const start = firstMonday;
 
       daysEl.innerHTML = "";
-      for (let i=0; i<42; i++){
-        const d = addDays(start, i);
-        const inThisMonth = d.getMonth() === view.getMonth();
 
-        const day = document.createElement("div");
-        day.className = "day" + (inThisMonth ? "" : " muted");
+      for (let row = 0; row < 6; row++){
+        const rowMonday = addDays(start, row * 7);
+        const wInfo = isoWeekInfo(rowMonday);
 
-        const top = document.createElement("div");
-        top.className = "dayTop";
+        const wc = document.createElement("div");
+        wc.className = "weekCell";
+        const wk = document.createElement("div");
+        wk.className = "wk";
+        wk.textContent = (wInfo.year === YEAR) ? ("Uge " + pad2(wInfo.week)) : "";
+        wc.appendChild(wk);
+        daysEl.appendChild(wc);
 
-        const num = document.createElement("div");
-        num.className = "num";
-        num.textContent = String(d.getDate());
+        for (let col = 0; col < 7; col++){
+          const i = row * 7 + col;
+          const d = addDays(start, i);
+          const inThisMonth = d.getMonth() === view.getMonth();
+          const inYear = d.getFullYear() === YEAR;
 
-        const dow = document.createElement("div");
-        dow.className = "dow";
-        dow.textContent = DK_DOW[d.getDay()];
+          const day = document.createElement("div");
+          day.className = "day" + (inThisMonth && inYear ? "" : " muted");
 
-        top.appendChild(num);
-        top.appendChild(dow);
-        day.appendChild(top);
+          const top = document.createElement("div");
+          top.className = "dayTop";
 
-        const base = baseOwnerForDate(d);
-        const visibleStay = findStayForDateVisible(d);
+          const num = document.createElement("div");
+          num.className = "num";
+          num.textContent = String(d.getDate());
 
-        if (base.type === "shift"){
-          /* Søndag: farve skal følge NÆSTE uge (next), og label skal være "Skiftedag:" */
-          const p = document.createElement("div");
-          p.className = "pill shiftday " + ownerClass(base.next);
-          p.textContent = `Skiftedag: ${base.current} → ${base.next}`;
-          p.title = `Skiftedag: ${base.current} → ${base.next}`;
-          day.appendChild(p);
-        } else {
-          const p = document.createElement("div");
-          p.className = "pill " + ownerClass(base.owner);
-          p.textContent = base.owner;
+          const dow = document.createElement("div");
+          dow.className = "dow";
+          dow.textContent = DK_DOW[d.getDay()];
 
-          if (visibleStay){
-            p.classList.add("strike");
-            p.title = "Denne periode er ændret";
+          top.appendChild(num);
+          top.appendChild(dow);
+          day.appendChild(top);
+
+          if (!inYear){
+            const p = document.createElement("div");
+            p.className = "pill special";
+            p.textContent = "Kun 2026";
+            day.appendChild(p);
+            daysEl.appendChild(day);
+            continue;
           }
 
-          day.appendChild(p);
-        }
+          const base = baseInfoForDate(d);
+          const visibleStay = findStayForDateVisible(d);
 
-        if (visibleStay){
-          const b = document.createElement("div");
-          b.className = "pill booking";
-          b.textContent = `Bruges af: ${visibleStay.family}`;
-          day.appendChild(b);
-        }
+          if (base.type === "shift"){
+            const p = document.createElement("div");
 
-        if (selectedStart && sameDay(d, selectedStart)) {
-          day.style.outline = "2px solid rgba(45,212,122,.85)";
-          day.style.outlineOffset = "2px";
-        }
-        if (selectedEnd && sameDay(d, selectedEnd)) {
-          day.style.outline = "2px solid rgba(45,212,122,.85)";
-          day.style.outlineOffset = "2px";
-        }
-        if (selectedStart && selectedEnd && inRange(d, selectedStart, selectedEnd)){
-          day.style.borderColor = "rgba(45,212,122,.35)";
-          day.style.background = "rgba(45,212,122,.08)";
-        }
+            const nextClass =
+              base.next.type === "owner"
+                ? ownerClass(base.next.owner)
+                : "special";
 
-        if (inThisMonth){
-          day.addEventListener("click", ()=> onDayClick(d));
-        }
+            p.className = "pill shiftday " + nextClass;
+            p.textContent = base.text;
+            p.title = base.text;
+            day.appendChild(p);
 
-        daysEl.appendChild(day);
+          } else if (base.type === "special"){
+            const p = document.createElement("div");
+            p.className = "pill special";
+            p.textContent = base.label;
+            p.title = base.label;
+            day.appendChild(p);
+
+          } else {
+            const p = document.createElement("div");
+            p.className = "pill " + ownerClass(base.owner);
+            p.textContent = base.owner;
+
+            if (visibleStay){
+              p.classList.add("strike");
+              p.title = "Denne periode er ændret";
+            }
+
+            day.appendChild(p);
+          }
+
+          if (visibleStay){
+            const b = document.createElement("div");
+            b.className = "pill booking";
+            b.textContent = visibleStay.family || "Bruges";
+            b.title = `Bruges af: ${visibleStay.family || ""}`;
+            day.appendChild(b);
+          }
+
+          if (selectedStart && sameDay(d, selectedStart)) {
+            day.style.outline = "2px solid rgba(45,212,122,.85)";
+            day.style.outlineOffset = "2px";
+          } else if (selectedEnd && sameDay(d, selectedEnd)) {
+            day.style.outline = "2px solid rgba(45,212,122,.85)";
+            day.style.outlineOffset = "2px";
+          } else {
+            day.style.outline = "";
+            day.style.outlineOffset = "";
+          }
+
+          if (selectedStart && selectedEnd && inRange(d, selectedStart, selectedEnd)){
+            day.style.borderColor = "rgba(45,212,122,.35)";
+            day.style.background = "rgba(45,212,122,.08)";
+          } else {
+            day.style.borderColor = "";
+            day.style.background = "";
+          }
+
+          if (inThisMonth && inYear){
+            day.addEventListener("click", ()=> onDayClick(d));
+          }
+
+          daysEl.appendChild(day);
+        }
       }
     }
 
@@ -1186,7 +1350,6 @@
         return;
       }
 
-      /* Ikke-admin må kun vælge sin egen familie eller all */
       if (!isAdmin()){
         if (isFamilyRole()){
           if (!(vis === "all" || vis === getRole())){
@@ -1203,14 +1366,12 @@
 
       const [a,b] = clampDateOrder(s, e);
 
-      /* Kun ændringer fra i morgen */
       const minISO = minStartDateISO();
       if (a < minISO){
         setStatus("Du kan kun lave ændringer fra i morgen.", false);
         return;
       }
 
-      /* Ingen overlap (uanset synlighed) */
       if (overlapsExisting(a, b, editingId)){
         setStatus("Der findes allerede en ændring i den valgte periode. Slet den først, hvis du vil lave en ny.", false);
         return;
@@ -1431,20 +1592,28 @@
       renderList();
     });
 
-    /* ===== Top navigation ===== */
+    /* ===== Top navigation låst til 2026 ===== */
+    function clampViewTo2026(d){
+      const x = new Date(d);
+      if (x.getFullYear() < YEAR) return new Date(YEAR, 0, 1, 12,0,0,0);
+      if (x.getFullYear() > YEAR) return new Date(YEAR, 11, 1, 12,0,0,0);
+      return x;
+    }
+
     prevBtn.addEventListener("click", ()=>{
-      view = new Date(view.getFullYear(), view.getMonth()-1, 1);
-      view.setHours(12,0,0,0);
+      const n = new Date(view.getFullYear(), view.getMonth()-1, 1, 12,0,0,0);
+      view = clampViewTo2026(n);
       render();
     });
     nextBtn.addEventListener("click", ()=>{
-      view = new Date(view.getFullYear(), view.getMonth()+1, 1);
-      view.setHours(12,0,0,0);
+      const n = new Date(view.getFullYear(), view.getMonth()+1, 1, 12,0,0,0);
+      view = clampViewTo2026(n);
       render();
     });
     todayBtn.addEventListener("click", ()=>{
-      view = new Date();
-      view.setHours(12,0,0,0);
+      const t = new Date();
+      const n = new Date(t.getFullYear(), t.getMonth(), 1, 12,0,0,0);
+      view = clampViewTo2026(n);
       render();
     });
 
@@ -1744,18 +1913,24 @@
     });
 
     /* ===== Init ===== */
-    (function init(){
+    (async function init(){
+      render();
+      renderList();
+
       if (isLoggedIn()){
         showApp();
         applyRoleUI();
-        loadStays();
-        loadExtraInfo();
+
+        await Promise.all([
+          loadStays(),
+          loadExtraInfo()
+        ]);
+
+        render();
+        renderList();
       } else {
         showLogin();
       }
-
-      render();
-      renderList();
     })();
   </script>
 </body>
