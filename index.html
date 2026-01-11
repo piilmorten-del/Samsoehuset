@@ -31,7 +31,6 @@
       overflow-x:hidden;
     }
 
-    /* ===== Background image ===== */
     .bg{
       position:fixed; inset:0;
       background-image: url("bg.jpg");
@@ -95,16 +94,14 @@
     }
     .btnPrimary:hover{ background: rgba(45,212,122,.20); border-color: rgba(45,212,122,.62); }
 
-    /* ===== Layout ===== */
     .grid{
       display:grid;
       grid-template-columns: minmax(0, 1.65fr) minmax(260px, 360px);
       gap: 16px;
-      align-items: stretch; /* sørger for at begge kolonner i rækken strækker sig lige meget */
+      align-items: stretch;
     }
     .grid > *{ min-width: 0; }
 
-    /* få begge cards til at fylde samme højde i grid-rækken */
     .grid > .card{
       height: 100%;
       display:flex;
@@ -138,7 +135,6 @@
       font-size: 13px;
     }
 
-    /* ===== Login screen ===== */
     #loginScreen{
       min-height: calc(100vh - 48px);
       display:flex;
@@ -200,7 +196,6 @@
     }
     .msg.ok{ color: rgba(205,255,225,.92); }
 
-    /* ===== Calendar ===== */
     .calHeader{
       display:flex;
       align-items:center;
@@ -272,6 +267,7 @@
       cursor: default;
     }
     .day.muted:hover{ background: rgba(255,255,255,.05); border-color: rgba(255,255,255,.10); }
+
     .dayTop{
       display:flex; justify-content:space-between; align-items:baseline;
       gap: 8px;
@@ -302,8 +298,8 @@
     .pill.horsens{ border-color: rgba(183,123,255,.55); background: rgba(183,123,255,.14); }
     .pill.birkeroed{ border-color: rgba(62,230,195,.55); background: rgba(62,230,195,.14); }
     .pill.booking{ border-color: rgba(45,212,122,.55); background: rgba(45,212,122,.16); }
+    .pill.private{ border-color: rgba(255,255,255,.22); background: rgba(255,255,255,.08); }
 
-    /* Skiftedag-pill: må gerne bryde linje, så teksten kan læses */
     .pill.shiftday{
       white-space: normal;
       text-overflow: clip;
@@ -312,7 +308,6 @@
       padding: 7px 10px;
     }
 
-    /* Ændrede dage */
     .day.changed{
       border-color: rgba(45,212,122,.55);
       background: rgba(45,212,122,.10);
@@ -323,7 +318,6 @@
       background: rgba(45,212,122,.12);
     }
 
-    /* Oprindelig ejer når der er en ændring */
     .pill.original{
       opacity: .55;
       text-decoration: line-through;
@@ -332,7 +326,6 @@
       filter: saturate(.8);
     }
 
-    /* ===== Form ===== */
     .formGrid{
       display:grid;
       grid-template-columns: 1fr 1fr;
@@ -347,7 +340,7 @@
       font-size: 12px;
       color: rgba(255,255,255,.74);
     }
-    textarea.field{ min-height: 92px; resize: vertical; }
+    textarea.field{ min-height: 56px; resize: vertical; }
 
     .rowBtns{
       display:flex;
@@ -406,6 +399,10 @@
       line-height: 1.25;
       white-space: normal;
       word-break: break-word;
+    }
+    .item .meta .vis{
+      color: rgba(255,255,255,.72);
+      font-size: 12px;
     }
 
     .danger{
@@ -508,6 +505,13 @@
             </div>
 
             <div class="full">
+              <label for="visibilitySelect">Synlighed</label>
+              <select id="visibilitySelect" class="field">
+                <option value="all">Ses af alle</option>
+              </select>
+            </div>
+
+            <div class="full">
               <label for="noteInput">Note (valgfri)</label>
               <textarea id="noteInput" class="field" placeholder="Kort note"></textarea>
             </div>
@@ -533,8 +537,13 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
-    const SHARED_CODE = "kalkhavesvej";
     const ADMIN_CODE = "Kalkhavesvej100!";
+    const FAMILY_CODES = {
+      "Taastrup": "taastrup",
+      "Horsens": "horsens",
+      "Birkerød": "birkeroed"
+    };
+    const DEFAULT_SHARED_CODE = "kalkhavesvej";
 
     const SUPABASE_URL = "https://jbweskxscyxjonrhbdcd.supabase.co";
     const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_2qMwF5JFmVmQuf9jJCERxw_25bMzbyu";
@@ -562,6 +571,7 @@
     const endInput = document.getElementById("endInput");
     const whoInput = document.getElementById("whoInput");
     const changedByInput = document.getElementById("changedByInput");
+    const visibilitySelect = document.getElementById("visibilitySelect");
     const noteInput = document.getElementById("noteInput");
     const resetBtn = document.getElementById("resetBtn");
     const saveBtn = document.getElementById("saveBtn");
@@ -587,11 +597,13 @@
     function isLoggedIn(){ return localStorage.getItem("samsoehuset_ok") === "1"; }
     function getRole(){ return localStorage.getItem("samsoehuset_role") || "user"; }
     function isAdmin(){ return getRole() === "admin"; }
+    function isFamilyRole(){ return ["taastrup","horsens","birkeroed"].includes(getRole()); }
 
     function setLoggedIn(role){
       localStorage.setItem("samsoehuset_ok", "1");
       localStorage.setItem("samsoehuset_role", role);
       showApp();
+      configureVisibilitySelect();
     }
     function setLoggedOut(){
       localStorage.removeItem("samsoehuset_ok");
@@ -610,27 +622,64 @@
       app.classList.remove("hidden");
     }
 
+    function configureVisibilitySelect(){
+      visibilitySelect.innerHTML = "";
+      const optAll = document.createElement("option");
+      optAll.value = "all";
+      optAll.textContent = "Ses af alle";
+      visibilitySelect.appendChild(optAll);
+
+      if (isAdmin()){
+        const o1 = document.createElement("option");
+        o1.value = "taastrup";
+        o1.textContent = "Kun Taastrup";
+        const o2 = document.createElement("option");
+        o2.value = "horsens";
+        o2.textContent = "Kun Horsens";
+        const o3 = document.createElement("option");
+        o3.value = "birkeroed";
+        o3.textContent = "Kun Birkerød";
+        visibilitySelect.appendChild(o1);
+        visibilitySelect.appendChild(o2);
+        visibilitySelect.appendChild(o3);
+        return;
+      }
+
+      if (isFamilyRole()){
+        const role = getRole();
+        const txt = role === "taastrup" ? "Kun Taastrup" : role === "horsens" ? "Kun Horsens" : "Kun Birkerød";
+        const optOwn = document.createElement("option");
+        optOwn.value = role;
+        optOwn.textContent = txt;
+        visibilitySelect.appendChild(optOwn);
+      }
+    }
+
     function tryLogin(){
       clearLoginMsg();
       const enteredRaw = (passInput.value || "").toString().trim();
-      const entered = normalize(enteredRaw);
-
-      const shared = normalize(SHARED_CODE);
-      const admin = ADMIN_CODE.toString().trim();
 
       if (!enteredRaw){
         setLoginMsg("Skriv koden først.");
         return;
       }
 
-      if (entered === shared){
-        setLoggedIn("user");
+      if (enteredRaw === ADMIN_CODE){
+        setLoggedIn("admin");
         loadStays();
         return;
       }
 
-      if (enteredRaw === admin){
-        setLoggedIn("admin");
+      for (const [code, role] of Object.entries(FAMILY_CODES)){
+        if (enteredRaw === code){
+          setLoggedIn(role);
+          loadStays();
+          return;
+        }
+      }
+
+      if (normalize(enteredRaw) === normalize(DEFAULT_SHARED_CODE)){
+        setLoggedIn("user");
         loadStays();
         return;
       }
@@ -733,6 +782,23 @@
       return "";
     }
 
+    function labelVisibility(v){
+      const val = (v || "all").toString().toLowerCase();
+      if (val === "all") return "Synlig: alle";
+      if (val === "taastrup") return "Synlig: kun Taastrup";
+      if (val === "horsens") return "Synlig: kun Horsens";
+      if (val === "birkeroed") return "Synlig: kun Birkerød";
+      return "Synlighed: ukendt";
+    }
+
+    function canSeeStay(s){
+      const v = (s.visibility || "all").toString().toLowerCase();
+      if (isAdmin()) return true;
+      if (v === "all") return true;
+      if (isFamilyRole() && v === getRole()) return true;
+      return false;
+    }
+
     function setStatus(text, ok=true){
       statusEl.textContent = text;
       statusEl.style.display = "block";
@@ -763,7 +829,7 @@
     async function loadStays(){
       const client = getSupabaseClient();
       if (!client){
-        setStatus("Kunde ikke forbinde lige nu. Prøv at genindlæse.", false);
+        setStatus("Kunne ikke forbinde lige nu. Prøv at genindlæse.", false);
         return;
       }
 
@@ -778,7 +844,9 @@
         return;
       }
 
-      stays = Array.isArray(data) ? data : [];
+      const all = Array.isArray(data) ? data : [];
+      stays = all.filter(canSeeStay);
+
       render();
       renderList();
     }
@@ -794,6 +862,7 @@
       const who = (whoInput.value || "").trim();
       const changedBy = (changedByInput.value || "").trim();
       const note = (noteInput.value || "").trim();
+      const vis = (visibilitySelect.value || "all").toString().toLowerCase();
 
       if (!s || !e){
         setStatus("Vælg både start og slut.", false);
@@ -821,6 +890,19 @@
         return;
       }
 
+      if (!isAdmin() && isFamilyRole()){
+        if (!(vis === "all" || vis === getRole())){
+          setStatus("Ugyldig synlighed.", false);
+          return;
+        }
+      }
+      if (!isAdmin() && !isFamilyRole()){
+        if (vis !== "all"){
+          setStatus("Du kan kun gemme synligt for alle.", false);
+          return;
+        }
+      }
+
       const client = getSupabaseClient();
       if (!client){
         setStatus("Kunne ikke forbinde.", false);
@@ -832,7 +914,8 @@
         end_date: b,
         family: who,
         booked_by: changedBy,
-        note: note
+        note: note,
+        visibility: vis
       };
 
       const { error } = await client.from("stays").insert(payload);
@@ -870,6 +953,7 @@
       whoInput.value = "";
       changedByInput.value = "";
       noteInput.value = "";
+      visibilitySelect.value = "all";
       if (clearSelection){
         selectedStart = null;
         selectedEnd = null;
@@ -937,7 +1021,6 @@
 
         if (base.type === "shift"){
           const p = document.createElement("div");
-          /* Farve på søndag skal tilhøre NÆSTE uge (base.next) */
           p.className = "pill shiftday " + ownerClass(base.next) + (stay ? " original" : "");
           p.textContent = `Skiftedag: ${base.current} → ${base.next}`;
           day.appendChild(p);
@@ -953,6 +1036,14 @@
           b.className = "pill booking";
           b.textContent = `Bruges af: ${stay.family}`;
           day.appendChild(b);
+
+          const vis = (stay.visibility || "all").toString().toLowerCase();
+          if (vis !== "all"){
+            const pr = document.createElement("div");
+            pr.className = "pill private";
+            pr.textContent = "Privat";
+            day.appendChild(pr);
+          }
         }
 
         if (selectedStart && sameDay(d, selectedStart)) {
@@ -995,9 +1086,14 @@
       by.className = "by";
       by.textContent = `Ændret af: ${s.booked_by || "-"}`;
 
+      const vis = document.createElement("div");
+      vis.className = "vis";
+      vis.textContent = labelVisibility(s.visibility);
+
       meta.appendChild(who);
       meta.appendChild(dates);
       meta.appendChild(by);
+      meta.appendChild(vis);
 
       if (s.note && String(s.note).trim()){
         const note = document.createElement("div");
@@ -1100,6 +1196,7 @@
 
       if (isLoggedIn()){
         showApp();
+        configureVisibilitySelect();
         loadStays();
       } else {
         showLogin();
