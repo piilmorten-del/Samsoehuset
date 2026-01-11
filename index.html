@@ -59,6 +59,7 @@
       justify-content:space-between;
       gap:16px;
       margin-bottom: 16px;
+      position: relative;
     }
     .title h1{
       margin:0;
@@ -72,8 +73,42 @@
       font-size: 14px;
     }
 
+    .welcome{
+      position:absolute;
+      left:50%;
+      transform: translateX(-50%);
+      top: 6px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      pointer-events:none;
+      text-align:center;
+      min-width: 220px;
+    }
+    .welcome .pillWelcome{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(0,0,0,.18);
+      font-weight: 800;
+      letter-spacing:.2px;
+      color: rgba(255,255,255,.92);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+      white-space: nowrap;
+      max-width: 70vw;
+      overflow:hidden;
+      text-overflow: ellipsis;
+    }
+
     .topActions{
       display:flex; align-items:center; gap:10px;
+      position: relative;
+      z-index: 2;
     }
     .btn{
       border: 1px solid var(--stroke2);
@@ -188,7 +223,7 @@
       box-shadow: 0 0 0 4px rgba(255,255,255,.07);
     }
 
-    /* Gør dropdown tydeligere (liste + valgt) */
+    /* Dropdown læsbarhed */
     select.field{
       background: rgba(255,255,255,.10);
       border-color: rgba(255,255,255,.18);
@@ -422,6 +457,8 @@
 
     @media (max-width: 980px){
       .grid{ grid-template-columns: 1fr; }
+      header{ padding-top: 40px; }
+      .welcome{ top: 0; }
     }
 
     .hidden{ display:none !important; }
@@ -436,6 +473,10 @@
       <div class="title">
         <h1>Samsøhuset</h1>
         <p>Kalender og eventuelle ændringer</p>
+      </div>
+
+      <div id="welcomeWrap" class="welcome hidden">
+        <div id="welcomeText" class="pillWelcome">Velkommen</div>
       </div>
 
       <div class="topActions">
@@ -517,7 +558,7 @@
             <div class="full">
               <label for="visibilitySelect">Synlighed</label>
               <select id="visibilitySelect" class="field">
-                <option value="all">Ses af alle</option>
+                <option value="" selected disabled>Vælg synlighed…</option>
               </select>
             </div>
 
@@ -563,6 +604,8 @@
     const ROTATION_START_MONDAY = "2025-12-29";
 
     const appHeader = document.getElementById("appHeader");
+    const welcomeWrap = document.getElementById("welcomeWrap");
+    const welcomeText = document.getElementById("welcomeText");
 
     const loginScreen = document.getElementById("loginScreen");
     const app = document.getElementById("app");
@@ -609,11 +652,31 @@
     function isAdmin(){ return getRole() === "admin"; }
     function isFamilyRole(){ return ["taastrup","horsens","birkeroed"].includes(getRole()); }
 
+    function roleLabel(){
+      if (isAdmin()) return "Administrator";
+      const r = getRole();
+      if (r === "taastrup") return "Taastrup";
+      if (r === "horsens") return "Horsens";
+      if (r === "birkeroed") return "Birkerød";
+      return "Gæst";
+    }
+
+    function updateWelcome(){
+      if (!isLoggedIn()){
+        welcomeWrap.classList.add("hidden");
+        return;
+      }
+      const label = roleLabel();
+      welcomeText.textContent = `Velkommen ${label}`;
+      welcomeWrap.classList.remove("hidden");
+    }
+
     function setLoggedIn(role){
       localStorage.setItem("samsoehuset_ok", "1");
       localStorage.setItem("samsoehuset_role", role);
       showApp();
       configureVisibilitySelect();
+      updateWelcome();
       resetForm(true);
     }
     function setLoggedOut(){
@@ -639,6 +702,14 @@
 
     function configureVisibilitySelect(){
       visibilitySelect.innerHTML = "";
+
+      const ph = document.createElement("option");
+      ph.value = "";
+      ph.textContent = "Vælg synlighed…";
+      ph.disabled = true;
+      ph.selected = true;
+      visibilitySelect.appendChild(ph);
+
       const optAll = document.createElement("option");
       optAll.value = "all";
       optAll.textContent = "Ses af alle";
@@ -837,8 +908,21 @@
       endInput.min = min;
     }
 
-    function overlapsExisting(a, b){
-      return stays.some(x => (x.start_date || "") <= b && (x.end_date || "") >= a);
+    async function hasOverlapInDb(a, b){
+      const client = getSupabaseClient();
+      if (!client) return true;
+
+      const { data, error } = await client
+        .from("stays")
+        .select("id,start_date,end_date")
+        .lte("start_date", b)
+        .gte("end_date", a);
+
+      if (error){
+        console.error(error);
+        return true;
+      }
+      return Array.isArray(data) && data.length > 0;
     }
 
     async function loadStays(){
@@ -877,7 +961,7 @@
       const who = (whoInput.value || "").trim();
       const changedBy = (changedByInput.value || "").trim();
       const note = (noteInput.value || "").trim();
-      const vis = (visibilitySelect.value || "all").toString().toLowerCase();
+      const vis = (visibilitySelect.value || "").toString().toLowerCase();
 
       if (!s || !e){
         setStatus("Vælg både start og slut.", false);
@@ -891,17 +975,16 @@
         setStatus("Skriv hvem der har ændret.", false);
         return;
       }
+      if (!vis){
+        setStatus("Vælg synlighed.", false);
+        return;
+      }
 
       const [a,b] = clampDateOrder(s, e);
 
       const min = tomorrowISO();
       if (a < min || b < min){
         setStatus("Du kan kun lave ændringer fra i morgen og frem.", false);
-        return;
-      }
-
-      if (overlapsExisting(a, b)){
-        setStatus("Der findes allerede en ændring på en eller flere af de valgte datoer. Slet den eksisterende ændring først.", false);
         return;
       }
 
@@ -916,6 +999,12 @@
           setStatus("Du kan kun gemme synligt for alle.", false);
           return;
         }
+      }
+
+      const overlap = await hasOverlapInDb(a, b);
+      if (overlap){
+        setStatus("Der findes allerede en ændring på en eller flere af de valgte datoer. Slet den eksisterende ændring først.", false);
+        return;
       }
 
       const client = getSupabaseClient();
@@ -968,7 +1057,7 @@
       whoInput.value = "";
       changedByInput.value = "";
       noteInput.value = "";
-      visibilitySelect.value = "all";
+      visibilitySelect.value = "";
       if (clearSelection){
         selectedStart = null;
         selectedEnd = null;
@@ -1203,6 +1292,7 @@
       if (isLoggedIn()){
         showApp();
         configureVisibilitySelect();
+        updateWelcome();
         resetForm(true);
         loadStays();
       } else {
