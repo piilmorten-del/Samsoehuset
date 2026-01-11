@@ -706,7 +706,7 @@
       statusEl.textContent = text;
       statusEl.style.display = "block";
       statusEl.style.color = ok ? "rgba(205,255,225,.92)" : "rgba(255,220,220,.92)";
-      setTimeout(()=>{ statusEl.style.display = "none"; }, 2500);
+      setTimeout(()=>{ statusEl.style.display = "none"; }, 3200);
     }
 
     function confirmDeleteStay(stay){
@@ -723,6 +723,10 @@
       const min = tomorrowISO();
       startInput.min = min;
       endInput.min = min;
+    }
+
+    function overlapsExisting(a, b){
+      return stays.some(x => (x.start_date || "") <= b && (x.end_date || "") >= a);
     }
 
     async function loadStays(){
@@ -778,6 +782,11 @@
       const min = tomorrowISO();
       if (a < min || b < min){
         setStatus("Du kan kun lave ændringer fra i morgen og frem.", false);
+        return;
+      }
+
+      if (overlapsExisting(a, b)){
+        setStatus("Der findes allerede en ændring på en eller flere af de valgte datoer. Slet den eksisterende ændring først.", false);
         return;
       }
 
@@ -1031,7 +1040,7 @@
         if (!showPast) pastWrap.classList.add("hidden");
 
         for (const s of past){
-          pastWrap.appendChild(createStayItem(s, false));
+          pastWrap.appendChild(createStayItem(s, true));
         }
 
         toggle.addEventListener("click", ()=>{
