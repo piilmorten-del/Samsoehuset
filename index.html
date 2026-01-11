@@ -90,6 +90,7 @@
       cursor:pointer;
       transition: transform .08s ease, background .18s ease, border-color .18s ease;
       user-select:none;
+      -webkit-tap-highlight-color: transparent;
     }
     .btn:hover{ background: rgba(255,255,255,.10); border-color: rgba(255,255,255,.22); }
     .btn:active{ transform: translateY(1px); }
@@ -127,6 +128,7 @@
       font-size: 13px;
     }
 
+    /* ===== Login screen ===== */
     #loginScreen{
       min-height: calc(100vh - 48px);
       display:flex;
@@ -147,12 +149,7 @@
       margin: 0;
       line-height: 1.02;
     }
-    .loginHero .small{
-      margin: 10px 0 0;
-      font-size: 18px;
-      color: rgba(255,255,255,.78);
-      letter-spacing: .2px;
-    }
+    /* .loginHero .small er stadig i CSS, men vi viser den ikke længere i HTML */
 
     .loginBox{
       width: min(560px, 96vw);
@@ -198,6 +195,7 @@
     }
     .msg.ok{ color: rgba(205,255,225,.92); }
 
+    /* ===== Calendar ===== */
     .calHeader{
       display:flex;
       align-items:center;
@@ -224,6 +222,12 @@
       display:flex; align-items:center; gap:10px;
     }
     .nav .btn{ padding: 10px 12px; min-width: 44px; }
+
+    /* Wrapper der gør det muligt at swipe/scroll kalenderen horisontalt på mobil */
+    .calScroll{
+      overflow-x: visible;
+      overflow-y: hidden;
+    }
 
     .weekdays{
       display:grid;
@@ -287,6 +291,7 @@
       user-select:none;
       position:relative;
       overflow: visible;
+      -webkit-tap-highlight-color: transparent;
     }
     .day:hover{ border-color: rgba(255,255,255,.18); background: rgba(255,255,255,.07); }
     .day:active{ transform: translateY(1px); }
@@ -350,6 +355,7 @@
       opacity: .55;
     }
 
+    /* ===== Form ===== */
     .formGrid{
       display:grid;
       grid-template-columns: 1fr 1fr;
@@ -449,12 +455,54 @@
 
     @media (max-width: 980px){
       .grid{ grid-template-columns: 1fr; }
+
+      /* mobil: header sticky så man altid har log ud osv. */
+      #appHeader{
+        position: sticky;
+        top: 0;
+        z-index: 40;
+        background: rgba(11,15,20,.70);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        padding-top: 10px;
+        margin-top: -10px;
+      }
+
+      /* mobil: kalender kan swipes horisontalt uden at vi ændrer struktur */
+      .calScroll{
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 6px;
+      }
+      .weekdays, .days{
+        min-width: 760px;
+      }
+
+      /* mobil: lidt større touch targets */
+      .day{ min-height: 110px; padding: 12px; }
+      .nav .btn{ min-width: 46px; padding: 12px 12px; }
+      .btn{ padding: 12px 14px; }
+
+      /* mobil: pills lidt kompakte og må gerne wrap */
+      .pill{
+        font-size: 11px;
+        line-height: 1.25;
+        white-space: normal;
+        overflow: visible;
+        text-overflow: clip;
+      }
+      .pill.booking{
+        justify-content:flex-start;
+      }
+
+      /* mobil: ugekolonne lidt smallere */
       .weekdays{ grid-template-columns: 56px repeat(7, 1fr); }
       .days{ grid-template-columns: 56px repeat(7, 1fr); }
     }
 
     .hidden{ display:none !important; }
 
+    /* ===== Modal ===== */
     .modalBack{
       position:fixed;
       inset:0;
@@ -497,8 +545,10 @@
       display:flex;
       justify-content:flex-end;
       gap:10px;
+      flex-wrap: wrap;
     }
 
+    /* ===== Dropdown for Yderligere info ===== */
     .dropMenu{
       position:absolute;
       top: 48px;
@@ -510,7 +560,7 @@
       box-shadow: 0 18px 50px rgba(0,0,0,.65);
       display:none;
       overflow:hidden;
-      z-index: 30;
+      z-index: 60;
     }
     .dropMenu.show{ display:block; }
     .dropMenu button{
@@ -554,11 +604,12 @@
       </div>
     </header>
 
+    <!-- LOGIN -->
     <section id="loginScreen">
       <div>
         <div class="loginHero">
           <h1 class="big">Samsøhuset</h1>
-          <p class="small">Hvem og hvornår</p>
+          <!-- Fjernet: <p class="small">Hvem og hvornår</p> -->
         </div>
 
         <div class="card loginBox">
@@ -577,7 +628,10 @@
       </div>
     </section>
 
+    <!-- APP -->
     <main id="app" class="grid hidden">
+
+      <!-- Calendar -->
       <section class="card">
         <div class="cardInner">
           <div class="calHeader">
@@ -592,15 +646,18 @@
             </div>
           </div>
 
-          <div class="weekdays">
-            <div class="wlab">Uge</div>
-            <div>Man</div><div>Tir</div><div>Ons</div><div>Tor</div><div>Fre</div><div>Lør</div><div>Søn</div>
-          </div>
+          <div class="calScroll">
+            <div class="weekdays">
+              <div class="wlab">Uge</div>
+              <div>Man</div><div>Tir</div><div>Ons</div><div>Tor</div><div>Fre</div><div>Lør</div><div>Søn</div>
+            </div>
 
-          <div id="days" class="days"></div>
+            <div id="days" class="days"></div>
+          </div>
         </div>
       </section>
 
+      <!-- Booking panel -->
       <aside class="card">
         <div class="cardInner">
           <h2>Foretag ændringer</h2>
@@ -659,9 +716,11 @@
           </div>
         </div>
       </aside>
+
     </main>
   </div>
 
+  <!-- Modal -->
   <div id="modalBack" class="modalBack" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true">
       <div class="head">
@@ -673,6 +732,7 @@
     </div>
   </div>
 
+  <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
@@ -1173,7 +1233,7 @@
           top.appendChild(dow);
           day.appendChild(top);
 
-          /* ÆNDRING: ingen "Kun 2026" label på dage udenfor 2026 */
+          /* Udenfor 2026: ingen label/pill, bare dato */
           if (!inYear){
             daysEl.appendChild(day);
             continue;
