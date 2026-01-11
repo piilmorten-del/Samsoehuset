@@ -31,6 +31,7 @@
       overflow-x:hidden;
     }
 
+    /* ===== Background image ===== */
     .bg{
       position:fixed; inset:0;
       background-image: url("bg.jpg");
@@ -59,7 +60,6 @@
       justify-content:space-between;
       gap:16px;
       margin-bottom: 16px;
-      position: relative;
     }
     .title h1{
       margin:0;
@@ -73,30 +73,10 @@
       font-size: 14px;
     }
 
-    /* Velkommen = ren tekst (ingen boks), stor og tydelig */
-    .welcomeText{
-      position:absolute;
-      left:50%;
-      transform: translateX(-50%);
-      top: 0;
-      pointer-events:none;
-      text-align:center;
-      font-weight: 900;
-      letter-spacing: .2px;
-      line-height: 1.05;
-      font-size: clamp(24px, 3.6vw, 40px);
-      color: rgba(255,255,255,.92);
-      text-shadow: 0 10px 26px rgba(0,0,0,.55);
-      white-space: nowrap;
-      max-width: 70vw;
-      overflow:hidden;
-      text-overflow: ellipsis;
-    }
-
     .topActions{
       display:flex; align-items:center; gap:10px;
-      position: relative;
-      z-index: 2;
+      flex-wrap: wrap;
+      justify-content:flex-end;
     }
     .btn{
       border: 1px solid var(--stroke2);
@@ -108,7 +88,6 @@
       cursor:pointer;
       transition: transform .08s ease, background .18s ease, border-color .18s ease;
       user-select:none;
-      white-space: nowrap;
     }
     .btn:hover{ background: rgba(255,255,255,.10); border-color: rgba(255,255,255,.22); }
     .btn:active{ transform: translateY(1px); }
@@ -120,21 +99,26 @@
 
     .grid{
       display:grid;
-      grid-template-columns: minmax(0, 1.65fr) minmax(260px, 360px);
+      grid-template-columns: minmax(0, 1.55fr) minmax(280px, .45fr);
       gap: 16px;
-      align-items: stretch;
+      align-items:stretch;
     }
-    .grid > *{ min-width: 0; }
 
-    .grid > .card{
-      height: 100%;
+    /* Sørg for at begge kort bliver lige høje */
+    #app{
+      min-height: calc(100vh - 140px);
+      align-items:stretch;
+    }
+    #app > .card{
+      height:100%;
       display:flex;
       flex-direction:column;
-      min-height: 0;
     }
-    .grid > .card .cardInner{
-      flex: 1 1 auto;
-      min-height: 0;
+    #app > .card > .cardInner{
+      height:100%;
+      display:flex;
+      flex-direction:column;
+      min-height:0;
     }
 
     .card{
@@ -144,9 +128,8 @@
       border-radius: var(--r);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
-      min-width: 0;
     }
-    .cardInner{ padding: 16px; min-width: 0; }
+    .cardInner{ padding: 16px; }
 
     .card h2{
       margin:0 0 4px;
@@ -159,6 +142,7 @@
       font-size: 13px;
     }
 
+    /* ===== Login screen ===== */
     #loginScreen{
       min-height: calc(100vh - 48px);
       display:flex;
@@ -213,13 +197,13 @@
     }
 
     select.field{
-      background: rgba(255,255,255,.10);
-      border-color: rgba(255,255,255,.18);
-      color: var(--text);
+      appearance:auto;
+      -webkit-appearance:auto;
+      -moz-appearance:auto;
     }
     select.field option{
-      background: #0b0f14;
-      color: #f3f5f7;
+      background: #0f131a;
+      color: #ffffff;
     }
 
     .msg{
@@ -230,19 +214,18 @@
     }
     .msg.ok{ color: rgba(205,255,225,.92); }
 
+    /* ===== Calendar ===== */
     .calHeader{
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap: 10px;
       margin-bottom: 12px;
-      min-width: 0;
     }
     .monthTitle{
       display:flex;
       flex-direction:column;
       gap:3px;
-      min-width: 0;
     }
     .monthTitle .m{
       font-size: 18px;
@@ -256,28 +239,28 @@
     }
     .nav{
       display:flex; align-items:center; gap:10px;
-      flex: 0 0 auto;
     }
     .nav .btn{ padding: 10px 12px; min-width: 44px; }
 
     .weekdays{
       display:grid;
-      grid-template-columns: repeat(7, minmax(0, 1fr));
+      grid-template-columns: repeat(6, 1fr) 1.35fr; /* gør søndag bredere */
       gap: 8px;
       margin-bottom: 8px;
       padding: 0 2px;
       color: rgba(255,255,255,.72);
       font-size: 12px;
-      min-width: 0;
     }
-    .weekdays div{ text-align:center; min-width: 0; }
+    .weekdays div{ text-align:center; }
 
     .days{
       display:grid;
-      grid-template-columns: repeat(7, minmax(0, 1fr));
+      grid-template-columns: repeat(6, 1fr) 1.35fr; /* gør søndag bredere */
       gap: 10px;
-      min-width: 0;
+      flex: 1;
+      min-height:0;
     }
+
     .day{
       border: 1px solid rgba(255,255,255,.10);
       background: rgba(255,255,255,.05);
@@ -290,9 +273,7 @@
       cursor:pointer;
       transition: transform .06s ease, border-color .18s ease, background .18s ease;
       user-select:none;
-      min-width: 0;
-      overflow: hidden;
-      position: relative;
+      min-width:0;
     }
     .day:hover{ border-color: rgba(255,255,255,.18); background: rgba(255,255,255,.07); }
     .day:active{ transform: translateY(1px); }
@@ -305,7 +286,7 @@
     .dayTop{
       display:flex; justify-content:space-between; align-items:baseline;
       gap: 8px;
-      min-width: 0;
+      min-width:0;
     }
     .num{ font-weight: 800; font-size: 14px; }
     .dow{ font-size: 12px; color: rgba(255,255,255,.70); }
@@ -320,45 +301,36 @@
       background: rgba(0,0,0,.20);
       font-weight: 750;
       font-size: 12px;
-      line-height: 1;
+      line-height: 1.15;
       letter-spacing:.2px;
       white-space: nowrap;
       max-width: 100%;
       overflow:hidden;
       text-overflow: ellipsis;
-      min-width: 0;
+      min-width:0;
     }
     .pill.taastrup{ border-color: rgba(74,166,255,.55); background: rgba(74,166,255,.14); }
     .pill.horsens{ border-color: rgba(183,123,255,.55); background: rgba(183,123,255,.14); }
     .pill.birkeroed{ border-color: rgba(62,230,195,.55); background: rgba(62,230,195,.14); }
     .pill.booking{ border-color: rgba(45,212,122,.55); background: rgba(45,212,122,.16); }
 
-    .pill.shiftday{
+    .pill.shift{
       white-space: normal;
-      text-overflow: clip;
       overflow: visible;
-      line-height: 1.15;
-      padding: 7px 10px;
+      text-overflow: clip;
+      border-radius: 14px;
+      justify-content:flex-start;
+      text-align:left;
     }
 
-    .day.changed{
-      border-color: rgba(45,212,122,.55);
-      background: rgba(45,212,122,.10);
-      box-shadow: inset 0 0 0 1px rgba(45,212,122,.18);
-    }
-    .day.changed:hover{
-      border-color: rgba(45,212,122,.70);
-      background: rgba(45,212,122,.12);
-    }
-
-    .pill.original{
+    .pill.overridden{
       opacity: .55;
       text-decoration: line-through;
       text-decoration-thickness: 2px;
       text-decoration-color: rgba(255,255,255,.55);
-      filter: saturate(.8);
     }
 
+    /* ===== Form ===== */
     .formGrid{
       display:grid;
       grid-template-columns: 1fr 1fr;
@@ -373,7 +345,10 @@
       font-size: 12px;
       color: rgba(255,255,255,.74);
     }
-    textarea.field{ min-height: 56px; resize: vertical; }
+    textarea.field{
+      min-height: 56px; /* mindre note-felt */
+      resize: vertical;
+    }
 
     .rowBtns{
       display:flex;
@@ -395,7 +370,8 @@
       display:flex;
       flex-direction:column;
       gap: 10px;
-      min-width: 0;
+      overflow:auto;
+      padding-right: 2px;
     }
     .item{
       border: 1px solid rgba(255,255,255,.10);
@@ -406,7 +382,6 @@
       justify-content:space-between;
       gap: 10px;
       align-items:flex-end;
-      min-width: 0;
     }
     .item .meta{
       display:flex; flex-direction:column; gap: 6px;
@@ -433,16 +408,13 @@
       white-space: normal;
       word-break: break-word;
     }
-    .item .meta .vis{
-      color: rgba(255,255,255,.72);
-      font-size: 12px;
-    }
 
-    .itemActions{
+    .actions{
       display:flex;
-      gap:10px;
-      align-items:flex-end;
-      flex: 0 0 auto;
+      gap:8px;
+      align-items:center;
+      justify-content:flex-end;
+      flex-wrap: wrap;
     }
 
     .danger{
@@ -450,10 +422,112 @@
       background: rgba(255,60,60,.10);
     }
 
+    /* ===== Simple dropdown for "Yderligere info" ===== */
+    .menuWrap{
+      position:relative;
+      display:inline-block;
+    }
+    .menuPanel{
+      position:absolute;
+      right:0;
+      top: calc(100% + 10px);
+      width: min(360px, 86vw);
+      background: rgba(10,12,16,.92);
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 14px;
+      box-shadow: 0 18px 50px rgba(0,0,0,.55);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 10px;
+      z-index: 50;
+      display:none;
+    }
+    .menuPanel.open{ display:block; }
+
+    .menuItem{
+      width:100%;
+      text-align:left;
+      padding: 10px 10px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      cursor:pointer;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .menuItem:hover{
+      background: rgba(255,255,255,.08);
+      border-color: rgba(255,255,255,.18);
+    }
+    .menuItemRow{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:8px;
+    }
+    .menuItemRow .menuItem{ margin-bottom:0; }
+    .menuMiniBtn{
+      padding: 8px 10px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      cursor:pointer;
+      font-weight: 750;
+    }
+    .menuMiniBtn:hover{ background: rgba(255,255,255,.10); }
+
+    /* ===== Modal ===== */
+    .modalBack{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,.55);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index: 80;
+      padding: 14px;
+    }
+    .modalBack.open{ display:flex; }
+    .modal{
+      width: min(760px, 96vw);
+      max-height: min(82vh, 860px);
+      overflow:auto;
+      background: rgba(10,12,16,.92);
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 18px;
+      box-shadow: 0 18px 50px rgba(0,0,0,.60);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 16px;
+    }
+    .modalHeader{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom: 10px;
+    }
+    .modalHeader h3{
+      margin:0;
+      font-size: 18px;
+      letter-spacing:.2px;
+    }
+    .modalBody{
+      color: rgba(255,255,255,.86);
+      font-size: 14px;
+      line-height: 1.45;
+      white-space: pre-wrap;
+    }
+
     @media (max-width: 980px){
       .grid{ grid-template-columns: 1fr; }
-      header{ padding-top: 44px; }
-      .welcomeText{ top: 4px; }
+      #app{ min-height: auto; }
+      #app > .card{ height:auto; }
+      .weekdays, .days{
+        grid-template-columns: repeat(7, 1fr);
+      }
     }
 
     .hidden{ display:none !important; }
@@ -464,19 +538,24 @@
   <div class="bg"></div>
 
   <div class="wrap">
+    <!-- Header vises kun når man er logget ind -->
     <header id="appHeader" class="hidden">
       <div class="title">
-        <h1>Samsøhuset</h1>
+        <h1 id="headerTitle">Samsøhuset</h1>
         <p>Kalender og eventuelle ændringer</p>
       </div>
 
-      <div id="welcomeText" class="welcomeText hidden">Velkommen</div>
-
       <div class="topActions">
+        <div class="menuWrap">
+          <button id="infoBtn" class="btn" type="button">Yderligere info</button>
+          <div id="infoMenu" class="menuPanel"></div>
+        </div>
+
         <button id="logoutBtn" class="btn" type="button">Log ud</button>
       </div>
     </header>
 
+    <!-- LOGIN -->
     <section id="loginScreen">
       <div>
         <div class="loginHero">
@@ -500,7 +579,9 @@
       </div>
     </section>
 
+    <!-- APP -->
     <main id="app" class="grid hidden">
+      <!-- Calendar -->
       <section class="card">
         <div class="cardInner">
           <div class="calHeader">
@@ -523,6 +604,7 @@
         </div>
       </section>
 
+      <!-- Booking panel -->
       <aside class="card">
         <div class="cardInner">
           <h2>Foretag ændringer</h2>
@@ -549,8 +631,14 @@
             </div>
 
             <div class="full">
-              <label for="visibilitySelect">Synlighed</label>
-              <select id="visibilitySelect" class="field"></select>
+              <label for="visibilityInput">Synlighed</label>
+              <select id="visibilityInput" class="field">
+                <option value="">Vælg…</option>
+                <option value="all">Ses af alle</option>
+                <option value="taastrup">Kun Taastrup</option>
+                <option value="horsens">Kun Horsens</option>
+                <option value="birkeroed">Kun Birkerød</option>
+              </select>
             </div>
 
             <div class="full">
@@ -566,7 +654,7 @@
 
           <div id="status" class="status">—</div>
 
-          <div style="margin-top:16px">
+          <div style="margin-top:16px; display:flex; flex-direction:column; min-height:0;">
             <h2>Ændringer</h2>
             <p class="sub">Liste over ændringer</p>
             <div id="list" class="list"></div>
@@ -576,16 +664,50 @@
     </main>
   </div>
 
+  <!-- Modal for info pages -->
+  <div id="modalBack" class="modalBack">
+    <div class="modal">
+      <div class="modalHeader">
+        <h3 id="modalTitle">—</h3>
+        <div class="actions">
+          <button id="modalEditBtn" class="btn hidden" type="button">Rediger</button>
+          <button id="modalDeleteBtn" class="btn danger hidden" type="button">Slet</button>
+          <button id="modalCloseBtn" class="btn" type="button">Luk</button>
+        </div>
+      </div>
+
+      <div id="modalBody" class="modalBody"></div>
+
+      <div id="modalEditArea" class="hidden" style="margin-top:12px;">
+        <label for="infoTitleInput">Titel</label>
+        <input id="infoTitleInput" class="field" type="text" />
+
+        <label for="infoContentInput">Indhold</label>
+        <textarea id="infoContentInput" class="field" style="min-height:180px;"></textarea>
+
+        <div class="rowBtns">
+          <button id="modalCancelEditBtn" class="btn" type="button">Annuller</button>
+          <button id="modalSaveEditBtn" class="btn btnPrimary" type="button">Gem</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
-    const ADMIN_CODE = "Kalkhavesvej100!";
+    /* =========================================================
+       KONFIGURATION
+       ========================================================= */
+    const SHARED_CODE = "kalkhavesvej";
+    const ADMIN_CODES = ["Kalkhavesvej100!", "DLOGIN"];
+
     const FAMILY_CODES = {
-      "Taastrup": "taastrup",
-      "Horsens": "horsens",
-      "Birkerød": "birkeroed"
+      "taastrup": "Taastrup",
+      "horsens": "Horsens",
+      "birkeroed": "Birkerød"
     };
-    const DEFAULT_SHARED_CODE = "Kalkhavesvej";
 
     const SUPABASE_URL = "https://jbweskxscyxjonrhbdcd.supabase.co";
     const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_2qMwF5JFmVmQuf9jJCERxw_25bMzbyu";
@@ -593,9 +715,10 @@
     const YEAR = 2026;
     const ROTATION = ["Taastrup", "Horsens", "Birkerød"];
     const ROTATION_START_MONDAY = "2025-12-29";
+    /* ========================================================= */
 
     const appHeader = document.getElementById("appHeader");
-    const welcomeText = document.getElementById("welcomeText");
+    const headerTitle = document.getElementById("headerTitle");
 
     const loginScreen = document.getElementById("loginScreen");
     const app = document.getElementById("app");
@@ -614,12 +737,28 @@
     const endInput = document.getElementById("endInput");
     const whoInput = document.getElementById("whoInput");
     const changedByInput = document.getElementById("changedByInput");
-    const visibilitySelect = document.getElementById("visibilitySelect");
+    const visibilityInput = document.getElementById("visibilityInput");
     const noteInput = document.getElementById("noteInput");
     const resetBtn = document.getElementById("resetBtn");
     const saveBtn = document.getElementById("saveBtn");
     const statusEl = document.getElementById("status");
     const listEl = document.getElementById("list");
+
+    const infoBtn = document.getElementById("infoBtn");
+    const infoMenu = document.getElementById("infoMenu");
+
+    const modalBack = document.getElementById("modalBack");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalBody = document.getElementById("modalBody");
+    const modalCloseBtn = document.getElementById("modalCloseBtn");
+    const modalEditBtn = document.getElementById("modalEditBtn");
+    const modalDeleteBtn = document.getElementById("modalDeleteBtn");
+
+    const modalEditArea = document.getElementById("modalEditArea");
+    const infoTitleInput = document.getElementById("infoTitleInput");
+    const infoContentInput = document.getElementById("infoContentInput");
+    const modalCancelEditBtn = document.getElementById("modalCancelEditBtn");
+    const modalSaveEditBtn = document.getElementById("modalSaveEditBtn");
 
     function getSupabaseClient(){
       if (!window.supabase || !window.supabase.createClient) return null;
@@ -627,6 +766,7 @@
     }
 
     function normalize(v){ return (v || "").toString().trim().toLowerCase(); }
+
     function setLoginMsg(text, ok=false){
       loginMsg.textContent = text;
       loginMsg.className = "msg" + (ok ? " ok" : "");
@@ -637,28 +777,50 @@
       loginMsg.textContent = "";
     }
 
-    function isLoggedIn(){ return localStorage.getItem("samsoehuset_ok") === "1"; }
-    function getRole(){ return localStorage.getItem("samsoehuset_role") || "user"; }
-    function isAdmin(){ return getRole() === "admin"; }
-    function isFamilyRole(){ return ["taastrup","horsens","birkeroed"].includes(getRole()); }
-
-    function roleLabel(){
-      if (isAdmin()) return "Administrator";
-      const r = getRole();
-      if (r === "taastrup") return "Taastrup";
-      if (r === "horsens") return "Horsens";
-      if (r === "birkeroed") return "Birkerød";
-      return "Gæst";
+    function setStatus(text, ok=true){
+      statusEl.textContent = text;
+      statusEl.style.display = "block";
+      statusEl.style.color = ok ? "rgba(205,255,225,.92)" : "rgba(255,220,220,.92)";
+      setTimeout(()=>{ statusEl.style.display = "none"; }, 2800);
     }
 
-    function updateWelcome(){
-      if (!isLoggedIn()){
-        welcomeText.classList.add("hidden");
+    function isLoggedIn(){ return localStorage.getItem("samsoehuset_ok") === "1"; }
+    function getRole(){ return localStorage.getItem("samsoehuset_role") || ""; }
+    function setSession(role){
+      localStorage.setItem("samsoehuset_ok", "1");
+      localStorage.setItem("samsoehuset_role", role);
+      updateHeaderTitle();
+      showApp();
+    }
+    function clearSession(){
+      localStorage.removeItem("samsoehuset_ok");
+      localStorage.removeItem("samsoehuset_role");
+      showLogin();
+    }
+
+    function isAdmin(){
+      return getRole() === "admin";
+    }
+
+    function roleLabel(role){
+      if (role === "taastrup") return "Taastrup";
+      if (role === "horsens") return "Horsens";
+      if (role === "birkeroed") return "Birkerød";
+      if (role === "admin") return "Administrator";
+      return "";
+    }
+
+    function updateHeaderTitle(){
+      const role = getRole();
+      if (role === "taastrup" || role === "horsens" || role === "birkeroed"){
+        headerTitle.textContent = `Velkommen til Samsøhuset - ${roleLabel(role)} familien`;
         return;
       }
-      const label = roleLabel();
-      welcomeText.textContent = `Velkommen ${label}`;
-      welcomeText.classList.remove("hidden");
+      if (role === "admin"){
+        headerTitle.textContent = "Velkommen til Samsøhuset - Administrator";
+        return;
+      }
+      headerTitle.textContent = "Velkommen til Samsøhuset";
     }
 
     function showLogin(){
@@ -672,101 +834,50 @@
       app.classList.remove("hidden");
     }
 
-    function setLoggedIn(role){
-      localStorage.setItem("samsoehuset_ok", "1");
-      localStorage.setItem("samsoehuset_role", role);
-      showApp();
-      configureVisibilitySelect();
-      updateWelcome();
-      resetForm(true);
-      loadStays();
-    }
-    function setLoggedOut(){
-      localStorage.removeItem("samsoehuset_ok");
-      localStorage.removeItem("samsoehuset_role");
-      stays = [];
-      editingId = null;
-      showPast = false;
-      resetForm(true);
-      render();
-      renderList();
-      showLogin();
-    }
+    function detectRoleFromCode(codeRaw){
+      const c = (codeRaw || "").toString().trim();
+      const cNorm = normalize(c);
 
-    function configureVisibilitySelect(){
-      visibilitySelect.innerHTML = "";
+      if (!cNorm) return null;
 
-      const ph = document.createElement("option");
-      ph.value = "";
-      ph.textContent = "Vælg synlighed…";
-      ph.disabled = true;
-      ph.selected = true;
-      visibilitySelect.appendChild(ph);
+      if (normalize(SHARED_CODE) === cNorm) return "guest";
 
-      const optAll = document.createElement("option");
-      optAll.value = "all";
-      optAll.textContent = "Ses af alle";
-      visibilitySelect.appendChild(optAll);
-
-      if (isAdmin()){
-        const o1 = document.createElement("option");
-        o1.value = "taastrup";
-        o1.textContent = "Kun Taastrup";
-        const o2 = document.createElement("option");
-        o2.value = "horsens";
-        o2.textContent = "Kun Horsens";
-        const o3 = document.createElement("option");
-        o3.value = "birkeroed";
-        o3.textContent = "Kun Birkerød";
-        visibilitySelect.appendChild(o1);
-        visibilitySelect.appendChild(o2);
-        visibilitySelect.appendChild(o3);
-        return;
+      for (const a of ADMIN_CODES){
+        if (normalize(a) === cNorm) return "admin";
       }
 
-      if (isFamilyRole()){
-        const role = getRole();
-        const txt = role === "taastrup" ? "Kun Taastrup" : role === "horsens" ? "Kun Horsens" : "Kun Birkerød";
-        const optOwn = document.createElement("option");
-        optOwn.value = role;
-        optOwn.textContent = txt;
-        visibilitySelect.appendChild(optOwn);
+      for (const [role, code] of Object.entries(FAMILY_CODES)){
+        if (normalize(code) === cNorm) return role;
       }
+
+      return null;
     }
 
     function tryLogin(){
       clearLoginMsg();
-      const enteredRaw = (passInput.value || "").toString().trim();
+      const entered = passInput.value;
+      const role = detectRoleFromCode(entered);
 
-      if (!enteredRaw){
+      if (!entered || !entered.trim()){
         setLoginMsg("Skriv koden først.");
         return;
       }
-
-      if (enteredRaw === ADMIN_CODE){
-        setLoggedIn("admin");
+      if (!role){
+        setLoginMsg("Forkert kode. Prøv igen.");
         return;
       }
 
-      for (const [code, role] of Object.entries(FAMILY_CODES)){
-        if (enteredRaw === code){
-          setLoggedIn(role);
-          return;
-        }
-      }
-
-      if (normalize(enteredRaw) === normalize(DEFAULT_SHARED_CODE)){
-        setLoggedIn("user");
-        return;
-      }
-
-      setLoginMsg("Forkert kode. Prøv igen.");
+      setSession(role);
+      loadAll();
     }
 
     loginBtn.addEventListener("click", tryLogin);
     passInput.addEventListener("keydown", (e)=>{ if (e.key === "Enter") tryLogin(); });
-    logoutBtn.addEventListener("click", ()=>{ setLoggedOut(); });
+    logoutBtn.addEventListener("click", ()=>{ clearSession(); });
 
+    /* =========================================================
+       Kalender logik
+       ========================================================= */
     const DK_MONTHS = ["januar","februar","marts","april","maj","juni","juli","august","september","oktober","november","december"];
     const DK_DOW = ["Søn","Man","Tir","Ons","Tor","Fre","Lør"];
 
@@ -777,26 +888,16 @@
     let selectedEnd = null;
 
     let stays = [];
-    let showPast = false;
+    let infoPages = [];
 
-    let editingId = null;
+    let editingStayId = null;
+    let editingInfoId = null;
 
     function isoDate(d){
       const y = d.getFullYear();
       const m = String(d.getMonth()+1).padStart(2,"0");
       const da = String(d.getDate()).padStart(2,"0");
       return `${y}-${m}-${da}`;
-    }
-    function todayISO(){
-      const t = new Date();
-      t.setHours(12,0,0,0);
-      return isoDate(t);
-    }
-    function tomorrowISO(){
-      const t = new Date();
-      t.setHours(12,0,0,0);
-      t.setDate(t.getDate()+1);
-      return isoDate(t);
     }
     function parseISO(s){
       const [y,m,d] = s.split("-").map(Number);
@@ -825,6 +926,15 @@
       if (!a || !b) return false;
       const d = day.getTime();
       return d >= a.getTime() && d <= b.getTime();
+    }
+
+    function tomorrowISO(){
+      const t = addDays(startOfDay(new Date()), 1);
+      return isoDate(t);
+    }
+    function isHistoricalStay(stay){
+      const min = tomorrowISO();
+      return (stay && stay.end_date && stay.end_date < min);
     }
 
     function mondayStart(d){
@@ -860,329 +970,41 @@
       return "";
     }
 
-    function labelVisibility(v){
-      const val = (v || "all").toString().toLowerCase();
-      if (val === "all") return "Synlig: alle";
-      if (val === "taastrup") return "Synlig: kun Taastrup";
-      if (val === "horsens") return "Synlig: kun Horsens";
-      if (val === "birkeroed") return "Synlig: kun Birkerød";
-      return "Synlighed: ukendt";
-    }
-
-    function canSeeStay(s){
-      const v = (s.visibility || "all").toString().toLowerCase();
+    function canSeeStay(stay){
+      if (!stay) return false;
       if (isAdmin()) return true;
-      if (v === "all") return true;
-      if (isFamilyRole() && v === getRole()) return true;
+
+      const role = getRole();
+      const vis = (stay.visibility || "all").toString().toLowerCase();
+
+      if (vis === "all" || vis === "") return true;
+      if (role === "taastrup" && vis === "taastrup") return true;
+      if (role === "horsens" && vis === "horsens") return true;
+      if (role === "birkeroed" && vis === "birkeroed") return true;
+
       return false;
     }
 
-    function setStatus(text, ok=true){
-      statusEl.textContent = text;
-      statusEl.style.display = "block";
-      statusEl.style.color = ok ? "rgba(205,255,225,.92)" : "rgba(255,220,220,.92)";
-      setTimeout(()=>{ statusEl.style.display = "none"; }, 3200);
+    function canModifyStay(stay){
+      if (!stay) return false;
+      if (isAdmin()) return true;
+
+      if (isHistoricalStay(stay)) return false;
+
+      const role = getRole();
+      const createdRole = (stay.created_role || "").toString().toLowerCase();
+      return createdRole && role && createdRole === role;
     }
 
-    function confirmDeleteStay(stay){
-      const by = (stay && stay.booked_by && String(stay.booked_by).trim()) ? String(stay.booked_by).trim() : "-";
-      const msg =
-        `OBS.\n\n` +
-        `Denne ændring er lavet af ${by}.\n\n` +
-        `Hvis du sletter denne ændring, forsvinder den permanent og kan ikke genskabes.\n\n` +
-        `Vil du slette ændringen?`;
-      return window.confirm(msg);
-    }
-
-    function applyDateMins(){
-      const min = tomorrowISO();
-      startInput.min = min;
-      endInput.min = min;
-    }
-
-    async function hasOverlapInDb(a, b, ignoreId=null){
-      const client = getSupabaseClient();
-      if (!client) return true;
-
-      let q = client
-        .from("stays")
-        .select("id,start_date,end_date")
-        .lte("start_date", b)
-        .gte("end_date", a);
-
-      if (ignoreId !== null && ignoreId !== undefined){
-        q = q.neq("id", ignoreId);
-      }
-
-      const { data, error } = await q;
-
-      if (error){
-        console.error(error);
-        return true;
-      }
-      return Array.isArray(data) && data.length > 0;
-    }
-
-    async function loadStays(){
-      const client = getSupabaseClient();
-      if (!client){
-        setStatus("Kunne ikke forbinde lige nu. Prøv at genindlæse.", false);
-        return;
-      }
-
-      const { data, error } = await client
-        .from("stays")
-        .select("*")
-        .order("start_date", { ascending: true });
-
-      if (error){
-        setStatus("Kunne ikke hente data.", false);
-        console.error(error);
-        return;
-      }
-
-      const all = Array.isArray(data) ? data : [];
-      stays = all.filter(canSeeStay);
-
-      render();
-      renderList();
-    }
-
-    function findStayForDate(d){
+    function findVisibleStayForDate(d){
       const dayISO = isoDate(d);
-      return stays.find(s => s.start_date <= dayISO && s.end_date >= dayISO) || null;
+      const matches = stays.filter(s => s.start_date <= dayISO && s.end_date >= dayISO);
+      const visible = matches.filter(canSeeStay);
+      return visible.length ? visible[0] : null;
     }
 
-    function isHistoricalStay(s){
-      const today = todayISO();
-      return (s.end_date || "") < today;
-    }
-
-    function enterEditMode(s){
-      editingId = s.id;
-
-      startInput.value = s.start_date || "";
-      endInput.value = s.end_date || "";
-      whoInput.value = s.family || "";
-      changedByInput.value = s.booked_by || "";
-      noteInput.value = s.note || "";
-
-      configureVisibilitySelect();
-      const v = (s.visibility || "").toString().toLowerCase();
-      visibilitySelect.value = v || "";
-
-      saveBtn.textContent = "Opdater";
-      setStatus("Redigering aktiv", true);
-    }
-
-    function exitEditMode(){
-      editingId = null;
-      saveBtn.textContent = "Gem";
-    }
-
-    async function saveOrUpdate(){
-      if (editingId !== null){
-        await updateStay(editingId);
-      } else {
-        await saveStay();
-      }
-    }
-
-    async function saveStay(){
-      const s = startInput.value;
-      const e = endInput.value;
-      const who = (whoInput.value || "").trim();
-      const changedBy = (changedByInput.value || "").trim();
-      const note = (noteInput.value || "").trim();
-      const vis = (visibilitySelect.value || "").toString().toLowerCase();
-
-      if (!s || !e){
-        setStatus("Vælg både start og slut.", false);
-        return;
-      }
-      if (!who){
-        setStatus("Skriv hvem der har huset.", false);
-        return;
-      }
-      if (!changedBy){
-        setStatus("Skriv hvem der har ændret.", false);
-        return;
-      }
-      if (!vis){
-        setStatus("Vælg synlighed.", false);
-        return;
-      }
-
-      const [a,b] = clampDateOrder(s, e);
-
-      const min = tomorrowISO();
-      if (a < min || b < min){
-        setStatus("Du kan kun lave ændringer fra i morgen og frem.", false);
-        return;
-      }
-
-      if (!isAdmin() && isFamilyRole()){
-        if (!(vis === "all" || vis === getRole())){
-          setStatus("Ugyldig synlighed.", false);
-          return;
-        }
-      }
-      if (!isAdmin() && !isFamilyRole()){
-        if (vis !== "all"){
-          setStatus("Du kan kun gemme synligt for alle.", false);
-          return;
-        }
-      }
-
-      const overlap = await hasOverlapInDb(a, b, null);
-      if (overlap){
-        setStatus("Der findes allerede en ændring på en eller flere af de valgte datoer. Slet den eksisterende ændring først.", false);
-        return;
-      }
-
-      const client = getSupabaseClient();
-      if (!client){
-        setStatus("Kunne ikke forbinde.", false);
-        return;
-      }
-
-      const payload = {
-        start_date: a,
-        end_date: b,
-        family: who,
-        booked_by: changedBy,
-        note: note,
-        visibility: vis
-      };
-
-      const { error } = await client.from("stays").insert(payload);
-      if (error){
-        setStatus("Kunne ikke gemme.", false);
-        console.error(error);
-        return;
-      }
-
-      setStatus("Gemt ✅");
-      resetForm(false);
-      await loadStays();
-    }
-
-    async function updateStay(id){
-      const s = startInput.value;
-      const e = endInput.value;
-      const who = (whoInput.value || "").trim();
-      const changedBy = (changedByInput.value || "").trim();
-      const note = (noteInput.value || "").trim();
-      const vis = (visibilitySelect.value || "").toString().toLowerCase();
-
-      if (!s || !e){
-        setStatus("Vælg både start og slut.", false);
-        return;
-      }
-      if (!who){
-        setStatus("Skriv hvem der har huset.", false);
-        return;
-      }
-      if (!changedBy){
-        setStatus("Skriv hvem der har ændret.", false);
-        return;
-      }
-      if (!vis){
-        setStatus("Vælg synlighed.", false);
-        return;
-      }
-
-      const existing = stays.find(x => String(x.id) === String(id));
-      if (existing && isHistoricalStay(existing) && !isAdmin()){
-        setStatus("Historiske ændringer kan ikke redigeres.", false);
-        return;
-      }
-
-      const [a,b] = clampDateOrder(s, e);
-
-      const min = tomorrowISO();
-      if (a < min || b < min){
-        setStatus("Du kan kun lave ændringer fra i morgen og frem.", false);
-        return;
-      }
-
-      if (!isAdmin() && isFamilyRole()){
-        if (!(vis === "all" || vis === getRole())){
-          setStatus("Ugyldig synlighed.", false);
-          return;
-        }
-      }
-      if (!isAdmin() && !isFamilyRole()){
-        if (vis !== "all"){
-          setStatus("Du kan kun gemme synligt for alle.", false);
-          return;
-        }
-      }
-
-      const overlap = await hasOverlapInDb(a, b, id);
-      if (overlap){
-        setStatus("Der findes allerede en ændring på en eller flere af de valgte datoer. Slet den eksisterende ændring først.", false);
-        return;
-      }
-
-      const client = getSupabaseClient();
-      if (!client){
-        setStatus("Kunne ikke forbinde.", false);
-        return;
-      }
-
-      const payload = {
-        start_date: a,
-        end_date: b,
-        family: who,
-        booked_by: changedBy,
-        note: note,
-        visibility: vis
-      };
-
-      const { error } = await client.from("stays").update(payload).eq("id", id);
-      if (error){
-        setStatus("Kunne ikke opdatere.", false);
-        console.error(error);
-        return;
-      }
-
-      setStatus("Opdateret ✅");
-      exitEditMode();
-      resetForm(false);
-      await loadStays();
-    }
-
-    async function deleteStay(id){
-      const client = getSupabaseClient();
-      if (!client){
-        setStatus("Kunne ikke forbinde.", false);
-        return;
-      }
-
-      const { error } = await client.from("stays").delete().eq("id", id);
-      if (error){
-        setStatus("Kunne ikke slette.", false);
-        console.error(error);
-        return;
-      }
-      setStatus("Slettet");
-      await loadStays();
-    }
-
-    function resetForm(clearSelection=true){
-      startInput.value = "";
-      endInput.value = "";
-      whoInput.value = "";
-      changedByInput.value = "";
-      noteInput.value = "";
-      visibilitySelect.value = "";
-      exitEditMode();
-
-      if (clearSelection){
-        selectedStart = null;
-        selectedEnd = null;
-      }
+    function monthLabel(d){
+      return `${DK_MONTHS[d.getMonth()]} ${d.getFullYear()}`;
     }
 
     function onDayClick(date){
@@ -1198,10 +1020,6 @@
       if (selectedEnd) endInput.value = isoDate(selectedEnd);
 
       render();
-    }
-
-    function monthLabel(d){
-      return `${DK_MONTHS[d.getMonth()]} ${d.getFullYear()}`;
     }
 
     function render(){
@@ -1236,29 +1054,26 @@
         top.appendChild(dow);
         day.appendChild(top);
 
-        const stay = findStayForDate(d);
-        if (stay){
-          day.classList.add("changed");
-        }
-
         const base = baseOwnerForDate(d);
+        const visibleStay = findVisibleStayForDate(d);
 
         if (base.type === "shift"){
+          // Søndag: farven skal tilhøre NÆSTE uge (base.next)
           const p = document.createElement("div");
-          p.className = "pill shiftday " + ownerClass(base.next) + (stay ? " original" : "");
+          p.className = "pill shift " + ownerClass(base.next);
           p.textContent = `Skiftedag: ${base.current} → ${base.next}`;
           day.appendChild(p);
         } else {
           const p = document.createElement("div");
-          p.className = "pill " + ownerClass(base.owner) + (stay ? " original" : "");
+          p.className = "pill " + ownerClass(base.owner) + (visibleStay ? " overridden" : "");
           p.textContent = base.owner;
           day.appendChild(p);
         }
 
-        if (stay){
+        if (visibleStay){
           const b = document.createElement("div");
           b.className = "pill booking";
-          b.textContent = `Bruges af: ${stay.family}`;
+          b.textContent = `Bruges af: ${visibleStay.family}`;
           day.appendChild(b);
         }
 
@@ -1283,130 +1098,6 @@
       }
     }
 
-    function createStayItem(s, allowDelete, allowEdit){
-      const it = document.createElement("div");
-      it.className = "item";
-
-      const meta = document.createElement("div");
-      meta.className = "meta";
-
-      const who = document.createElement("div");
-      who.className = "who";
-      who.textContent = s.family || "(ukendt)";
-
-      const dates = document.createElement("div");
-      dates.className = "dates";
-      dates.textContent = `${s.start_date} → ${s.end_date}`;
-
-      const by = document.createElement("div");
-      by.className = "by";
-      by.textContent = `Ændret af: ${s.booked_by || "-"}`;
-
-      const vis = document.createElement("div");
-      vis.className = "vis";
-      vis.textContent = labelVisibility(s.visibility);
-
-      meta.appendChild(who);
-      meta.appendChild(dates);
-      meta.appendChild(by);
-      meta.appendChild(vis);
-
-      if (s.note && String(s.note).trim()){
-        const note = document.createElement("div");
-        note.className = "note";
-        note.textContent = `Note: ${String(s.note).trim()}`;
-        meta.appendChild(note);
-      }
-
-      it.appendChild(meta);
-
-      const actions = document.createElement("div");
-      actions.className = "itemActions";
-
-      if (allowEdit){
-        const edit = document.createElement("button");
-        edit.className = "btn";
-        edit.type = "button";
-        edit.textContent = "Rediger";
-        edit.addEventListener("click", ()=> enterEditMode(s));
-        actions.appendChild(edit);
-      }
-
-      if (allowDelete){
-        const del = document.createElement("button");
-        del.className = "btn danger";
-        del.type = "button";
-        del.textContent = "Slet";
-        del.addEventListener("click", ()=>{
-          if (!confirmDeleteStay(s)) return;
-          deleteStay(s.id);
-        });
-        actions.appendChild(del);
-      }
-
-      if (actions.childNodes.length){
-        it.appendChild(actions);
-      }
-
-      return it;
-    }
-
-    function renderList(){
-      listEl.innerHTML = "";
-
-      if (!stays.length){
-        const empty = document.createElement("div");
-        empty.className = "item";
-        empty.innerHTML = `<div class="meta"><div class="who">Ingen ændringer endnu</div><div class="dates">—</div></div>`;
-        listEl.appendChild(empty);
-        return;
-      }
-
-      const sorted = [...stays].sort((a,b)=>{
-        const aa = (a.created_at || "");
-        const bb = (b.created_at || "");
-        return bb.localeCompare(aa);
-      });
-
-      const today = todayISO();
-      const active = sorted.filter(s => (s.end_date || "") >= today);
-      const past = sorted.filter(s => (s.end_date || "") < today);
-
-      for (const s of active){
-        const allowEdit = true;
-        const allowDelete = true;
-        listEl.appendChild(createStayItem(s, allowDelete, allowEdit));
-      }
-
-      if (past.length){
-        const toggle = document.createElement("button");
-        toggle.className = "btn";
-        toggle.type = "button";
-        toggle.style.width = "100%";
-        toggle.style.marginTop = active.length ? "6px" : "0";
-        toggle.textContent = showPast ? `Skjul historiske ændringer (${past.length})` : `Vis historiske ændringer (${past.length})`;
-
-        const pastWrap = document.createElement("div");
-        pastWrap.style.marginTop = "10px";
-        if (!showPast) pastWrap.classList.add("hidden");
-
-        const allowPastDelete = isAdmin();
-        const allowPastEdit = isAdmin();
-        for (const s of past){
-          pastWrap.appendChild(createStayItem(s, allowPastDelete, allowPastEdit));
-        }
-
-        toggle.addEventListener("click", ()=>{
-          showPast = !showPast;
-          pastWrap.classList.toggle("hidden", !showPast);
-          toggle.textContent = showPast ? `Skjul historiske ændringer (${past.length})` : `Vis historiske ændringer (${past.length})`;
-        });
-
-        listEl.appendChild(toggle);
-        listEl.appendChild(pastWrap);
-      }
-    }
-
     prevBtn.addEventListener("click", ()=>{
       view = new Date(view.getFullYear(), view.getMonth()-1, 1);
       view.setHours(12,0,0,0);
@@ -1423,27 +1114,576 @@
       render();
     });
 
-    resetBtn.addEventListener("click", ()=>{
-      resetForm(true);
+    /* =========================================================
+       Stays (ændringer)
+       ========================================================= */
+    function resetForm(clearSelection=true){
+      startInput.value = "";
+      endInput.value = "";
+      whoInput.value = "";
+      changedByInput.value = "";
+      visibilityInput.value = "";
+      noteInput.value = "";
+
+      editingStayId = null;
+      saveBtn.textContent = "Gem";
+
+      if (clearSelection){
+        selectedStart = null;
+        selectedEnd = null;
+        render();
+      }
+    }
+
+    resetBtn.addEventListener("click", ()=> resetForm(true));
+
+    async function getOverlapCount(client, a, b, excludeId){
+      let q = client
+        .from("stays")
+        .select("id", { count: "exact", head: true })
+        .not("end_date", "lt", a)
+        .not("start_date", "gt", b);
+
+      if (excludeId != null){
+        q = q.neq("id", excludeId);
+      }
+
+      const { count, error } = await q;
+      if (error){
+        console.error(error);
+        return null;
+      }
+      return count || 0;
+    }
+
+    async function saveStay(){
+      const s = startInput.value;
+      const e = endInput.value;
+      const who = (whoInput.value || "").trim();
+      const changedBy = (changedByInput.value || "").trim();
+      const vis = (visibilityInput.value || "").trim();
+      const note = (noteInput.value || "").trim();
+
+      if (!s || !e){
+        setStatus("Vælg både start og slut.", false);
+        return;
+      }
+      if (!who){
+        setStatus("Skriv hvem der har huset.", false);
+        return;
+      }
+      if (!changedBy){
+        setStatus("Skriv hvem der har ændret.", false);
+        return;
+      }
+      if (!vis){
+        setStatus("Vælg synlighed.", false);
+        return;
+      }
+
+      const [a,b] = clampDateOrder(s, e);
+      const min = tomorrowISO();
+      if (a < min || b < min){
+        setStatus("Du kan kun lave ændringer fra i morgen og frem.", false);
+        return;
+      }
+
+      const client = getSupabaseClient();
+      if (!client){
+        setStatus("Kunne ikke forbinde.", false);
+        return;
+      }
+
+      const overlapCount = await getOverlapCount(client, a, b, editingStayId);
+      if (overlapCount == null){
+        setStatus("Kunne ikke validere datoer.", false);
+        return;
+      }
+      if (overlapCount > 0){
+        setStatus("Der findes allerede en ændring i den periode. Slet eller redigér den først.", false);
+        return;
+      }
+
+      const role = getRole();
+      const payload = {
+        start_date: a,
+        end_date: b,
+        family: who,
+        booked_by: changedBy,
+        note: note,
+        visibility: vis,
+        created_role: role // kræver kolonnen created_role i stays
+      };
+
+      if (editingStayId){
+        const current = stays.find(x => String(x.id) === String(editingStayId));
+        if (current && !canModifyStay(current)){
+          setStatus("Du kan ikke redigere denne ændring.", false);
+          return;
+        }
+
+        const { error } = await client
+          .from("stays")
+          .update(payload)
+          .eq("id", editingStayId);
+
+        if (error){
+          setStatus("Kunne ikke gemme ændring.", false);
+          console.error(error);
+          return;
+        }
+
+        setStatus("Opdateret ✅");
+      } else {
+        const { error } = await client.from("stays").insert(payload);
+        if (error){
+          setStatus("Kunne ikke gemme.", false);
+          console.error(error);
+          return;
+        }
+        setStatus("Gemt ✅");
+      }
+
+      resetForm(false);
+      await loadStays();
+    }
+
+    saveBtn.addEventListener("click", saveStay);
+
+    function formatVisibility(v){
+      const x = (v || "all").toString().toLowerCase();
+      if (x === "all") return "alle";
+      if (x === "taastrup") return "kun Taastrup";
+      if (x === "horsens") return "kun Horsens";
+      if (x === "birkeroed") return "kun Birkerød";
+      return x;
+    }
+
+    function startEditStay(stay){
+      if (!stay) return;
+      if (!canModifyStay(stay)){
+        setStatus("Du kan ikke redigere denne ændring.", false);
+        return;
+      }
+
+      editingStayId = stay.id;
+      saveBtn.textContent = "Opdater";
+
+      startInput.value = stay.start_date || "";
+      endInput.value = stay.end_date || "";
+      whoInput.value = stay.family || "";
+      changedByInput.value = stay.booked_by || "";
+      visibilityInput.value = (stay.visibility || "all").toString().toLowerCase();
+      noteInput.value = stay.note || "";
+
+      selectedStart = stay.start_date ? parseISO(stay.start_date) : null;
+      selectedEnd = stay.end_date ? parseISO(stay.end_date) : null;
       render();
+    }
+
+    async function deleteStay(id){
+      const stay = stays.find(x => String(x.id) === String(id));
+      if (!stay){
+        setStatus("Kunne ikke finde ændringen.", false);
+        return;
+      }
+
+      if (!canModifyStay(stay)){
+        setStatus("Du kan ikke slette denne ændring.", false);
+        return;
+      }
+
+      const who = (stay.booked_by || "-").toString().trim() || "-";
+      const ok = confirm(`OBS. Denne ændring er lavet af ${who}\n\nHvis du sletter denne ændring, forsvinder den permanent og kan ikke genskabes.\n\nVil du slette?`);
+      if (!ok) return;
+
+      const client = getSupabaseClient();
+      if (!client){
+        setStatus("Kunne ikke forbinde.", false);
+        return;
+      }
+
+      const { error } = await client.from("stays").delete().eq("id", id);
+      if (error){
+        setStatus("Kunne ikke slette.", false);
+        console.error(error);
+        return;
+      }
+      setStatus("Slettet");
+      await loadStays();
+    }
+
+    function renderList(){
+      listEl.innerHTML = "";
+
+      const visibleList = isAdmin() ? stays : stays.filter(canSeeStay);
+
+      if (!visibleList.length){
+        const empty = document.createElement("div");
+        empty.className = "item";
+        empty.innerHTML = `<div class="meta"><div class="who">Ingen ændringer endnu</div><div class="dates">—</div></div>`;
+        listEl.appendChild(empty);
+        return;
+      }
+
+      const sorted = [...visibleList].sort((a,b)=>{
+        const aa = (a.created_at || "");
+        const bb = (b.created_at || "");
+        return bb.localeCompare(aa);
+      });
+
+      for (const s of sorted){
+        const it = document.createElement("div");
+        it.className = "item";
+
+        const meta = document.createElement("div");
+        meta.className = "meta";
+
+        const who = document.createElement("div");
+        who.className = "who";
+        who.textContent = s.family || "(ukendt)";
+
+        const dates = document.createElement("div");
+        dates.className = "dates";
+        dates.textContent = `${s.start_date} → ${s.end_date}`;
+
+        const by = document.createElement("div");
+        by.className = "by";
+        by.textContent = `Ændret af: ${s.booked_by || "-"}`;
+
+        const vis = document.createElement("div");
+        vis.className = "by";
+        vis.textContent = `Synlig: ${formatVisibility(s.visibility)}`;
+
+        meta.appendChild(who);
+        meta.appendChild(dates);
+        meta.appendChild(by);
+        meta.appendChild(vis);
+
+        if (s.note && String(s.note).trim()){
+          const note = document.createElement("div");
+          note.className = "note";
+          note.textContent = `Note: ${String(s.note).trim()}`;
+          meta.appendChild(note);
+        }
+
+        const actions = document.createElement("div");
+        actions.className = "actions";
+
+        const canMod = canModifyStay(s);
+
+        if (canMod){
+          const edit = document.createElement("button");
+          edit.className = "btn";
+          edit.type = "button";
+          edit.textContent = "Rediger";
+          edit.addEventListener("click", ()=> startEditStay(s));
+          actions.appendChild(edit);
+
+          const del = document.createElement("button");
+          del.className = "btn danger";
+          del.type = "button";
+          del.textContent = "Slet";
+          del.addEventListener("click", ()=> deleteStay(s.id));
+          actions.appendChild(del);
+        }
+
+        it.appendChild(meta);
+        it.appendChild(actions);
+
+        listEl.appendChild(it);
+      }
+    }
+
+    async function loadStays(){
+      const client = getSupabaseClient();
+      if (!client){
+        setStatus("Kunne ikke forbinde lige nu. Prøv at genindlæse.", false);
+        return;
+      }
+
+      const { data, error } = await client
+        .from("stays")
+        .select("*")
+        .order("start_date", { ascending: true });
+
+      if (error){
+        setStatus("Kunne ikke hente data.", false);
+        console.error(error);
+        return;
+      }
+
+      stays = Array.isArray(data) ? data : [];
+      render();
+      renderList();
+    }
+
+    /* =========================================================
+       Info pages (Yderligere info)
+       ========================================================= */
+    function closeInfoMenu(){
+      infoMenu.classList.remove("open");
+    }
+
+    infoBtn.addEventListener("click", (e)=>{
+      e.stopPropagation();
+      infoMenu.classList.toggle("open");
     });
-    saveBtn.addEventListener("click", saveOrUpdate);
 
+    document.addEventListener("click", ()=>{
+      closeInfoMenu();
+    });
+
+    function openModal(){
+      modalBack.classList.add("open");
+    }
+    function closeModal(){
+      modalBack.classList.remove("open");
+      modalEditArea.classList.add("hidden");
+      modalBody.classList.remove("hidden");
+      modalEditBtn.classList.remove("hidden");
+      modalDeleteBtn.classList.remove("hidden");
+      editingInfoId = null;
+    }
+
+    modalCloseBtn.addEventListener("click", closeModal);
+    modalBack.addEventListener("click", (e)=>{
+      if (e.target === modalBack) closeModal();
+    });
+
+    function renderInfoMenu(){
+      infoMenu.innerHTML = "";
+
+      if (isAdmin()){
+        const newBtn = document.createElement("button");
+        newBtn.className = "menuItem";
+        newBtn.type = "button";
+        newBtn.textContent = "Nyt punkt";
+        newBtn.addEventListener("click", ()=> startCreateInfoPage());
+        infoMenu.appendChild(newBtn);
+      }
+
+      if (!infoPages.length){
+        const empty = document.createElement("div");
+        empty.style.color = "rgba(255,255,255,.70)";
+        empty.style.fontSize = "13px";
+        empty.style.padding = "6px 8px";
+        empty.textContent = "Ingen punkter endnu";
+        infoMenu.appendChild(empty);
+        return;
+      }
+
+      for (const p of infoPages){
+        const row = document.createElement("div");
+        row.className = "menuItemRow";
+
+        const btn = document.createElement("button");
+        btn.className = "menuItem";
+        btn.type = "button";
+        btn.textContent = p.title || "(uden titel)";
+        btn.addEventListener("click", ()=> openInfoPage(p));
+
+        row.appendChild(btn);
+        infoMenu.appendChild(row);
+      }
+    }
+
+    function openInfoPage(page){
+      if (!page) return;
+      editingInfoId = page.id;
+
+      modalTitle.textContent = page.title || "(uden titel)";
+      modalBody.textContent = page.content || "";
+
+      modalEditArea.classList.add("hidden");
+      modalBody.classList.remove("hidden");
+
+      if (isAdmin()){
+        modalEditBtn.classList.remove("hidden");
+        modalDeleteBtn.classList.remove("hidden");
+      } else {
+        modalEditBtn.classList.add("hidden");
+        modalDeleteBtn.classList.add("hidden");
+      }
+
+      openModal();
+      closeInfoMenu();
+    }
+
+    function startCreateInfoPage(){
+      if (!isAdmin()) return;
+
+      editingInfoId = null;
+      modalTitle.textContent = "Nyt punkt";
+      modalBody.textContent = "";
+
+      infoTitleInput.value = "";
+      infoContentInput.value = "";
+
+      modalBody.classList.add("hidden");
+      modalEditArea.classList.remove("hidden");
+
+      modalEditBtn.classList.add("hidden");
+      modalDeleteBtn.classList.add("hidden");
+
+      openModal();
+      closeInfoMenu();
+    }
+
+    modalEditBtn.addEventListener("click", ()=>{
+      if (!isAdmin()) return;
+      const page = infoPages.find(x => String(x.id) === String(editingInfoId));
+      if (!page) return;
+
+      infoTitleInput.value = page.title || "";
+      infoContentInput.value = page.content || "";
+
+      modalBody.classList.add("hidden");
+      modalEditArea.classList.remove("hidden");
+      modalEditBtn.classList.add("hidden");
+      modalDeleteBtn.classList.add("hidden");
+    });
+
+    modalCancelEditBtn.addEventListener("click", ()=>{
+      const page = editingInfoId ? infoPages.find(x => String(x.id) === String(editingInfoId)) : null;
+      if (page){
+        modalTitle.textContent = page.title || "(uden titel)";
+        modalBody.textContent = page.content || "";
+        modalBody.classList.remove("hidden");
+        modalEditArea.classList.add("hidden");
+        if (isAdmin()){
+          modalEditBtn.classList.remove("hidden");
+          modalDeleteBtn.classList.remove("hidden");
+        }
+      } else {
+        closeModal();
+      }
+    });
+
+    modalSaveEditBtn.addEventListener("click", async ()=>{
+      if (!isAdmin()) return;
+
+      const title = (infoTitleInput.value || "").trim();
+      const content = (infoContentInput.value || "").trim();
+
+      if (!title){
+        setStatus("Skriv en titel.", false);
+        return;
+      }
+
+      const client = getSupabaseClient();
+      if (!client){
+        setStatus("Kunne ikke forbinde.", false);
+        return;
+      }
+
+      if (editingInfoId){
+        const { error } = await client
+          .from("info_pages")
+          .update({ title, content })
+          .eq("id", editingInfoId);
+
+        if (error){
+          setStatus("Kunne ikke gemme.", false);
+          console.error(error);
+          return;
+        }
+        setStatus("Gemt ✅");
+      } else {
+        const { error } = await client
+          .from("info_pages")
+          .insert({ title, content });
+
+        if (error){
+          setStatus("Kunne ikke oprette.", false);
+          console.error(error);
+          return;
+        }
+        setStatus("Oprettet ✅");
+      }
+
+      await loadInfoPages();
+
+      const page = editingInfoId ? infoPages.find(x => String(x.id) === String(editingInfoId)) : null;
+      if (page){
+        openInfoPage(page);
+      } else {
+        closeModal();
+      }
+    });
+
+    modalDeleteBtn.addEventListener("click", async ()=>{
+      if (!isAdmin()) return;
+      if (!editingInfoId) return;
+
+      const ok = confirm("Vil du slette dette punkt permanent?");
+      if (!ok) return;
+
+      const client = getSupabaseClient();
+      if (!client){
+        setStatus("Kunne ikke forbinde.", false);
+        return;
+      }
+
+      const { error } = await client
+        .from("info_pages")
+        .delete()
+        .eq("id", editingInfoId);
+
+      if (error){
+        setStatus("Kunne ikke slette.", false);
+        console.error(error);
+        return;
+      }
+
+      setStatus("Slettet");
+      closeModal();
+      await loadInfoPages();
+    });
+
+    async function loadInfoPages(){
+      const client = getSupabaseClient();
+      if (!client){
+        return;
+      }
+
+      const { data, error } = await client
+        .from("info_pages")
+        .select("*")
+        .order("sort_order", { ascending: true, nullsFirst: false })
+        .order("created_at", { ascending: true });
+
+      if (error){
+        console.error(error);
+        infoPages = [];
+        renderInfoMenu();
+        return;
+      }
+
+      infoPages = Array.isArray(data) ? data : [];
+      renderInfoMenu();
+    }
+
+    async function loadAll(){
+      updateHeaderTitle();
+      await Promise.all([loadStays(), loadInfoPages()]);
+    }
+
+    /* =========================================================
+       Init
+       ========================================================= */
     (function init(){
-      applyDateMins();
-
       if (isLoggedIn()){
         showApp();
-        configureVisibilitySelect();
-        updateWelcome();
-        resetForm(true);
-        loadStays();
+        updateHeaderTitle();
+        loadAll();
       } else {
         showLogin();
       }
 
       render();
       renderList();
+      renderInfoMenu();
     })();
   </script>
 </body>
