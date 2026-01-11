@@ -137,10 +137,19 @@
       padding: 10px 0;
     }
 
+    /* NY: centrer hele login-indholdet i en kolonne */
+    .loginStack{
+      display:flex;
+      flex-direction:column;
+      align-items:center;     /* centrerer både titel og boks */
+      justify-content:center;
+      width: 100%;
+    }
+
     .loginHero{
       width: min(640px, 96vw);
       text-align:center;
-      margin-bottom: 14px;
+      margin-bottom: clamp(28px, 6vw, 52px); /* ca. 3x luft, fleksibelt */
     }
     .loginHero .big{
       font-size: clamp(44px, 6vw, 72px);
@@ -149,12 +158,11 @@
       margin: 0;
       line-height: 1.02;
     }
-    /* .loginHero .small er stadig i CSS, men vi viser den ikke længere i HTML */
 
     .loginBox{
       width: min(560px, 96vw);
       padding: 18px;
-      text-align:left;
+      text-align:left; /* behold venstrejustering inde i boksen */
     }
     .loginBox .row{
       display:flex; gap: 10px;
@@ -223,7 +231,6 @@
     }
     .nav .btn{ padding: 10px 12px; min-width: 44px; }
 
-    /* Wrapper der gør det muligt at swipe/scroll kalenderen horisontalt på mobil */
     .calScroll{
       overflow-x: visible;
       overflow-y: hidden;
@@ -355,7 +362,6 @@
       opacity: .55;
     }
 
-    /* ===== Form ===== */
     .formGrid{
       display:grid;
       grid-template-columns: 1fr 1fr;
@@ -456,7 +462,6 @@
     @media (max-width: 980px){
       .grid{ grid-template-columns: 1fr; }
 
-      /* mobil: header sticky så man altid har log ud osv. */
       #appHeader{
         position: sticky;
         top: 0;
@@ -468,7 +473,6 @@
         margin-top: -10px;
       }
 
-      /* mobil: kalender kan swipes horisontalt uden at vi ændrer struktur */
       .calScroll{
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
@@ -478,12 +482,10 @@
         min-width: 760px;
       }
 
-      /* mobil: lidt større touch targets */
       .day{ min-height: 110px; padding: 12px; }
       .nav .btn{ min-width: 46px; padding: 12px 12px; }
       .btn{ padding: 12px 14px; }
 
-      /* mobil: pills lidt kompakte og må gerne wrap */
       .pill{
         font-size: 11px;
         line-height: 1.25;
@@ -495,14 +497,12 @@
         justify-content:flex-start;
       }
 
-      /* mobil: ugekolonne lidt smallere */
       .weekdays{ grid-template-columns: 56px repeat(7, 1fr); }
       .days{ grid-template-columns: 56px repeat(7, 1fr); }
     }
 
     .hidden{ display:none !important; }
 
-    /* ===== Modal ===== */
     .modalBack{
       position:fixed;
       inset:0;
@@ -548,7 +548,6 @@
       flex-wrap: wrap;
     }
 
-    /* ===== Dropdown for Yderligere info ===== */
     .dropMenu{
       position:absolute;
       top: 48px;
@@ -606,10 +605,9 @@
 
     <!-- LOGIN -->
     <section id="loginScreen">
-      <div>
+      <div class="loginStack">
         <div class="loginHero">
           <h1 class="big">Samsøhuset</h1>
-          <!-- Fjernet: <p class="small">Hvem og hvornår</p> -->
         </div>
 
         <div class="card loginBox">
@@ -1233,7 +1231,6 @@
           top.appendChild(dow);
           day.appendChild(top);
 
-          /* Udenfor 2026: ingen label/pill, bare dato */
           if (!inYear){
             daysEl.appendChild(day);
             continue;
