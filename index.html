@@ -265,8 +265,8 @@
       min-height: 92px;
       padding: 10px;
       display:flex;
-      align-items:center;      /* ÆNDRING: centrer lodret */
-      justify-content:center;  /* ÆNDRING: centrer vandret */
+      align-items:center;
+      justify-content:center;
       color: rgba(255,255,255,.70);
       font-weight: 850;
       letter-spacing: .2px;
@@ -459,7 +459,6 @@
       background: rgba(255,60,60,.10);
     }
 
-    /* NY: tydelig opdeling i "Foretag ændringer"-boksen */
     .panelDivider{
       height: 1px;
       background: rgba(255,255,255,.12);
@@ -712,10 +711,8 @@
 
           <div id="status" class="status">—</div>
 
-          <!-- NY: divider mellem form og historik -->
           <div class="panelDivider"></div>
 
-          <!-- NY: historik-afsnit -->
           <div class="historySection">
             <div class="listHeaderRow">
               <div>
@@ -1361,12 +1358,42 @@
       renderList();
     }
 
+    // ===== ÆNDRINGEN: overlap er kun tilladt hvis overlap-dagene alle er søndag =====
+    function overlapIsOnlySundays(aStartISO, aEndISO, bStartISO, bEndISO){
+      const aStart = parseISO(aStartISO);
+      const aEnd = parseISO(aEndISO);
+      const bStart = parseISO(bStartISO);
+      const bEnd = parseISO(bEndISO);
+
+      const start = (aStart > bStart) ? aStart : bStart;
+      const end = (aEnd < bEnd) ? aEnd : bEnd;
+
+      if (start.getTime() > end.getTime()){
+        return false; // intet overlap
+      }
+
+      for (let d = startOfDay(start); d.getTime() <= end.getTime(); d = addDays(d, 1)){
+        if (d.getDay() !== 0){
+          return false; // overlap rammer en ikke-søndag => ikke tilladt
+        }
+      }
+      return true; // overlap rammer kun søndage => tilladt
+    }
+
     function overlapsExisting(aISO, bISO, ignoreId){
       return stays.some(s=>{
         if (ignoreId && String(s.id) === String(ignoreId)) return false;
-        return !(s.end_date < aISO || s.start_date > bISO);
+
+        // Ingen overlap? så er det ok
+        const noOverlap = (s.end_date < aISO) || (s.start_date > bISO);
+        if (noOverlap) return false;
+
+        // Her ER der overlap. Tillad KUN hvis overlap-dagene alle er søndag.
+        const allowed = overlapIsOnlySundays(aISO, bISO, s.start_date, s.end_date);
+        return !allowed; // returnér true hvis det er et "ulovligt overlap"
       });
     }
+    // ===== SLUT på ændringen =====
 
     function minStartDateISO(){
       const t = startOfDay(new Date());
