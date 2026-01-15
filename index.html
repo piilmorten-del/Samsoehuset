@@ -377,9 +377,15 @@
       line-height: 1.2;
     }
 
+    /* Gør overstreget base tydeligere */
     .pill.strike{
       text-decoration: line-through;
-      opacity: .55;
+      text-decoration-thickness: 2px;
+      text-decoration-color: rgba(255,255,255,.78);
+      opacity: .42;
+      background: rgba(255,255,255,.04);
+      border-color: rgba(255,255,255,.20);
+      filter: saturate(.85);
     }
 
     /* ===== Form ===== */
@@ -601,6 +607,13 @@
       .cardInner{ padding: 14px; }
     }
 
+    /* Når højrepanelet bliver smalt: start/slut i én kolonne */
+    @media (max-width: 1280px){
+      aside .formGrid{
+        grid-template-columns: 1fr;
+      }
+    }
+
     /* ===== Hvis skærmen er for smal, skift til 1 kolonne ===== */
     @media (max-width: 1100px){
       .grid{ grid-template-columns: 1fr; }
@@ -758,10 +771,14 @@
                 <h2 style="margin:0 0 4px;">Ændringer</h2>
                 <p class="sub" style="margin:0;">Liste over ændringer</p>
               </div>
-              <button id="toggleHistoryBtn" class="btn" type="button">Vis historiske ændringer</button>
+
+              <div class="btnRow">
+                <button id="toggleListBtn" class="btn" type="button">Se ændringer</button>
+                <button id="toggleHistoryBtn" class="btn hidden" type="button">Vis historiske ændringer</button>
+              </div>
             </div>
 
-            <div id="list" class="list"></div>
+            <div id="list" class="list hidden"></div>
           </div>
         </div>
       </aside>
@@ -846,6 +863,7 @@
     const statusEl = document.getElementById("status");
     const listEl = document.getElementById("list");
     const toggleHistoryBtn = document.getElementById("toggleHistoryBtn");
+    const toggleListBtn = document.getElementById("toggleListBtn");
 
     const modalBack = document.getElementById("modalBack");
     const modalTitle = document.getElementById("modalTitle");
@@ -1056,6 +1074,29 @@
     let stays = [];
     let showHistory = false;
 
+    /* Ændringer-listen er skjult som standard */
+    let listOpen = false;
+
+    function applyListUI(){
+      if (listOpen){
+        listEl.classList.remove("hidden");
+        toggleHistoryBtn.classList.remove("hidden");
+        toggleListBtn.textContent = "Skjul ændringer";
+        renderList();
+      } else {
+        listEl.classList.add("hidden");
+        toggleHistoryBtn.classList.add("hidden");
+        toggleListBtn.textContent = "Se ændringer";
+        showHistory = false;
+        toggleHistoryBtn.textContent = "Vis historiske ændringer";
+      }
+    }
+
+    toggleListBtn.addEventListener("click", ()=>{
+      listOpen = !listOpen;
+      applyListUI();
+    });
+
     function isoDate(d){
       const y = d.getFullYear();
       const m = String(d.getMonth()+1).padStart(2,"0");
@@ -1241,8 +1282,8 @@
       const oStart = (aStart > bStart) ? aStart : bStart;
       const oEnd = (aEnd < bEnd) ? aEnd : bEnd;
 
-      if (oStart > oEnd) return true; // ingen overlap
-      if (oStart !== oEnd) return false; // overlap på flere dage
+      if (oStart > oEnd) return true;
+      if (oStart !== oEnd) return false;
 
       const day = oStart;
       if (!isSundayISO(day)) return false;
@@ -1260,7 +1301,6 @@
 
       if (d.getDay() !== 0) return matches.slice(0, 1);
 
-      // søndag: tillad op til 2, og sorter så "slutter søndag" kommer før "starter søndag"
       const sorted = [...matches].sort((a,b)=>{
         const aEnds = (a.end_date === dayISO) ? 0 : 1;
         const bEnds = (b.end_date === dayISO) ? 0 : 1;
@@ -1363,11 +1403,12 @@
             day.appendChild(p);
           }
 
+          /* FJERN "Bruges af:" -> kun navn */
           if (visibleStays.length === 1){
             const b = document.createElement("div");
             b.className = "pill booking";
-            b.textContent = `Bruges af: ${visibleStays[0].family || "—"}`;
-            b.title = `Bruges af: ${visibleStays[0].family || ""}`;
+            b.textContent = `${visibleStays[0].family || "—"}`;
+            b.title = `${visibleStays[0].family || ""}`;
             day.appendChild(b);
           }
 
@@ -1376,7 +1417,7 @@
             const b2 = visibleStays[1].family || "—";
             const b = document.createElement("div");
             b.className = "pill booking";
-            b.textContent = `Bruges af: ${a} → ${b2}`;
+            b.textContent = `${a} → ${b2}`;
             b.title = `Skiftedag-bookinger: ${a} → ${b2}`;
             day.appendChild(b);
           }
@@ -1445,17 +1486,15 @@
 
       stays = Array.isArray(data) ? data : [];
       render();
-      renderList();
+      if (listOpen) renderList();
     }
 
     function overlapsExisting(aISO, bISO, ignoreId){
       return stays.some(s=>{
         if (ignoreId && String(s.id) === String(ignoreId)) return false;
 
-        // ingen overlap
         if (s.end_date < aISO || s.start_date > bISO) return false;
 
-        // overlap findes -> tillad KUN søndag "slut+start på samme søndag"
         const allowed = isAllowedSundayOnlyOverlap(aISO, bISO, s.start_date, s.end_date);
         return !allowed;
       });
@@ -1562,6 +1601,7 @@
       setStatus("Gemt ✅");
       resetForm(false);
       await loadStays();
+      if (listOpen) renderList();
     }
 
     async function deleteStay(id){
@@ -1599,6 +1639,7 @@
               }
               setStatus("Slettet");
               await loadStays();
+              if (listOpen) renderList();
           }}
         ]
       );
@@ -1622,6 +1663,8 @@
     }
 
     function renderList(){
+      if (!listOpen) return;
+
       listEl.innerHTML = "";
 
       const visible = stays.filter(s=> canViewerSeeStay(s));
@@ -1735,6 +1778,7 @@
     }
 
     toggleHistoryBtn.addEventListener("click", ()=>{
+      if (!listOpen) return;
       showHistory = !showHistory;
       toggleHistoryBtn.textContent = showHistory ? "Skjul historiske ændringer" : "Vis historiske ændringer";
       renderList();
@@ -2062,7 +2106,8 @@
     /* ===== Init ===== */
     (async function init(){
       render();
-      renderList();
+
+      applyListUI();
 
       if (isLoggedIn()){
         showApp();
@@ -2074,7 +2119,7 @@
         ]);
 
         render();
-        renderList();
+        if (listOpen) renderList();
       } else {
         showLogin();
       }
