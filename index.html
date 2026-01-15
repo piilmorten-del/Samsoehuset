@@ -100,10 +100,10 @@
     }
     .btnPrimary:hover{ background: rgba(45,212,122,.20); border-color: rgba(45,212,122,.62); }
 
-    /* ===== Layout: default (store skærme) ===== */
+    /* ===== Layout: gør kalender tydeligt større, højre panel smallere ===== */
     .grid{
       display:grid;
-      grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.55fr);
+      grid-template-columns: minmax(0, 2.25fr) minmax(220px, 0.32fr);
       gap: 16px;
       align-items:stretch;
     }
@@ -240,9 +240,10 @@
       min-width: 0;
     }
 
+    /* Søndag gøres lidt bredere end de andre (sidste kolonne) */
     .weekdays{
       display:grid;
-      grid-template-columns: 62px repeat(7, minmax(0, 1fr));
+      grid-template-columns: 62px repeat(6, minmax(0, 1fr)) minmax(0, 1.22fr);
       gap: 8px;
       margin-bottom: 8px;
       padding: 0 2px;
@@ -260,7 +261,7 @@
 
     .days{
       display:grid;
-      grid-template-columns: 62px repeat(7, minmax(0, 1fr));
+      grid-template-columns: 62px repeat(6, minmax(0, 1fr)) minmax(0, 1.22fr);
       gap: 10px;
       min-width: 0;
     }
@@ -347,22 +348,33 @@
     .pill.taastrup{ border-color: rgba(74,166,255,.55); background: rgba(74,166,255,.14); }
     .pill.horsens{ border-color: rgba(183,123,255,.55); background: rgba(183,123,255,.14); }
     .pill.birkeroed{ border-color: rgba(62,230,195,.55); background: rgba(62,230,195,.14); }
-    .pill.booking{ border-color: rgba(45,212,122,.55); background: rgba(45,212,122,.16); }
+    .pill.booking{
+      border-color: rgba(45,212,122,.55);
+      background: rgba(45,212,122,.16);
+      justify-content:flex-start;
+      white-space: normal;
+      overflow: visible;
+      text-overflow: clip;
+      line-height: 1.2;
+    }
 
     .pill.special{
       border-color: rgba(255,181,94,.55);
       background: rgba(255,181,94,.14);
-      white-space: nowrap;
-      overflow:hidden;
-      text-overflow: ellipsis;
+      white-space: normal;
+      overflow: visible;
+      text-overflow: clip;
+      line-height: 1.2;
     }
 
+    /* Skiftedag må IKKE klippes. Den må gerne wrappe */
     .pill.shiftday{
       font-size: 11px;
       padding: 7px 12px;
-      white-space: nowrap;
-      overflow:hidden;
-      text-overflow: ellipsis;
+      white-space: normal;
+      overflow: visible;
+      text-overflow: clip;
+      line-height: 1.2;
     }
 
     .pill.strike{
@@ -405,6 +417,20 @@
       color: rgba(205,255,225,.92);
       display:none;
       white-space: pre-line;
+    }
+
+    /* Gør højrepanelet mere kompakt */
+    aside .cardInner{
+      padding: 14px;
+    }
+    aside .sub{
+      margin-bottom: 10px;
+    }
+    aside label{
+      margin-top: 8px;
+    }
+    aside .formGrid{
+      gap: 8px;
     }
 
     .listHeaderRow{
@@ -565,23 +591,22 @@
       background: rgba(255,255,255,.10);
     }
 
-    /* ===== Laptop tilpasning: gør højre panel smallere ===== */
-    @media (max-width: 1280px){
+    /* ===== Laptop: endnu smallere højrepanel ===== */
+    @media (max-width: 1400px){
       .wrap{ padding: 18px 18px 28px; }
       .grid{
-        grid-template-columns: minmax(0, 1.7fr) minmax(240px, 0.45fr);
+        grid-template-columns: minmax(0, 2.45fr) minmax(210px, 0.28fr);
         gap: 14px;
       }
       .cardInner{ padding: 14px; }
-      .nav .btn{ min-width: 42px; }
     }
 
-    /* ===== Hvis skærmen er for smal til to kolonner, skift til 1 kolonne ===== */
+    /* ===== Hvis skærmen er for smal, skift til 1 kolonne ===== */
     @media (max-width: 1100px){
       .grid{ grid-template-columns: 1fr; }
     }
 
-    /* ===== Mobil ===== */
+    /* ===== Mobil: tillad swipe hvis nødvendigt ===== */
     @media (max-width: 980px){
       #appHeader{
         position: sticky;
@@ -602,30 +627,11 @@
         padding-bottom: 6px;
       }
 
-      /* På mobil må man gerne swipe */
-      .weekdays, .days{ min-width: 760px; }
+      .weekdays, .days{ min-width: 820px; }
 
-      .day{ min-height: 110px; padding: 12px; }
+      .day{ min-height: 116px; padding: 12px; }
       .nav .btn{ min-width: 46px; padding: 12px 12px; }
       .btn{ padding: 12px 14px; }
-
-      /* Gør labels mere fleksible på mobil */
-      .pill{
-        font-size: 11px;
-        line-height: 1.25;
-        white-space: normal;
-        overflow: visible;
-        text-overflow: clip;
-      }
-      .pill.shiftday, .pill.special{
-        white-space: normal;
-        overflow: visible;
-        text-overflow: clip;
-      }
-      .pill.booking{ justify-content:flex-start; }
-
-      .weekdays{ grid-template-columns: 56px repeat(7, minmax(0,1fr)); }
-      .days{ grid-template-columns: 56px repeat(7, minmax(0,1fr)); }
     }
   </style>
 </head>
@@ -789,7 +795,6 @@
       "Birkerød": "Birkerød"
     };
 
-    // Slå fra hvis den ikke bruges
     const SHARED_CODE = "";
 
     const SUPABASE_URL = "https://jbweskxscyxjonrhbdcd.supabase.co";
@@ -1227,11 +1232,43 @@
       return true;
     }
 
-    function findStayForDateVisible(d){
+    function isSundayISO(iso){
+      const d = parseISO(iso);
+      return d.getDay() === 0;
+    }
+
+    function isAllowedSundayOnlyOverlap(aStart, aEnd, bStart, bEnd){
+      const oStart = (aStart > bStart) ? aStart : bStart;
+      const oEnd = (aEnd < bEnd) ? aEnd : bEnd;
+
+      if (oStart > oEnd) return true; // ingen overlap
+      if (oStart !== oEnd) return false; // overlap på flere dage
+
+      const day = oStart;
+      if (!isSundayISO(day)) return false;
+
+      const ok1 = (aEnd === day && bStart === day);
+      const ok2 = (bEnd === day && aStart === day);
+      return ok1 || ok2;
+    }
+
+    function findStaysForDateVisible(d){
       const dayISO = isoDate(d);
-      const match = stays.find(s => s.start_date <= dayISO && s.end_date >= dayISO) || null;
-      if (!match) return null;
-      return canViewerSeeStay(match) ? match : null;
+      const matches = stays
+        .filter(s => s.start_date <= dayISO && s.end_date >= dayISO)
+        .filter(s => canViewerSeeStay(s));
+
+      if (d.getDay() !== 0) return matches.slice(0, 1);
+
+      // søndag: tillad op til 2, og sorter så "slutter søndag" kommer før "starter søndag"
+      const sorted = [...matches].sort((a,b)=>{
+        const aEnds = (a.end_date === dayISO) ? 0 : 1;
+        const bEnds = (b.end_date === dayISO) ? 0 : 1;
+        if (aEnds !== bEnds) return aEnds - bEnds;
+        return (a.start_date || "").localeCompare(b.start_date || "");
+      });
+
+      return sorted.slice(0, 2);
     }
 
     function monthLabel(d){
@@ -1291,7 +1328,7 @@
           }
 
           const base = baseInfoForDate(d);
-          const visibleStay = findStayForDateVisible(d);
+          const visibleStays = findStaysForDateVisible(d);
 
           if (base.type === "shift"){
             const p = document.createElement("div");
@@ -1318,7 +1355,7 @@
             p.className = "pill " + ownerClass(base.owner);
             p.textContent = base.owner;
 
-            if (visibleStay){
+            if (visibleStays.length){
               p.classList.add("strike");
               p.title = "Denne periode er ændret";
             }
@@ -1326,11 +1363,21 @@
             day.appendChild(p);
           }
 
-          if (visibleStay){
+          if (visibleStays.length === 1){
             const b = document.createElement("div");
             b.className = "pill booking";
-            b.textContent = visibleStay.family || "Bruges";
-            b.title = `Bruges af: ${visibleStay.family || ""}`;
+            b.textContent = `Bruges af: ${visibleStays[0].family || "—"}`;
+            b.title = `Bruges af: ${visibleStays[0].family || ""}`;
+            day.appendChild(b);
+          }
+
+          if (visibleStays.length === 2){
+            const a = visibleStays[0].family || "—";
+            const b2 = visibleStays[1].family || "—";
+            const b = document.createElement("div");
+            b.className = "pill booking";
+            b.textContent = `Bruges af: ${a} → ${b2}`;
+            b.title = `Skiftedag-bookinger: ${a} → ${b2}`;
             day.appendChild(b);
           }
 
@@ -1404,7 +1451,13 @@
     function overlapsExisting(aISO, bISO, ignoreId){
       return stays.some(s=>{
         if (ignoreId && String(s.id) === String(ignoreId)) return false;
-        return !(s.end_date < aISO || s.start_date > bISO);
+
+        // ingen overlap
+        if (s.end_date < aISO || s.start_date > bISO) return false;
+
+        // overlap findes -> tillad KUN søndag "slut+start på samme søndag"
+        const allowed = isAllowedSundayOnlyOverlap(aISO, bISO, s.start_date, s.end_date);
+        return !allowed;
       });
     }
 
@@ -1464,7 +1517,7 @@
       }
 
       if (overlapsExisting(a, b, editingId)){
-        setStatus("Der findes allerede en ændring i den valgte periode. Slet den først, hvis du vil lave en ny.", false);
+        setStatus("Der findes allerede en ændring i perioden. Søndag kan kun deles hvis den ene slutter søndag og den anden starter søndag.", false);
         return;
       }
 
@@ -1576,10 +1629,8 @@
       const future = visible.filter(s=> !isHistorical(s));
       const past = visible.filter(s=> isHistorical(s));
 
-      // Kommende: tidligste start først
       const sortedFuture = [...future].sort((a,b)=> (a.start_date || "").localeCompare(b.start_date || ""));
 
-      // Historik: seneste dato først (primært slutdato, ellers startdato)
       const sortedPast = [...past].sort((a,b)=>{
         const ae = (a.end_date || "");
         const be = (b.end_date || "");
