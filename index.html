@@ -100,10 +100,10 @@
     }
     .btnPrimary:hover{ background: rgba(45,212,122,.20); border-color: rgba(45,212,122,.62); }
 
-    /* ===== Layout: gør kalender tydeligt større, højre panel smallere ===== */
+    /* ===== Layout: kalender større, højre panel smallere ===== */
     .grid{
       display:grid;
-      grid-template-columns: minmax(0, 2.25fr) minmax(220px, 0.32fr);
+      grid-template-columns: minmax(0, 2.35fr) minmax(260px, 0.45fr);
       gap: 16px;
       align-items:stretch;
     }
@@ -367,7 +367,7 @@
       line-height: 1.2;
     }
 
-    /* Skiftedag må IKKE klippes. Den må gerne wrappe */
+    /* Søndagspillen må wrappe og må ikke klippes */
     .pill.shiftday{
       font-size: 11px;
       padding: 7px 12px;
@@ -377,9 +377,13 @@
       line-height: 1.2;
     }
 
+    /* Gør det mere tydeligt at den oprindelige ejer er "overrulet" */
     .pill.strike{
       text-decoration: line-through;
-      opacity: .55;
+      text-decoration-thickness: 2px;
+      text-decoration-color: rgba(255,255,255,.78);
+      opacity: .42;
+      border-style: dashed;
     }
 
     /* ===== Form ===== */
@@ -420,96 +424,21 @@
     }
 
     /* Gør højrepanelet mere kompakt */
-    aside .cardInner{
-      padding: 14px;
-    }
-    aside .sub{
-      margin-bottom: 10px;
-    }
-    aside label{
-      margin-top: 8px;
-    }
-    aside .formGrid{
-      gap: 8px;
-    }
-
-    .listHeaderRow{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap: 10px;
-    }
-
-    .list{
-      margin-top: 12px;
-      display:flex;
-      flex-direction:column;
-      gap: 10px;
-    }
-    .item{
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.05);
-      border-radius: 14px;
-      padding: 12px;
-      display:flex;
-      justify-content:space-between;
-      gap: 10px;
-      align-items:flex-end;
-      min-width: 0;
-    }
-    .item .meta{
-      display:flex;
-      flex-direction:column;
-      gap: 6px;
-      min-width: 0;
-    }
-    .item .meta .who{
-      font-weight: 800;
-      white-space: nowrap;
-      overflow:hidden;
-      text-overflow: ellipsis;
-    }
-    .item .meta .dates{
-      color: rgba(255,255,255,.70);
-      font-size: 12px;
-    }
-    .item .meta .by{
-      color: rgba(255,255,255,.72);
-      font-size: 12px;
-    }
-    .item .meta .note{
-      color: rgba(255,255,255,.74);
-      font-size: 12px;
-      line-height: 1.25;
-      white-space: normal;
-      word-break: break-word;
-    }
-
-    .btnRow{
-      display:flex;
-      gap:8px;
-      align-items:center;
-      flex-shrink: 0;
-    }
-
-    .danger{
-      border-color: rgba(255,100,100,.35);
-      background: rgba(255,60,60,.10);
-    }
+    aside .cardInner{ padding: 14px; }
+    aside .sub{ margin-bottom: 10px; }
+    aside label{ margin-top: 8px; }
+    aside .formGrid{ gap: 8px; }
 
     .panelDivider{
       height: 1px;
       background: rgba(255,255,255,.12);
       margin-top: 18px;
-      margin-bottom: 16px;
-    }
-    .historySection{
-      padding-top: 2px;
+      margin-bottom: 14px;
     }
 
     .hidden{ display:none !important; }
 
-    /* ===== Modal ===== */
+    /* ===== Modal / overlay (bruges også som skuffe) ===== */
     .modalBack{
       position:fixed;
       inset:0;
@@ -521,6 +450,7 @@
       z-index: 50;
     }
     .modalBack.show{ display:flex; }
+
     .modal{
       width: min(620px, 96vw);
       border-radius: 18px;
@@ -553,6 +483,107 @@
       justify-content:flex-end;
       gap:10px;
       flex-wrap: wrap;
+    }
+
+    /* Skuffe-layout */
+    .modalBack.drawerMode{
+      justify-content:flex-end;
+      align-items:stretch;
+      padding: 0;
+    }
+    .modal.drawer{
+      width: min(560px, 94vw);
+      height: 100%;
+      max-height: 100vh;
+      border-radius: 0;
+    }
+    .modal.drawer .body{
+      overflow:auto;
+      max-height: calc(100vh - 56px - 66px);
+    }
+
+    /* ===== Ændringer i skuffe ===== */
+    .chgTopRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .chgHint{
+      color: rgba(255,255,255,.70);
+      font-size: 12px;
+      margin: 0;
+    }
+    .chgList{
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+    }
+    .chgItem{
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+      border-radius: 14px;
+      padding: 12px;
+      display:flex;
+      justify-content:space-between;
+      gap: 10px;
+      align-items:flex-end;
+      min-width: 0;
+    }
+    .chgMeta{
+      display:flex;
+      flex-direction:column;
+      gap: 6px;
+      min-width: 0;
+    }
+    .chgWho{
+      font-weight: 850;
+      white-space: normal;
+      word-break: break-word;
+      line-height: 1.15;
+    }
+    .chgDates{
+      color: rgba(255,255,255,.78);
+      font-size: 12px;
+    }
+    .chgSmallRow{
+      display:flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items:center;
+    }
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding: 5px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.20);
+      font-size: 12px;
+      color: rgba(255,255,255,.84);
+      white-space: nowrap;
+    }
+    .chip.dim{
+      color: rgba(255,255,255,.70);
+    }
+    .chgNote{
+      color: rgba(255,255,255,.74);
+      font-size: 12px;
+      line-height: 1.25;
+      white-space: normal;
+      word-break: break-word;
+    }
+    .btnRow{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      flex-shrink: 0;
+    }
+    .danger{
+      border-color: rgba(255,100,100,.35);
+      background: rgba(255,60,60,.10);
     }
 
     /* ===== Dropdown ===== */
@@ -591,14 +622,23 @@
       background: rgba(255,255,255,.10);
     }
 
-    /* ===== Laptop: endnu smallere højrepanel ===== */
+    /* ===== Laptop: lav en smule nedskalering så det føles mindre rodet ===== */
     @media (max-width: 1400px){
       .wrap{ padding: 18px 18px 28px; }
       .grid{
-        grid-template-columns: minmax(0, 2.45fr) minmax(210px, 0.28fr);
+        grid-template-columns: minmax(0, 2.55fr) minmax(260px, 0.45fr);
         gap: 14px;
       }
       .cardInner{ padding: 14px; }
+
+      .day{ min-height: 86px; padding: 9px; gap: 7px; }
+      .pill{ font-size: 11px; padding: 6px 10px; }
+      .pill.shiftday{ font-size: 10.5px; padding: 6px 10px; }
+      .nav .btn{ min-width: 42px; padding: 9px 11px; }
+
+      /* På laptop: stack Start/Slut så felter aldrig bliver klemt */
+      aside .formGrid{ grid-template-columns: 1fr; }
+      aside .formGrid .full{ grid-column: 1 / -1; }
     }
 
     /* ===== Hvis skærmen er for smal, skift til 1 kolonne ===== */
@@ -632,6 +672,8 @@
       .day{ min-height: 116px; padding: 12px; }
       .nav .btn{ min-width: 46px; padding: 12px 12px; }
       .btn{ padding: 12px 14px; }
+
+      .modalBack.drawerMode .modal.drawer{ width: 94vw; }
     }
   </style>
 </head>
@@ -722,7 +764,7 @@
 
             <div class="full">
               <label for="whoInput">Hvem har huset (kan være familie/venner)</label>
-              <input id="whoInput" class="field" type="text" placeholder="Fx navn, familie, venner..." />
+              <input id="whoInput" class="field" type="text" placeholder="Fx Birkerød / Vennegruppe / etc." />
             </div>
 
             <div class="full">
@@ -752,26 +794,16 @@
 
           <div class="panelDivider"></div>
 
-          <div class="historySection">
-            <div class="listHeaderRow">
-              <div>
-                <h2 style="margin:0 0 4px;">Ændringer</h2>
-                <p class="sub" style="margin:0;">Liste over ændringer</p>
-              </div>
-              <button id="toggleHistoryBtn" class="btn" type="button">Vis historiske ændringer</button>
-            </div>
-
-            <div id="list" class="list"></div>
-          </div>
+          <button id="openChangesBtn" class="btn" type="button" style="width:100%;">Se ændringer</button>
         </div>
       </aside>
 
     </main>
   </div>
 
-  <!-- Modal -->
+  <!-- Modal / Overlay -->
   <div id="modalBack" class="modalBack" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true">
+    <div id="modal" class="modal" role="dialog" aria-modal="true">
       <div class="head">
         <div id="modalTitle" class="h">-</div>
         <button id="modalClose" class="btn" type="button">Luk</button>
@@ -844,10 +876,11 @@
     const resetBtn = document.getElementById("resetBtn");
     const saveBtn = document.getElementById("saveBtn");
     const statusEl = document.getElementById("status");
-    const listEl = document.getElementById("list");
-    const toggleHistoryBtn = document.getElementById("toggleHistoryBtn");
+
+    const openChangesBtn = document.getElementById("openChangesBtn");
 
     const modalBack = document.getElementById("modalBack");
+    const modal = document.getElementById("modal");
     const modalTitle = document.getElementById("modalTitle");
     const modalBody = document.getElementById("modalBody");
     const modalFoot = document.getElementById("modalFoot");
@@ -886,8 +919,10 @@
         .replaceAll("'","&#039;");
     }
 
-    function openModal(title, bodyNodeOrHtml, buttons){
+    function openModal(title, bodyNodeOrHtml, buttons, opts){
+      const options = opts || {};
       modalTitle.textContent = title;
+
       modalBody.innerHTML = "";
       if (typeof bodyNodeOrHtml === "string"){
         modalBody.innerHTML = bodyNodeOrHtml;
@@ -905,11 +940,22 @@
         modalFoot.appendChild(btn);
       });
 
+      if (options.drawer){
+        modalBack.classList.add("drawerMode");
+        modal.classList.add("drawer");
+      } else {
+        modalBack.classList.remove("drawerMode");
+        modal.classList.remove("drawer");
+      }
+
       modalBack.classList.add("show");
       modalBack.setAttribute("aria-hidden", "false");
     }
+
     function closeModal(){
       modalBack.classList.remove("show");
+      modalBack.classList.remove("drawerMode");
+      modal.classList.remove("drawer");
       modalBack.setAttribute("aria-hidden", "true");
     }
     modalClose.addEventListener("click", closeModal);
@@ -990,7 +1036,6 @@
       ]);
 
       render();
-      renderList();
     }
 
     loginBtn.addEventListener("click", tryLogin);
@@ -1054,7 +1099,7 @@
     let selectedEnd = null;
 
     let stays = [];
-    let showHistory = false;
+    let showHistoryInDrawer = false;
 
     function isoDate(d){
       const y = d.getFullYear();
@@ -1186,7 +1231,7 @@
           type: "shift",
           current: cur,
           next: nxt,
-          text: `Skiftedag: ${curLabel} → ${nxtLabel}`
+          text: `${curLabel} → ${nxtLabel}`
         };
       }
 
@@ -1241,8 +1286,8 @@
       const oStart = (aStart > bStart) ? aStart : bStart;
       const oEnd = (aEnd < bEnd) ? aEnd : bEnd;
 
-      if (oStart > oEnd) return true; // ingen overlap
-      if (oStart !== oEnd) return false; // overlap på flere dage
+      if (oStart > oEnd) return true;
+      if (oStart !== oEnd) return false;
 
       const day = oStart;
       if (!isSundayISO(day)) return false;
@@ -1260,7 +1305,6 @@
 
       if (d.getDay() !== 0) return matches.slice(0, 1);
 
-      // søndag: tillad op til 2, og sorter så "slutter søndag" kommer før "starter søndag"
       const sorted = [...matches].sort((a,b)=>{
         const aEnds = (a.end_date === dayISO) ? 0 : 1;
         const bEnds = (b.end_date === dayISO) ? 0 : 1;
@@ -1282,20 +1326,12 @@
       first.setHours(12,0,0,0);
 
       const firstMonday = mondayStart(first);
-
-      // ✅ NYT: beregn hvor mange uger vi faktisk skal vise (4/5/6)
-      const lastDay = new Date(view.getFullYear(), view.getMonth() + 1, 0);
-      lastDay.setHours(12,0,0,0);
-      const lastWeekMonday = mondayStart(lastDay);
-      const lastSunday = addDays(lastWeekMonday, 6);
-
-      const MS_WEEK = 7 * 24 * 60 * 60 * 1000;
-      const weeksToShow = Math.round((lastSunday.getTime() - firstMonday.getTime()) / MS_WEEK) + 1;
+      const start = firstMonday;
 
       daysEl.innerHTML = "";
 
-      for (let row = 0; row < weeksToShow; row++){
-        const rowMonday = addDays(firstMonday, row * 7);
+      for (let row = 0; row < 6; row++){
+        const rowMonday = addDays(start, row * 7);
         const wInfo = isoWeekInfo(rowMonday);
 
         const wc = document.createElement("div");
@@ -1308,7 +1344,7 @@
 
         for (let col = 0; col < 7; col++){
           const i = row * 7 + col;
-          const d = addDays(firstMonday, i);
+          const d = addDays(start, i);
           const inThisMonth = d.getMonth() === view.getMonth();
           const inYear = d.getFullYear() === YEAR;
 
@@ -1374,8 +1410,8 @@
           if (visibleStays.length === 1){
             const b = document.createElement("div");
             b.className = "pill booking";
-            b.textContent = `Bruges af: ${visibleStays[0].family || "—"}`;
-            b.title = `Bruges af: ${visibleStays[0].family || ""}`;
+            b.textContent = `${visibleStays[0].family || "—"}`;
+            b.title = `${visibleStays[0].family || ""}`;
             day.appendChild(b);
           }
 
@@ -1384,8 +1420,8 @@
             const b2 = visibleStays[1].family || "—";
             const b = document.createElement("div");
             b.className = "pill booking";
-            b.textContent = `Bruges af: ${a} → ${b2}`;
-            b.title = `Skiftedag-bookinger: ${a} → ${b2}`;
+            b.textContent = `${a} → ${b2}`;
+            b.title = `${a} → ${b2}`;
             day.appendChild(b);
           }
 
@@ -1453,17 +1489,14 @@
 
       stays = Array.isArray(data) ? data : [];
       render();
-      renderList();
     }
 
     function overlapsExisting(aISO, bISO, ignoreId){
       return stays.some(s=>{
         if (ignoreId && String(s.id) === String(ignoreId)) return false;
 
-        // ingen overlap
         if (s.end_date < aISO || s.start_date > bISO) return false;
 
-        // overlap findes -> tillad KUN søndag "slut+start på samme søndag"
         const allowed = isAllowedSundayOnlyOverlap(aISO, bISO, s.start_date, s.end_date);
         return !allowed;
       });
@@ -1591,8 +1624,8 @@
           Hvis du sletter denne ændring, forsvinder den permanent og kan ikke genskabes.
         </div>`,
         [
-          { text: "Nej, jeg vil ikke slette", onClick: ()=> closeModal() },
-          { text: "Ja, jeg vil slette ændringen", danger:true, primary:true, onClick: async ()=>{
+          { text: "Nej", onClick: ()=> closeModal() },
+          { text: "Ja, slet", danger:true, primary:true, onClick: async ()=>{
               closeModal();
               const client = getSupabaseClient();
               if (!client){
@@ -1629,99 +1662,6 @@
       }
     }
 
-    function renderList(){
-      listEl.innerHTML = "";
-
-      const visible = stays.filter(s=> canViewerSeeStay(s));
-
-      const future = visible.filter(s=> !isHistorical(s));
-      const past = visible.filter(s=> isHistorical(s));
-
-      const sortedFuture = [...future].sort((a,b)=> (a.start_date || "").localeCompare(b.start_date || ""));
-
-      const sortedPast = [...past].sort((a,b)=>{
-        const ae = (a.end_date || "");
-        const be = (b.end_date || "");
-        if (be !== ae) return be.localeCompare(ae);
-        const as = (a.start_date || "");
-        const bs = (b.start_date || "");
-        return bs.localeCompare(as);
-      });
-
-      if (!sortedFuture.length && (!showHistory || !sortedPast.length)){
-        const empty = document.createElement("div");
-        empty.className = "item";
-        empty.innerHTML = `<div class="meta"><div class="who">Ingen ændringer endnu</div><div class="dates">-</div></div>`;
-        listEl.appendChild(empty);
-        return;
-      }
-
-      function addStayItem(s){
-        const it = document.createElement("div");
-        it.className = "item";
-
-        const meta = document.createElement("div");
-        meta.className = "meta";
-
-        const who = document.createElement("div");
-        who.className = "who";
-        who.textContent = s.family || "(ukendt)";
-
-        const dates = document.createElement("div");
-        dates.className = "dates";
-        dates.textContent = `${s.start_date} → ${s.end_date}`;
-
-        const by = document.createElement("div");
-        by.className = "by";
-        by.textContent = `Ændret af: ${s.booked_by || "-"}`;
-
-        const vis = document.createElement("div");
-        vis.className = "by";
-        const visText = (s.visibility === "all" || !s.visibility) ? "alle" : ("kun " + s.visibility);
-        vis.textContent = `Synlig: ${visText}`;
-
-        meta.appendChild(who);
-        meta.appendChild(dates);
-        meta.appendChild(by);
-        meta.appendChild(vis);
-
-        if (s.note && String(s.note).trim()){
-          const note = document.createElement("div");
-          note.className = "note";
-          note.textContent = `Note: ${String(s.note).trim()}`;
-          meta.appendChild(note);
-        }
-
-        const btns = document.createElement("div");
-        btns.className = "btnRow";
-
-        const canChange = canEditOrDeleteStay(s);
-
-        if (canChange){
-          const edit = document.createElement("button");
-          edit.className = "btn";
-          edit.type = "button";
-          edit.textContent = "Rediger";
-          edit.addEventListener("click", ()=> beginEdit(s));
-          btns.appendChild(edit);
-
-          const del = document.createElement("button");
-          del.className = "btn danger";
-          del.type = "button";
-          del.textContent = "Slet";
-          del.addEventListener("click", ()=> deleteStay(s.id));
-          btns.appendChild(del);
-        }
-
-        it.appendChild(meta);
-        it.appendChild(btns);
-        listEl.appendChild(it);
-      }
-
-      sortedFuture.forEach(addStayItem);
-      if (showHistory) sortedPast.forEach(addStayItem);
-    }
-
     function beginEdit(stay){
       if (!stay) return;
       if (!canEditOrDeleteStay(stay)){
@@ -1742,11 +1682,171 @@
       setStatus("Redigering slået til");
     }
 
-    toggleHistoryBtn.addEventListener("click", ()=>{
-      showHistory = !showHistory;
-      toggleHistoryBtn.textContent = showHistory ? "Skjul historiske ændringer" : "Vis historiske ændringer";
-      renderList();
-    });
+    function formatDkDate(iso){
+      const d = parseISO(iso);
+      const dd = String(d.getDate()).padStart(2,"0");
+      const mm = String(d.getMonth()+1).padStart(2,"0");
+      return `${dd}.${mm}`;
+    }
+
+    function drawerVisibleStays(){
+      const visible = stays.filter(s=> canViewerSeeStay(s));
+      const future = visible.filter(s=> !isHistorical(s));
+      const past = visible.filter(s=> isHistorical(s));
+
+      const sortedFuture = [...future].sort((a,b)=> (a.start_date || "").localeCompare(b.start_date || ""));
+      const sortedPast = [...past].sort((a,b)=>{
+        const ae = (a.end_date || "");
+        const be = (b.end_date || "");
+        if (be !== ae) return be.localeCompare(ae);
+        const as = (a.start_date || "");
+        const bs = (b.start_date || "");
+        return bs.localeCompare(as);
+      });
+
+      return { sortedFuture, sortedPast };
+    }
+
+    function openChangesDrawer(){
+      const wrap = document.createElement("div");
+
+      const top = document.createElement("div");
+      top.className = "chgTopRow";
+
+      const left = document.createElement("div");
+      const h = document.createElement("div");
+      h.style.fontWeight = "900";
+      h.style.fontSize = "18px";
+      h.textContent = "Ændringer";
+      const p = document.createElement("p");
+      p.className = "chgHint";
+      p.textContent = "Tryk på en ændring for at redigere eller slette (hvis du har rettigheder).";
+      left.appendChild(h);
+      left.appendChild(p);
+
+      const histBtn = document.createElement("button");
+      histBtn.type = "button";
+      histBtn.className = "btn";
+      histBtn.textContent = showHistoryInDrawer ? "Skjul historiske" : "Vis historiske";
+
+      top.appendChild(left);
+      top.appendChild(histBtn);
+
+      const list = document.createElement("div");
+      list.className = "chgList";
+
+      function renderDrawerList(){
+        list.innerHTML = "";
+        const { sortedFuture, sortedPast } = drawerVisibleStays();
+
+        if (!sortedFuture.length && (!showHistoryInDrawer || !sortedPast.length)){
+          const empty = document.createElement("div");
+          empty.className = "chgItem";
+          empty.innerHTML = `<div class="chgMeta"><div class="chgWho">Ingen ændringer endnu</div><div class="chgDates">-</div></div>`;
+          list.appendChild(empty);
+          return;
+        }
+
+        function addStayItem(s){
+          const it = document.createElement("div");
+          it.className = "chgItem";
+
+          const meta = document.createElement("div");
+          meta.className = "chgMeta";
+
+          const who = document.createElement("div");
+          who.className = "chgWho";
+          who.textContent = s.family || "(ukendt)";
+
+          const dates = document.createElement("div");
+          dates.className = "chgDates";
+          dates.textContent = `${formatDkDate(s.start_date)} til ${formatDkDate(s.end_date)} (${s.start_date} → ${s.end_date})`;
+
+          const small = document.createElement("div");
+          small.className = "chgSmallRow";
+
+          const chipBy = document.createElement("div");
+          chipBy.className = "chip";
+          chipBy.textContent = s.booked_by ? s.booked_by : "—";
+
+          const visText = (s.visibility === "all" || !s.visibility) ? "alle" : ("kun " + s.visibility);
+          const chipVis = document.createElement("div");
+          chipVis.className = "chip dim";
+          chipVis.textContent = visText;
+
+          small.appendChild(chipBy);
+          small.appendChild(chipVis);
+
+          meta.appendChild(who);
+          meta.appendChild(dates);
+          meta.appendChild(small);
+
+          if (s.note && String(s.note).trim()){
+            const note = document.createElement("div");
+            note.className = "chgNote";
+            note.textContent = String(s.note).trim();
+            meta.appendChild(note);
+          }
+
+          const btns = document.createElement("div");
+          btns.className = "btnRow";
+
+          if (canEditOrDeleteStay(s)){
+            const edit = document.createElement("button");
+            edit.className = "btn";
+            edit.type = "button";
+            edit.textContent = "Rediger";
+            edit.addEventListener("click", ()=>{
+              closeModal();
+              beginEdit(s);
+            });
+            btns.appendChild(edit);
+
+            const del = document.createElement("button");
+            del.className = "btn danger";
+            del.type = "button";
+            del.textContent = "Slet";
+            del.addEventListener("click", ()=>{
+              closeModal();
+              deleteStay(s.id);
+            });
+            btns.appendChild(del);
+          }
+
+          it.appendChild(meta);
+          it.appendChild(btns);
+          list.appendChild(it);
+        }
+
+        sortedFuture.forEach(addStayItem);
+        if (showHistoryInDrawer) sortedPast.forEach(addStayItem);
+      }
+
+      histBtn.addEventListener("click", ()=>{
+        showHistoryInDrawer = !showHistoryInDrawer;
+        histBtn.textContent = showHistoryInDrawer ? "Skjul historiske" : "Vis historiske";
+        renderDrawerList();
+      });
+
+      wrap.appendChild(top);
+      wrap.appendChild(list);
+
+      renderDrawerList();
+
+      openModal(
+        "Ændringer",
+        wrap,
+        [
+          { text: "Luk", primary:true, onClick: ()=> closeModal() }
+        ],
+        { drawer:true }
+      );
+    }
+
+    openChangesBtn.addEventListener("click", openChangesDrawer);
+
+    resetBtn.addEventListener("click", ()=> resetForm(true));
+    saveBtn.addEventListener("click", saveStay);
 
     function clampViewTo2026(d){
       const x = new Date(d);
@@ -1771,9 +1871,6 @@
       view = clampViewTo2026(n);
       render();
     });
-
-    resetBtn.addEventListener("click", ()=> resetForm(true));
-    saveBtn.addEventListener("click", saveStay);
 
     /* ===== Yderligere info (Supabase) ===== */
     let extraItems = [];
@@ -2070,7 +2167,6 @@
     /* ===== Init ===== */
     (async function init(){
       render();
-      renderList();
 
       if (isLoggedIn()){
         showApp();
@@ -2082,7 +2178,6 @@
         ]);
 
         render();
-        renderList();
       } else {
         showLogin();
       }
