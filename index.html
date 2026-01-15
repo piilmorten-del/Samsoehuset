@@ -29,7 +29,7 @@
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       color: var(--text);
       background: var(--bg);
-      overflow-x:hidden;
+      overflow-x: hidden;
     }
 
     .bg{
@@ -100,9 +100,10 @@
     }
     .btnPrimary:hover{ background: rgba(45,212,122,.20); border-color: rgba(45,212,122,.62); }
 
+    /* ===== Layout: default (store skærme) ===== */
     .grid{
       display:grid;
-      grid-template-columns: minmax(0, 1.35fr) minmax(300px, .65fr);
+      grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.55fr);
       gap: 16px;
       align-items:stretch;
     }
@@ -114,6 +115,7 @@
       border-radius: var(--r);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
+      min-width: 0;
     }
     .cardInner{ padding: 16px; }
 
@@ -166,7 +168,7 @@
     .loginBox .row{
       display:flex; gap: 10px;
       align-items:center;
-      margin-top: 10px;
+      margin-top: 0;
     }
 
     .field{
@@ -178,6 +180,7 @@
       color: var(--text);
       outline:none;
       font-size: 16px;
+      min-width: 0;
     }
     .field:focus{
       border-color: rgba(255,255,255,.28);
@@ -214,6 +217,7 @@
       display:flex;
       flex-direction:column;
       gap:3px;
+      min-width: 0;
     }
     .monthTitle .m{
       font-size: 18px;
@@ -231,18 +235,20 @@
     .nav .btn{ padding: 10px 12px; min-width: 44px; }
 
     .calScroll{
-      overflow-x: visible;
+      overflow-x: hidden;
       overflow-y: hidden;
+      min-width: 0;
     }
 
     .weekdays{
       display:grid;
-      grid-template-columns: 62px repeat(7, 1fr);
+      grid-template-columns: 62px repeat(7, minmax(0, 1fr));
       gap: 8px;
       margin-bottom: 8px;
       padding: 0 2px;
       color: rgba(255,255,255,.72);
       font-size: 12px;
+      min-width: 0;
     }
     .weekdays div{ text-align:center; }
     .weekdays .wlab{
@@ -254,8 +260,9 @@
 
     .days{
       display:grid;
-      grid-template-columns: 62px repeat(7, 1fr);
+      grid-template-columns: 62px repeat(7, minmax(0, 1fr));
       gap: 10px;
+      min-width: 0;
     }
 
     .weekCell{
@@ -265,23 +272,26 @@
       min-height: 92px;
       padding: 10px;
       display:flex;
-      align-items:center;      /* ÆNDRING: centrer lodret */
-      justify-content:center;  /* ÆNDRING: centrer vandret */
+      align-items:center;
+      justify-content:center;
       color: rgba(255,255,255,.70);
       font-weight: 850;
       letter-spacing: .2px;
+      min-width: 0;
     }
     .weekCell .wk{
-      display:inline-flex;
+      display:flex;
       align-items:center;
       justify-content:center;
+      width: 100%;
+      height: 100%;
+      text-align:center;
       padding: 7px 10px;
       border-radius: 999px;
       border: 1px solid rgba(255,255,255,.14);
       background: rgba(0,0,0,.18);
       font-size: 12px;
       line-height: 1;
-      text-align:center;
     }
 
     .day{
@@ -297,7 +307,8 @@
       transition: transform .06s ease, border-color .18s ease, background .18s ease;
       user-select:none;
       position:relative;
-      overflow: visible;
+      overflow: hidden;
+      min-width: 0;
       -webkit-tap-highlight-color: transparent;
     }
     .day:hover{ border-color: rgba(255,255,255,.18); background: rgba(255,255,255,.07); }
@@ -310,6 +321,7 @@
     .dayTop{
       display:flex; justify-content:space-between; align-items:baseline;
       gap: 8px;
+      min-width: 0;
     }
     .num{ font-weight: 800; font-size: 14px; }
     .dow{ font-size: 12px; color: rgba(255,255,255,.70); }
@@ -324,7 +336,7 @@
       background: rgba(0,0,0,.20);
       font-weight: 750;
       font-size: 12px;
-      line-height: 1.2;
+      line-height: 1.15;
       letter-spacing:.2px;
       white-space: nowrap;
       max-width: 100%;
@@ -340,21 +352,17 @@
     .pill.special{
       border-color: rgba(255,181,94,.55);
       background: rgba(255,181,94,.14);
-      white-space: normal;
-      overflow: visible;
-      text-overflow: clip;
-      line-height: 1.25;
-      justify-content:flex-start;
+      white-space: nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
     }
 
     .pill.shiftday{
       font-size: 11px;
       padding: 7px 12px;
-      white-space: normal;
-      overflow: visible;
-      text-overflow: clip;
-      line-height: 1.25;
-      justify-content:flex-start;
+      white-space: nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
     }
 
     .pill.strike{
@@ -362,11 +370,13 @@
       opacity: .55;
     }
 
+    /* ===== Form ===== */
     .formGrid{
       display:grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
       margin-top: 10px;
+      min-width: 0;
     }
     .formGrid .full{ grid-column: 1 / -1; }
 
@@ -419,6 +429,7 @@
       justify-content:space-between;
       gap: 10px;
       align-items:flex-end;
+      min-width: 0;
     }
     .item .meta{
       display:flex;
@@ -452,6 +463,7 @@
       display:flex;
       gap:8px;
       align-items:center;
+      flex-shrink: 0;
     }
 
     .danger{
@@ -459,7 +471,6 @@
       background: rgba(255,60,60,.10);
     }
 
-    /* NY: tydelig opdeling i "Foretag ændringer"-boksen */
     .panelDivider{
       height: 1px;
       background: rgba(255,255,255,.12);
@@ -470,50 +481,9 @@
       padding-top: 2px;
     }
 
-    @media (max-width: 980px){
-      .grid{ grid-template-columns: 1fr; }
-
-      #appHeader{
-        position: sticky;
-        top: 0;
-        z-index: 40;
-        background: rgba(11,15,20,.70);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        padding-top: 10px;
-        margin-top: -10px;
-      }
-
-      .calScroll{
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        padding-bottom: 6px;
-      }
-      .weekdays, .days{
-        min-width: 760px;
-      }
-
-      .day{ min-height: 110px; padding: 12px; }
-      .nav .btn{ min-width: 46px; padding: 12px 12px; }
-      .btn{ padding: 12px 14px; }
-
-      .pill{
-        font-size: 11px;
-        line-height: 1.25;
-        white-space: normal;
-        overflow: visible;
-        text-overflow: clip;
-      }
-      .pill.booking{
-        justify-content:flex-start;
-      }
-
-      .weekdays{ grid-template-columns: 56px repeat(7, 1fr); }
-      .days{ grid-template-columns: 56px repeat(7, 1fr); }
-    }
-
     .hidden{ display:none !important; }
 
+    /* ===== Modal ===== */
     .modalBack{
       position:fixed;
       inset:0;
@@ -559,6 +529,7 @@
       flex-wrap: wrap;
     }
 
+    /* ===== Dropdown ===== */
     .dropMenu{
       position:absolute;
       top: 48px;
@@ -593,6 +564,69 @@
       height:1px;
       background: rgba(255,255,255,.10);
     }
+
+    /* ===== Laptop tilpasning: gør højre panel smallere ===== */
+    @media (max-width: 1280px){
+      .wrap{ padding: 18px 18px 28px; }
+      .grid{
+        grid-template-columns: minmax(0, 1.7fr) minmax(240px, 0.45fr);
+        gap: 14px;
+      }
+      .cardInner{ padding: 14px; }
+      .nav .btn{ min-width: 42px; }
+    }
+
+    /* ===== Hvis skærmen er for smal til to kolonner, skift til 1 kolonne ===== */
+    @media (max-width: 1100px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+
+    /* ===== Mobil ===== */
+    @media (max-width: 980px){
+      #appHeader{
+        position: sticky;
+        top: 0;
+        z-index: 40;
+        background: rgba(11,15,20,.70);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        padding-top: 10px;
+        margin-top: -10px;
+      }
+
+      .wrap{ padding: 16px 14px 26px; }
+
+      .calScroll{
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 6px;
+      }
+
+      /* På mobil må man gerne swipe */
+      .weekdays, .days{ min-width: 760px; }
+
+      .day{ min-height: 110px; padding: 12px; }
+      .nav .btn{ min-width: 46px; padding: 12px 12px; }
+      .btn{ padding: 12px 14px; }
+
+      /* Gør labels mere fleksible på mobil */
+      .pill{
+        font-size: 11px;
+        line-height: 1.25;
+        white-space: normal;
+        overflow: visible;
+        text-overflow: clip;
+      }
+      .pill.shiftday, .pill.special{
+        white-space: normal;
+        overflow: visible;
+        text-overflow: clip;
+      }
+      .pill.booking{ justify-content:flex-start; }
+
+      .weekdays{ grid-template-columns: 56px repeat(7, minmax(0,1fr)); }
+      .days{ grid-template-columns: 56px repeat(7, minmax(0,1fr)); }
+    }
   </style>
 </head>
 
@@ -623,9 +657,7 @@
 
         <div class="card loginBox">
           <div class="cardInner">
-            <h2>Log ind</h2>
-            <p class="sub">Indtast koden for at komme ind.</p>
-
+            <!-- Kun kodefelt + login-knap -->
             <div class="row">
               <input id="passInput" class="field" type="password" placeholder="Kode" autocomplete="current-password" />
               <button id="loginBtn" class="btn btnPrimary" type="button">Log ind</button>
@@ -645,7 +677,7 @@
         <div class="cardInner">
           <div class="calHeader">
             <div class="monthTitle">
-              <div id="monthName" class="m">—</div>
+              <div id="monthName" class="m">-</div>
               <div class="t">Klik på en dag for start. Klik igen for slut.</div>
             </div>
             <div class="nav">
@@ -710,12 +742,10 @@
             <button id="saveBtn" class="btn btnPrimary" type="button">Gem</button>
           </div>
 
-          <div id="status" class="status">—</div>
+          <div id="status" class="status">-</div>
 
-          <!-- NY: divider mellem form og historik -->
           <div class="panelDivider"></div>
 
-          <!-- NY: historik-afsnit -->
           <div class="historySection">
             <div class="listHeaderRow">
               <div>
@@ -737,7 +767,7 @@
   <div id="modalBack" class="modalBack" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true">
       <div class="head">
-        <div id="modalTitle" class="h">—</div>
+        <div id="modalTitle" class="h">-</div>
         <button id="modalClose" class="btn" type="button">Luk</button>
       </div>
       <div id="modalBody" class="body"></div>
@@ -749,12 +779,17 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
+    /* =========================================================
+       KONFIGURATION
+       ========================================================= */
     const ADMIN_CODE = "Kalkhavesvej100!";
     const FAMILY_CODES = {
       "Taastrup": "Taastrup",
       "Horsens": "Horsens",
       "Birkerød": "Birkerød"
     };
+
+    // Slå fra hvis den ikke bruges
     const SHARED_CODE = "";
 
     const SUPABASE_URL = "https://jbweskxscyxjonrhbdcd.supabase.co";
@@ -773,6 +808,8 @@
 
     const STAYS_TABLE = "stays";
     const EXTRA_TABLE = "extra_info";
+
+    /* ========================================================= */
 
     const appHeader = document.getElementById("appHeader");
     const welcomeTitle = document.getElementById("welcomeTitle");
@@ -875,6 +912,7 @@
       if (e.target === modalBack) closeModal();
     });
 
+    /* ===== Login roller ===== */
     const ROLE_KEY = "samsoehuset_role";
     const OK_KEY = "samsoehuset_ok";
 
@@ -950,7 +988,7 @@
       renderList();
     }
 
-    loginBtn.addEventListener("click", ()=>{ tryLogin(); });
+    loginBtn.addEventListener("click", tryLogin);
     passInput.addEventListener("keydown", (e)=>{ if (e.key === "Enter") tryLogin(); });
     logoutBtn.addEventListener("click", ()=>{ setLoggedOut(); });
 
@@ -1000,6 +1038,7 @@
       visibilityInput.value = "";
     }
 
+    /* ===== Kalender ===== */
     const DK_MONTHS = ["januar","februar","marts","april","maj","juni","juli","august","september","oktober","november","december"];
     const DK_DOW = ["Søn","Man","Tir","Ons","Tor","Fre","Lør"];
 
@@ -1338,6 +1377,7 @@
       render();
     }
 
+    /* ===== Supabase stays ===== */
     async function loadStays(){
       const client = getSupabaseClient();
       if (!client){
@@ -1536,17 +1576,23 @@
       const future = visible.filter(s=> !isHistorical(s));
       const past = visible.filter(s=> isHistorical(s));
 
+      // Kommende: tidligste start først
       const sortedFuture = [...future].sort((a,b)=> (a.start_date || "").localeCompare(b.start_date || ""));
+
+      // Historik: seneste dato først (primært slutdato, ellers startdato)
       const sortedPast = [...past].sort((a,b)=>{
-        const aa = (a.created_at || "");
-        const bb = (b.created_at || "");
-        return bb.localeCompare(aa);
+        const ae = (a.end_date || "");
+        const be = (b.end_date || "");
+        if (be !== ae) return be.localeCompare(ae);
+        const as = (a.start_date || "");
+        const bs = (b.start_date || "");
+        return bs.localeCompare(as);
       });
 
       if (!sortedFuture.length && (!showHistory || !sortedPast.length)){
         const empty = document.createElement("div");
         empty.className = "item";
-        empty.innerHTML = `<div class="meta"><div class="who">Ingen ændringer endnu</div><div class="dates">—</div></div>`;
+        empty.innerHTML = `<div class="meta"><div class="who">Ingen ændringer endnu</div><div class="dates">-</div></div>`;
         listEl.appendChild(empty);
         return;
       }
@@ -1670,6 +1716,7 @@
     resetBtn.addEventListener("click", ()=> resetForm(true));
     saveBtn.addEventListener("click", saveStay);
 
+    /* ===== Yderligere info (Supabase) ===== */
     let extraItems = [];
 
     async function loadExtraInfo(){
@@ -1711,7 +1758,7 @@
         extraItems.forEach((it)=>{
           const b = document.createElement("button");
           b.type = "button";
-          b.textContent = it.title || "—";
+          b.textContent = it.title || "-";
           b.addEventListener("click", ()=>{
             extraMenu.classList.remove("show");
             openExtraView(it);
@@ -1752,7 +1799,7 @@
       const t = document.createElement("div");
       t.style.fontWeight = "850";
       t.style.fontSize = "18px";
-      t.textContent = item.title || "—";
+      t.textContent = item.title || "-";
 
       const c = document.createElement("div");
       c.style.whiteSpace = "pre-wrap";
@@ -1886,7 +1933,7 @@
           t.style.overflow = "hidden";
           t.style.textOverflow = "ellipsis";
           t.style.whiteSpace = "nowrap";
-          t.textContent = it.title || "—";
+          t.textContent = it.title || "-";
 
           const btnRow = document.createElement("div");
           btnRow.style.display = "flex";
@@ -1961,6 +2008,7 @@
       extraMenu.classList.remove("show");
     });
 
+    /* ===== Init ===== */
     (async function init(){
       render();
       renderList();
