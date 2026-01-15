@@ -1328,10 +1328,24 @@
       const firstMonday = mondayStart(first);
       const start = firstMonday;
 
+      const viewMonth = view.getMonth();
+
       daysEl.innerHTML = "";
 
+      // Vis kun uger hvor mindst én dag i ugen er i den viste måned
       for (let row = 0; row < 6; row++){
         const rowMonday = addDays(start, row * 7);
+
+        let weekHasDayInMonth = false;
+        for (let col = 0; col < 7; col++){
+          const d = addDays(rowMonday, col);
+          if (d.getFullYear() === YEAR && d.getMonth() === viewMonth){
+            weekHasDayInMonth = true;
+            break;
+          }
+        }
+        if (!weekHasDayInMonth) continue;
+
         const wInfo = isoWeekInfo(rowMonday);
 
         const wc = document.createElement("div");
@@ -1343,8 +1357,7 @@
         daysEl.appendChild(wc);
 
         for (let col = 0; col < 7; col++){
-          const i = row * 7 + col;
-          const d = addDays(start, i);
+          const d = addDays(rowMonday, col);
           const inThisMonth = d.getMonth() === view.getMonth();
           const inYear = d.getFullYear() === YEAR;
 
