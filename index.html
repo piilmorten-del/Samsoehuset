@@ -849,7 +849,9 @@
     const SUPABASE_URL = "https://jbweskxscyxjonrhbdcd.supabase.co";
     const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_2qMwF5JFmVmQuf9jJCERxw_25bMzbyu";
 
-    const YEAR = 2026;
+    const ROTATION_YEAR = 2026;
+    const START_YEAR = 2026;
+    const END_YEAR = 2027;
 
     const ROTATION = ["Birkerød", "Horsens", "Taastrup"];
     const ROTATION_START_ISO_WEEK = 2;
@@ -1106,10 +1108,15 @@
     const DK_DOW = ["Søn","Man","Tir","Ons","Tor","Fre","Lør"];
 
     const initialToday = new Date();
-    let view = initialToday.getFullYear() === YEAR
-      ? new Date(YEAR, initialToday.getMonth(), 1)
-      : new Date(YEAR, 0, 1);
+    let startYear = initialToday.getFullYear();
+    let startMonth = initialToday.getMonth();
 
+    if (startYear < START_YEAR || startYear > END_YEAR){
+      startYear = START_YEAR;
+      startMonth = 0;
+    }
+
+    let view = new Date(startYear, startMonth, 1);
     view.setHours(12,0,0,0);
 
     let selectedStart = null;
@@ -1184,7 +1191,7 @@
 
     function isSpecialWeek(isoWeek){
       if (!isoWeek) return false;
-      if (isoWeek.year !== YEAR) return false;
+      if (isoWeek.year !== ROTATION_YEAR) return false;
       return !!SPECIAL_WEEKS_2026[isoWeek.week];
     }
 
@@ -1198,7 +1205,7 @@
     }
 
     function ownerForIsoWeek(isoWeek){
-      if (!isoWeek || isoWeek.year !== YEAR) return { type: "out", label: "" };
+      if (!isoWeek || isoWeek.year !== ROTATION_YEAR) return { type: "out", label: "" };
 
       if (isSpecialWeek(isoWeek)){
         return { type: "special", label: specialLabel(isoWeek) };
@@ -1230,7 +1237,7 @@
       const mon = mondayStart(d);
       const w = isoWeekInfo(mon);
 
-      if (w.year !== YEAR){
+      if (w.year !== ROTATION_YEAR){
         return { type: "out", label: "" };
       }
 
@@ -1336,6 +1343,11 @@
       return `${DK_MONTHS[d.getMonth()]} ${d.getFullYear()}`;
     }
 
+    function isInCalendarYears(d){
+      const y = d.getFullYear();
+      return y >= START_YEAR && y <= END_YEAR;
+    }
+
     function render(){
       monthName.textContent = monthLabel(view);
 
@@ -1348,6 +1360,7 @@
       const start = firstMonday;
 
       const viewMonth = view.getMonth();
+      const viewYear = view.getFullYear();
 
       daysEl.innerHTML = "";
 
@@ -1357,7 +1370,7 @@
         let weekHasDayInMonth = false;
         for (let col = 0; col < 7; col++){
           const d = addDays(rowMonday, col);
-          if (d.getFullYear() === YEAR && d.getMonth() === viewMonth){
+          if (isInCalendarYears(d) && d.getFullYear() === viewYear && d.getMonth() === viewMonth){
             weekHasDayInMonth = true;
             break;
           }
@@ -1370,20 +1383,20 @@
         wc.className = "weekCell";
         const wk = document.createElement("div");
         wk.className = "wk";
-        wk.textContent = (wInfo.year === YEAR) ? ("Uge " + pad2(wInfo.week)) : "";
+        wk.textContent = isInCalendarYears(rowMonday) ? ("Uge " + pad2(wInfo.week)) : "";
         wc.appendChild(wk);
         daysEl.appendChild(wc);
 
         for (let col = 0; col < 7; col++){
           const d = addDays(rowMonday, col);
           const dayISO = isoDate(d);
-          const inThisMonth = d.getMonth() === view.getMonth();
-          const inYear = d.getFullYear() === YEAR;
+          const inThisMonth = d.getMonth() === view.getMonth() && d.getFullYear() === view.getFullYear();
+          const inCalendarYears = isInCalendarYears(d);
 
           const day = document.createElement("div");
-          day.className = "day" + (inThisMonth && inYear ? "" : " muted");
+          day.className = "day" + (inThisMonth && inCalendarYears ? "" : " muted");
 
-          if (dayISO === todayISO && inThisMonth && inYear){
+          if (dayISO === todayISO && inThisMonth && inCalendarYears){
             day.classList.add("today");
           }
 
@@ -1402,7 +1415,7 @@
           top.appendChild(dow);
           day.appendChild(top);
 
-          if (!inYear){
+          if (!inCalendarYears){
             daysEl.appendChild(day);
             continue;
           }
@@ -1430,7 +1443,7 @@
             p.title = base.label;
             day.appendChild(p);
 
-          } else {
+          } else if (base.type === "owner"){
             const p = document.createElement("div");
             p.className = "pill " + ownerClass(base.owner);
             p.textContent = base.owner;
@@ -1480,7 +1493,7 @@
             day.style.background = "";
           }
 
-          if (inThisMonth && inYear){
+          if (inThisMonth && inCalendarYears){
             day.addEventListener("click", ()=> onDayClick(d));
           }
 
@@ -1883,27 +1896,27 @@
     resetBtn.addEventListener("click", ()=> resetForm(true));
     saveBtn.addEventListener("click", saveStay);
 
-    function clampViewTo2026(d){
+    function clampView(d){
       const x = new Date(d);
-      if (x.getFullYear() < YEAR) return new Date(YEAR, 0, 1, 12,0,0,0);
-      if (x.getFullYear() > YEAR) return new Date(YEAR, 11, 1, 12,0,0,0);
+      if (x.getFullYear() < START_YEAR) return new Date(START_YEAR, 0, 1, 12,0,0,0);
+      if (x.getFullYear() > END_YEAR) return new Date(END_YEAR, 11, 1, 12,0,0,0);
       return x;
     }
 
     prevBtn.addEventListener("click", ()=>{
       const n = new Date(view.getFullYear(), view.getMonth()-1, 1, 12,0,0,0);
-      view = clampViewTo2026(n);
+      view = clampView(n);
       render();
     });
     nextBtn.addEventListener("click", ()=>{
       const n = new Date(view.getFullYear(), view.getMonth()+1, 1, 12,0,0,0);
-      view = clampViewTo2026(n);
+      view = clampView(n);
       render();
     });
     todayBtn.addEventListener("click", ()=>{
       const t = new Date();
       const n = new Date(t.getFullYear(), t.getMonth(), 1, 12,0,0,0);
-      view = clampViewTo2026(n);
+      view = clampView(n);
       render();
     });
 
