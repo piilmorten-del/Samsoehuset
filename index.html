@@ -424,10 +424,41 @@
     }
 
     /* Gør højrepanelet mere kompakt */
-    aside .cardInner{ padding: 14px; }
+    aside{
+      min-width: 0;
+      max-width: 100%;
+      overflow: hidden;
+    }
+
+    aside .cardInner{
+      padding: 14px;
+      min-width: 0;
+      max-width: 100%;
+    }
+
     aside .sub{ margin-bottom: 10px; }
     aside label{ margin-top: 8px; }
-    aside .formGrid{ gap: 8px; }
+
+    aside .formGrid{
+      gap: 8px;
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    aside .formGrid > div{
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    aside .field,
+    aside input,
+    aside select,
+    aside textarea,
+    aside button{
+      width: 100%;
+      min-width: 0;
+      max-width: 100%;
+    }
 
     .panelDivider{
       height: 1px;
