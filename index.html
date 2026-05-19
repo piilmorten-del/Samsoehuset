@@ -675,32 +675,230 @@
     }
 
     @media (max-width: 980px){
+      .wrap{
+        padding: 10px 8px 22px;
+      }
+
       #appHeader{
         position: sticky;
         top: 0;
         z-index: 40;
-        background: rgba(11,15,20,.70);
+        background: rgba(11,15,20,.76);
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
-        padding-top: 10px;
-        margin-top: -10px;
+        padding: 8px 0 8px;
+        margin: -10px 0 10px;
+        align-items:flex-start;
+        gap: 8px;
       }
 
-      .wrap{ padding: 16px 14px 26px; }
+      .title h1{
+        font-size: clamp(26px, 8.5vw, 38px);
+        line-height: 1.08;
+        max-width: 70vw;
+      }
+
+      .title p{
+        font-size: 13px;
+        margin-top: 6px;
+      }
+
+      .topActions{
+        gap: 6px;
+        flex-shrink: 0;
+      }
+
+      .topActions .btn{
+        padding: 9px 10px;
+        border-radius: 14px;
+        font-size: 13px;
+        line-height: 1.05;
+        max-width: 82px;
+        white-space: normal;
+      }
+
+      .grid{
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .card{
+        border-radius: 16px;
+      }
+
+      .cardInner{
+        padding: 12px;
+      }
+
+      .calHeader{
+        align-items:flex-start;
+        gap: 8px;
+        margin-bottom: 10px;
+      }
+
+      .monthTitle .m{
+        font-size: 18px;
+      }
+
+      .monthTitle .t{
+        font-size: 12px;
+        line-height: 1.25;
+      }
+
+      .nav{
+        gap: 6px;
+        flex-shrink: 0;
+      }
+
+      .nav .btn{
+        min-width: 42px;
+        padding: 10px 10px;
+        border-radius: 14px;
+        font-size: 14px;
+      }
 
       .calScroll{
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        padding-bottom: 6px;
+        overflow-x: hidden;
+        overflow-y: hidden;
+        padding-bottom: 0;
       }
 
-      .weekdays, .days{ min-width: 820px; }
+      .weekdays,
+      .days{
+        width: 100%;
+        min-width: 0;
+        grid-template-columns: 38px repeat(7, minmax(0, 1fr));
+        gap: 5px;
+      }
 
-      .day{ min-height: 116px; padding: 12px; }
-      .nav .btn{ min-width: 46px; padding: 12px 12px; }
-      .btn{ padding: 12px 14px; }
+      .weekdays{
+        font-size: 11px;
+        margin-bottom: 6px;
+        padding: 0;
+      }
 
-      .modalBack.drawerMode .modal.drawer{ width: 94vw; }
+      .weekdays .wlab{
+        padding-left: 0;
+        text-align:center;
+      }
+
+      .weekCell{
+        min-height: 76px;
+        padding: 4px;
+        border-radius: 12px;
+      }
+
+      .weekCell .wk{
+        padding: 5px 3px;
+        font-size: 10px;
+        line-height: 1.05;
+        writing-mode: horizontal-tb;
+      }
+
+      .day{
+        min-height: 76px;
+        padding: 6px 5px;
+        gap: 5px;
+        border-radius: 12px;
+      }
+
+      .dayTop{
+        gap: 3px;
+      }
+
+      .num{
+        font-size: 13px;
+      }
+
+      .dow{
+        display:none;
+      }
+
+      .pill{
+        width: 100%;
+        padding: 4px 4px;
+        font-size: 9.5px;
+        line-height: 1.08;
+        white-space: normal;
+        overflow: hidden;
+        text-overflow: clip;
+        min-height: 22px;
+      }
+
+      .pill.shiftday{
+        font-size: 9px;
+        padding: 4px 4px;
+        line-height: 1.05;
+      }
+
+      .pill.booking{
+        font-size: 9.5px;
+        padding: 4px 4px;
+        line-height: 1.08;
+        justify-content:center;
+      }
+
+      .pill.special{
+        font-size: 9px;
+        padding: 4px 4px;
+        line-height: 1.05;
+      }
+
+      .day.today{
+        box-shadow: 0 0 0 1px rgba(45,212,122,.45), 0 0 18px rgba(45,212,122,.12);
+      }
+
+      aside .cardInner{
+        padding: 14px;
+      }
+
+      aside .formGrid{
+        grid-template-columns: 1fr;
+      }
+
+      .field{
+        font-size: 16px;
+      }
+
+      .modalBack.drawerMode .modal.drawer{
+        width: 94vw;
+      }
+    }
+
+    @media (max-width: 430px){
+      .weekdays,
+      .days{
+        grid-template-columns: 34px repeat(7, minmax(0, 1fr));
+        gap: 4px;
+      }
+
+      .weekCell{
+        min-height: 72px;
+        padding: 3px;
+      }
+
+      .weekCell .wk{
+        font-size: 9px;
+      }
+
+      .day{
+        min-height: 72px;
+        padding: 5px 4px;
+      }
+
+      .pill{
+        font-size: 8.8px;
+        padding: 4px 3px;
+      }
+
+      .pill.shiftday,
+      .pill.special{
+        font-size: 8.4px;
+      }
+
+      .pill.booking{
+        font-size: 8.8px;
+      }
     }
   </style>
 </head>
