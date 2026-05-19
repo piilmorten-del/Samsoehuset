@@ -100,7 +100,6 @@
     }
     .btnPrimary:hover{ background: rgba(45,212,122,.20); border-color: rgba(45,212,122,.62); }
 
-    /* ===== Layout: kalender større, højre panel smallere ===== */
     .grid{
       display:grid;
       grid-template-columns: minmax(0, 2.35fr) minmax(260px, 0.45fr);
@@ -130,7 +129,6 @@
       font-size: 13px;
     }
 
-    /* ===== Login screen ===== */
     #loginScreen{
       min-height: calc(100vh - 48px);
       display:flex;
@@ -205,7 +203,6 @@
     }
     .msg.ok{ color: rgba(205,255,225,.92); }
 
-    /* ===== Calendar ===== */
     .calHeader{
       display:flex;
       align-items:center;
@@ -240,7 +237,6 @@
       min-width: 0;
     }
 
-    /* Søndag gøres lidt bredere end de andre (sidste kolonne) */
     .weekdays{
       display:grid;
       grid-template-columns: 62px repeat(6, minmax(0, 1fr)) minmax(0, 1.22fr);
@@ -367,7 +363,6 @@
       line-height: 1.2;
     }
 
-    /* Søndagspillen må wrappe og må ikke klippes */
     .pill.shiftday{
       font-size: 11px;
       padding: 7px 12px;
@@ -377,7 +372,6 @@
       line-height: 1.2;
     }
 
-    /* Gør det mere tydeligt at den oprindelige ejer er "overrulet" */
     .pill.strike{
       text-decoration: line-through;
       text-decoration-thickness: 2px;
@@ -386,7 +380,6 @@
       border-style: dashed;
     }
 
-    /* ===== Form ===== */
     .formGrid{
       display:grid;
       grid-template-columns: 1fr 1fr;
@@ -423,7 +416,6 @@
       white-space: pre-line;
     }
 
-    /* Gør højrepanelet mere kompakt */
     aside{
       min-width: 0;
       max-width: 100%;
@@ -469,7 +461,6 @@
 
     .hidden{ display:none !important; }
 
-    /* ===== Modal / overlay (bruges også som skuffe) ===== */
     .modalBack{
       position:fixed;
       inset:0;
@@ -516,7 +507,6 @@
       flex-wrap: wrap;
     }
 
-    /* Skuffe-layout */
     .modalBack.drawerMode{
       justify-content:flex-end;
       align-items:stretch;
@@ -533,7 +523,6 @@
       max-height: calc(100vh - 56px - 66px);
     }
 
-    /* ===== Ændringer i skuffe ===== */
     .chgTopRow{
       display:flex;
       align-items:center;
@@ -617,7 +606,6 @@
       background: rgba(255,60,60,.10);
     }
 
-    /* ===== Dropdown ===== */
     .dropMenu{
       position:absolute;
       top: 48px;
@@ -653,7 +641,6 @@
       background: rgba(255,255,255,.10);
     }
 
-    /* ===== Laptop: lav en smule nedskalering så det føles mindre rodet ===== */
     @media (max-width: 1400px){
       .wrap{ padding: 18px 18px 28px; }
       .grid{
@@ -667,17 +654,14 @@
       .pill.shiftday{ font-size: 10.5px; padding: 6px 10px; }
       .nav .btn{ min-width: 42px; padding: 9px 11px; }
 
-      /* På laptop: stack Start/Slut så felter aldrig bliver klemt */
       aside .formGrid{ grid-template-columns: 1fr; }
       aside .formGrid .full{ grid-column: 1 / -1; }
     }
 
-    /* ===== Hvis skærmen er for smal, skift til 1 kolonne ===== */
     @media (max-width: 1100px){
       .grid{ grid-template-columns: 1fr; }
     }
 
-    /* ===== Mobil: tillad swipe hvis nødvendigt ===== */
     @media (max-width: 980px){
       #appHeader{
         position: sticky;
@@ -727,7 +711,6 @@
       </div>
     </header>
 
-    <!-- LOGIN -->
     <section id="loginScreen">
       <div class="loginStack">
         <div class="loginHero">
@@ -736,7 +719,6 @@
 
         <div class="card loginBox">
           <div class="cardInner">
-            <!-- Kun kodefelt + login-knap -->
             <div class="row">
               <input id="passInput" class="field" type="password" placeholder="Kode" autocomplete="current-password" />
               <button id="loginBtn" class="btn btnPrimary" type="button">Log ind</button>
@@ -748,10 +730,8 @@
       </div>
     </section>
 
-    <!-- APP -->
     <main id="app" class="grid hidden">
 
-      <!-- Calendar -->
       <section class="card">
         <div class="cardInner">
           <div class="calHeader">
@@ -777,7 +757,6 @@
         </div>
       </section>
 
-      <!-- Booking panel -->
       <aside class="card">
         <div class="cardInner">
           <h2>Foretag ændringer</h2>
@@ -832,7 +811,6 @@
     </main>
   </div>
 
-  <!-- Modal / Overlay -->
   <div id="modalBack" class="modalBack" aria-hidden="true">
     <div id="modal" class="modal" role="dialog" aria-modal="true">
       <div class="head">
@@ -844,13 +822,9 @@
     </div>
   </div>
 
-  <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
-    /* =========================================================
-       KONFIGURATION
-       ========================================================= */
     const ADMIN_CODE = "Kalkhavesvej100!";
     const FAMILY_CODES = {
       "Taastrup": "Taastrup",
@@ -876,8 +850,6 @@
 
     const STAYS_TABLE = "stays";
     const EXTRA_TABLE = "extra_info";
-
-    /* ========================================================= */
 
     const appHeader = document.getElementById("appHeader");
     const welcomeTitle = document.getElementById("welcomeTitle");
@@ -994,7 +966,6 @@
       if (e.target === modalBack) closeModal();
     });
 
-    /* ===== Login roller ===== */
     const ROLE_KEY = "samsoehuset_role";
     const OK_KEY = "samsoehuset_ok";
 
@@ -1119,11 +1090,14 @@
       visibilityInput.value = "";
     }
 
-    /* ===== Kalender ===== */
     const DK_MONTHS = ["januar","februar","marts","april","maj","juni","juli","august","september","oktober","november","december"];
     const DK_DOW = ["Søn","Man","Tir","Ons","Tor","Fre","Lør"];
 
-    let view = new Date(YEAR, 0, 1);
+    const initialToday = new Date();
+    let view = initialToday.getFullYear() === YEAR
+      ? new Date(YEAR, initialToday.getMonth(), 1)
+      : new Date(YEAR, 0, 1);
+
     view.setHours(12,0,0,0);
 
     let selectedStart = null;
@@ -1363,7 +1337,6 @@
 
       daysEl.innerHTML = "";
 
-      // Vis kun uger hvor mindst én dag i ugen er i den viste måned
       for (let row = 0; row < 6; row++){
         const rowMonday = addDays(start, row * 7);
 
@@ -1512,7 +1485,6 @@
       render();
     }
 
-    /* ===== Supabase stays ===== */
     async function loadStays(){
       const client = getSupabaseClient();
       if (!client){
@@ -1916,7 +1888,6 @@
       render();
     });
 
-    /* ===== Yderligere info (Supabase) ===== */
     let extraItems = [];
 
     async function loadExtraInfo(){
@@ -2208,7 +2179,6 @@
       extraMenu.classList.remove("show");
     });
 
-    /* ===== Init ===== */
     (async function init(){
       render();
 
