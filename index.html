@@ -315,6 +315,18 @@
       cursor: default;
     }
     .day.muted:hover{ background: rgba(255,255,255,.05); border-color: rgba(255,255,255,.10); }
+
+    .day.today{
+      border-color: rgba(45,212,122,.85);
+      box-shadow: 0 0 0 2px rgba(45,212,122,.35), 0 0 24px rgba(45,212,122,.16);
+      background: rgba(45,212,122,.10);
+    }
+
+    .day.today .num{
+      color: #ffffff;
+      text-shadow: 0 0 12px rgba(45,212,122,.75);
+    }
+
     .dayTop{
       display:flex; justify-content:space-between; align-items:baseline;
       gap: 8px;
@@ -1327,6 +1339,8 @@
     function render(){
       monthName.textContent = monthLabel(view);
 
+      const todayISO = isoDate(new Date());
+
       const first = new Date(view.getFullYear(), view.getMonth(), 1);
       first.setHours(12,0,0,0);
 
@@ -1362,11 +1376,16 @@
 
         for (let col = 0; col < 7; col++){
           const d = addDays(rowMonday, col);
+          const dayISO = isoDate(d);
           const inThisMonth = d.getMonth() === view.getMonth();
           const inYear = d.getFullYear() === YEAR;
 
           const day = document.createElement("div");
           day.className = "day" + (inThisMonth && inYear ? "" : " muted");
+
+          if (dayISO === todayISO && inThisMonth && inYear){
+            day.classList.add("today");
+          }
 
           const top = document.createElement("div");
           top.className = "dayTop";
